@@ -359,5 +359,86 @@
     "category": "Native packages",
     "aliases": "Android terminal private prefix native payload",
     "revision": "958bb861421f107028583c64917ebc87b9753c99"
+  },
+  {
+    "name": "ukify-impurifier",
+    "label": "ukify",
+    "description": "Unified Kernel Images and external-key signing",
+    "frontends": "ukify, sbsign, sbverify",
+    "category": "Early userspace",
+    "aliases": "UKI EFI Secure Boot kernel initramfs",
+    "revision": "2d06c9030909f9cf673b321856300d8dcf5b67a4"
+  },
+  {
+    "name": "oci-impurifier",
+    "label": "OCI",
+    "description": "Ordinary OCI application images and embedded closures",
+    "frontends": "Podman, Docker, Skopeo, umoci",
+    "category": "Images & bundles",
+    "aliases": "OCI container registry",
+    "revision": "a9f64e5dd03e6cb8dc53d280fa86165528a56654"
+  },
+  {
+    "name": "apptainer-impurifier",
+    "label": "Apptainer",
+    "description": "Native SIF images for scientific and HPC workloads",
+    "frontends": "Apptainer, SIF",
+    "category": "Images & bundles",
+    "aliases": "Singularity HPC scientific containers",
+    "revision": "1924896d6c03f74b0a7fb7bc2bd9fc3856a58e35"
+  },
+  {
+    "name": "initramfs-tools-impurifier",
+    "label": "initramfs-tools",
+    "description": "Native build hooks and early boot scripts",
+    "frontends": "mkinitramfs, update-initramfs",
+    "category": "Early userspace",
+    "aliases": "Debian Ubuntu boot initramfs",
+    "revision": "5735465f7d2f6f97ab68735b089b9d5f66ef04c0"
+  },
+  {
+    "name": "booster-impurifier",
+    "label": "Booster",
+    "description": "Native initramfs images with embedded early tools",
+    "frontends": "Booster generator and init",
+    "category": "Early userspace",
+    "aliases": "boot initramfs rescue",
+    "revision": "70bc49d6a3c659861436e0f37bcdc00a91543056"
+  },
+  {
+    "name": "pip-impurifier",
+    "label": "pip",
+    "description": "Prepared Python wheels with native library support",
+    "frontends": "pip, Python wheels",
+    "category": "Language ecosystems",
+    "aliases": "Python wheel ABI native extensions",
+    "revision": "810b865dfc919996715f9b732dc0f40501d832a3"
+  },
+  {
+    "name": "npm-impurifier",
+    "label": "npm",
+    "description": "Node package tarballs and prepared native addons",
+    "frontends": "npm, Node.js",
+    "category": "Language ecosystems",
+    "aliases": "JavaScript TypeScript N-API addon",
+    "revision": "26442438cf71f38bd98da640480a22b93e3c658a"
+  },
+  {
+    "name": "rubygems-impurifier",
+    "label": "RubyGems",
+    "description": "Native gems and prepared Ruby extensions",
+    "frontends": "gem, RubyGems",
+    "category": "Language ecosystems",
+    "aliases": "Ruby gem extension",
+    "revision": "a9cf9dd2b20978d7f46cc06936f6d7a902175871"
+  },
+  {
+    "name": "pkg-impurifier",
+    "label": "pkg",
+    "description": "FreeBSD and DragonFly pkg-format packages",
+    "frontends": "pkg, portable pkg",
+    "category": "Native packages",
+    "aliases": "FreeBSD DragonFly BSD pkgng",
+    "revision": "6679c52c3ef5a9551b580d032ab2f6190cb9c421"
   }
 ]

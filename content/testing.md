@@ -66,3 +66,13 @@ The Android fixture derives a lean boot ISO from pinned Android-x86 9.0-r2 by re
 Native Guix payloads are built by Guix's actual trivial builder and installed into real profiles, with version changes, rollback and manifest replacement. Snap uses upstream snapd and its socket activation, native revisions and retained-image policy. Swupd signs real third-party repositories and exercises native bundle updates. Bedrock imports and replaces actual strata. These manager fixtures retain their documented host tools; separate isolated-root executions establish that their prepared static payloads do not need Nix.
 
 Native bootc layers and transactional-update trees are booted through real image deployments or Btrfs snapshots, with native upgrade or rollback and removal checks. Nix-backed variants repeat their lifecycle with private static clients and incompatible external candidates. None of these tests claims to install a bootloader or provision Nix itself.
+
+[initramfs-tools](/initramfs-tools-impurifier/) builds images inside a producer VM and boots two revisions with upstream init. [Booster](/booster-impurifier/) uses its native generator and rescue shell to execute embedded tools. Both boot without a root disk or shared host store. [ukify](/ukify-impurifier/) boots signed UKIs under OVMF Secure Boot, reads the guest's SecureBoot variable and requires firmware rejection of a modified kernel section. Signing uses disposable test keys; production keys remain outside Nix builds.
+
+## Further native consumers
+
+[OCI](/oci-impurifier/) tests Skopeo, Podman and umoci with prepared native roots and embedded closures. [Apptainer](/apptainer-impurifier/) tests ordinary-user SIF execution, replacement and removal. Neither image requires a target Nix database or daemon.
+
+[pip](/pip-impurifier/), [npm](/npm-impurifier/) and [RubyGems](/rubygems-impurifier/) perform offline native transactions and execute compiled shared libraries or interpreter extensions. Their prepared payloads must match the consumer ABI. These are interpreter/tool VMs, not claims that arbitrary nixpkgs outputs work on every operating system.
+
+[pkg](/pkg-impurifier/) uses the actual portable FreeBSD/DragonFly package manager for target-root transactions and static execution in a Linux VM. This proves its native archive/manager lifecycle; FreeBSD kernel and executable-ABI coverage remains additional work.
