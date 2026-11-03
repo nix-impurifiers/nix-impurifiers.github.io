@@ -90,13 +90,30 @@ Support for services, configuration, accounts, drivers, rollback and image deplo
 
 ## Native payloads without target-side Nix
 
-The dpkg, RPM, ALPM, APK, XBPS and opkg adapters can export complete closures as ordinary native-owned packages at their original store paths. For example, `adapter.makeNativeDebs { pkg = pkgs.hello; }` produces a collection of DEBs with exact native dependencies between store objects. The native manager owns those files; there is no target Nix database or daemon. Keep this ownership separate from a Nix-managed store and its garbage collection.
+Choose the payload contract that matches the consumer. These modes omit Nix activation and target-side Nix database requirements; their native managers retain their own requirements.
 
-Conda, Spack, Homebrew and MacPorts also accept producer-prepared native prefix trees. The producer supplies ABI-compatible files that work in the target prefix; this is not automatic relocation. Their guides describe the relevant native constructor.
+| Payload contract | Adapters |
+| --- | --- |
+| Complete closures at their original store paths, split into native-owned objects with exact dependencies | dpkg, RPM, ALPM, APK, XBPS, opkg |
+| Prepared filesystem trees with native dependency and configuration policies | ipkg, pkgtools, pkgutils, KISS, CPT, eopkg, PiSi, pkgsrc, PETget, Entropy |
+| Prepared prefix or output trees | Conda, Spack, Homebrew, MacPorts, Autopackage, Guix |
+| Native source-builder recipes carrying prepared files | Portage, pkgcore, Paludis, Sorcery, Lunar, BitBake/OpenEmbedded |
+| Native application bundles with their own runtime contracts | AppImage, Flatpak, Snap, Zero Install |
+| Native extensions, third-party bundles or strata | TCE, systemd-sysext, swupd, Bedrock |
+| Prepared native image layers, RPM layers or snapshot trees | bootc, rpm-ostree, transactional-update |
+| Early userspace modules and hooks | dracut, mkinitcpio |
 
-Historical ipkg, pkgtools, pkgutils, KISS, CPT, eopkg, PiSi and pkgsrc also accept producer-prepared filesystem trees with no implicit Nix runtime or activation hooks. Their native dependency and configuration policies still apply. Read each guide for its constructor and platform coverage.
+For example, `adapter.makeNativeDebs { pkg = pkgs.hello; }` produces DEBs with exact native dependencies between closure objects. The native manager owns those store files. Keep this ownership separate from a Nix-managed store and its garbage collection.
 
-The [dracut adapter](/dracut-impurifier/) and [mkinitcpio adapter](/mkinitcpio-impurifier/) produce native early-userspace modules and hooks. Their payloads run before the real root is available, without target-side Nix.
+For prepared trees, the producer supplies files that already work with the target ABI, prefix and runtime. This is not automatic relocation. Flatpak requires an explicit native runtime reference; Guix retains its own store and daemon; image adapters retain native deployment policy. Each project guide names its constructor and tested platforms.
+
+Nix's own impurifier uses native Nix profiles, which necessarily retain a Nix store, database and client. Use the adapter for another native manager when that manager should own Nix-free files.
+
+## Supply a bundled Nix client
+
+Nix-backed adapters can accept a producer-supplied static client through `bundledNixStore` and upstream notices through `bundledNixNotices`. Depending on the adapter, these belong on its runtime package or application constructor. Launch prefers a compatible external client, then the bundle. Explicit `IMPURIFIER_NIX_STORE` disables fallback.
+
+A client is not a Nix installation: the store, daemon or other documented infrastructure must already exist. Trusted preparation helpers use host tools and never execute an application-owned bundled client as root. Read the selected adapter's guide for its preparation and trust boundary.
 
 ## Android and Termux are separate ecosystems
 
@@ -104,6 +121,3 @@ The [dracut adapter](/dracut-impurifier/) and [mkinitcpio adapter](/mkinitcpio-i
 
 [termux-impurifier](/termux-impurifier/) builds DEBs for Termux’s private prefix and Android ABI. Supply an already-compatible native tree; ordinary Debian/Linux binaries and global-store layouts are separate contracts. Both targets work without a target-side Nix installation.
 
-Portage, pkgcore and Paludis offer native ebuild payloads as well as Nix-backed application intent. Systemd-sysext can package a plain `/usr` tree as a native extension. AppImage can wrap a complete native AppDir. Each producer supplies files that already work in the target environment; none of these modes assumes automatic relocation.
-
-Flatpak accepts a prepared `/app` tree and an explicit native runtime reference. Zero Install accepts native implementations; Autopackage accepts complete prefix trees. TCE, PETget, Entropy, Sorcery and Lunar expose native payload constructors using their managers’ installation policies. BitBake/OpenEmbedded can emit native-only recipe layers without a Nix runtime recipe. See each project guide for its constructor and tested boundary.

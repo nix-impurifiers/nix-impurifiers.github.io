@@ -100,3 +100,23 @@ network failure, unsigned-cache rejection, trusted offline recovery,
 versioned updates, host-library replacement, removal, pruning and Nix GC.
 Tests run on x86_64 Linux using actual native clients and databases. A complete
 Clear Linux boot image and other architectures remain separate coverage.
+
+## Prepared native bundles and bundled clients
+
+`makeNativeBundle { name; payload; }` accepts a complete prepared filesystem
+bundle and adds only swupd's bundle marker. It adds no Nix runtime or activation
+hooks. Feed it to `makeRepository` alongside other native bundles. The producer
+supplies files that already work under swupd's third-party prefix; this is not
+relocation. The VM builds actual signed repositories, installs, executes,
+updates and removes native bundles. The installed static executable also runs
+in an isolated root without `/nix`. The manager uses NixOS host tools; this is
+not a complete Clear Linux boot without Nix.
+
+Nix-backed constructors accept `bundledNixStore` (a static ELF client) and
+`bundledNixNotices` (upstream notice files). These artifacts carry a private
+client and a Python-only SDK. Launch selects a compatible external client first,
+then the bundle, before registering roots or capturing hardware. An explicit
+`IMPURIFIER_NIX_STORE` disables fallback. The trusted preparation helper always
+uses host tools, never the application-owned client as root. An existing Nix
+store, daemon and initial SDK preparation remain necessary. The bundled suite
+repeats the full native lifecycle with an incompatible external candidate.

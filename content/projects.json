@@ -5,7 +5,7 @@
     "description": "DEB packages",
     "frontends": "apt, apt-get, aptitude, Nala, GDebi, Synaptic",
     "category": "Native packages",
-    "revision": "113b64a4c3aaeef9220e9f06a7db5e72279c9cf1",
+    "revision": "3db50246d63c93fb87e1d96259eea57815c98d4a",
     "aliases": "deb Debian Ubuntu"
   },
   {
@@ -14,7 +14,7 @@
     "description": "RPM packages",
     "frontends": "DNF 4/5, yum, Zypper, microdnf, tdnf, APT-RPM, urpmi, Poldek",
     "category": "Native packages",
-    "revision": "964548520253731bf17d460b4843bb3408daa0b7",
+    "revision": "6e72217960f50ff568d4ae907ab09a830ea978e2",
     "aliases": "dnf4 dnf5 yum3"
   },
   {
@@ -23,7 +23,7 @@
     "description": "ALPM packages",
     "frontends": "pacman, makepkg, Yay, Paru, Pikaur, Aura, Pamac, Pacaur, Trizen",
     "category": "Native packages",
-    "revision": "03b6f9f8ba336dfdd256bb59f96917588f2d338b",
+    "revision": "1ac4f4e81b6e61cef5b852e4f7b380a106493e30",
     "aliases": "Arch Manjaro AUR"
   },
   {
@@ -32,7 +32,7 @@
     "description": "Alpine APK",
     "frontends": "APK 2 and APK 3, OpenRC",
     "category": "Native packages",
-    "revision": "fa6a04fe28f59f08f632bcc652ecd5e2f6eec963",
+    "revision": "a81eb5d00460256d450d55caa0d3ed41ad5277a4",
     "aliases": "Alpine"
   },
   {
@@ -210,7 +210,7 @@
     "description": "RPM/OSTree deployments",
     "frontends": "rpm-ostree, OSTree",
     "category": "Images & bundles",
-    "revision": "7cf38ebb2475cadf105b282a59862768c5dc32bf"
+    "revision": "7e99ac2eac400988ce0c4a43a2b73300499ef6c9"
   },
   {
     "name": "bootc-impurifier",
@@ -218,7 +218,7 @@
     "description": "Bootable OCI deployments",
     "frontends": "bootc, OSTree, OCI",
     "category": "Images & bundles",
-    "revision": "0d5b376fa1f57c0caeecaaec42d748a3cf257b5f"
+    "revision": "7eb147c821db238ab1de43436235da56bd79566c"
   },
   {
     "name": "transactional-update-impurifier",
@@ -226,7 +226,7 @@
     "description": "Transactional snapshots",
     "frontends": "transactional-update, Tukit, Snapper",
     "category": "Images & bundles",
-    "revision": "cb82fbe50fd7b3705c377ec1dac9f799e8a83c20"
+    "revision": "49494fc7839f6e016be874c212d1c8eade1d75c9"
   },
   {
     "name": "swupd-impurifier",
@@ -234,7 +234,7 @@
     "description": "Clear Linux bundles",
     "frontends": "swupd",
     "category": "Images & bundles",
-    "revision": "6a1a67116a3a7c75540aa7c9aff763eae8778a6a"
+    "revision": "b24b52c535c9cbbe317dc69d506bb6bd2cd9fee5"
   },
   {
     "name": "brl-impurifier",
@@ -242,7 +242,7 @@
     "description": "Bedrock strata",
     "frontends": "Bedrock Linux, brl",
     "category": "Images & bundles",
-    "revision": "fa7faed235325620526e5298201f5f4037b79954"
+    "revision": "d4cbe41ecb14acac7c581a59ee5167fc46945ccd"
   },
   {
     "name": "flatpak-impurifier",
@@ -258,7 +258,7 @@
     "description": "Classic snaps",
     "frontends": "snapd, Snap",
     "category": "Images & bundles",
-    "revision": "685bcfb6b8c058b99500fc28137f8c41a036a9cf"
+    "revision": "e03e298802967ef89c751f9130ea46aae569cf0d"
   },
   {
     "name": "appimage-impurifier",
@@ -274,7 +274,7 @@
     "description": "Autopackage installers",
     "frontends": "Autopackage",
     "category": "Images & bundles",
-    "revision": "5377574fd8797953a3cea4ac27a8af1301ef54f7"
+    "revision": "2b3bd16fc1c20adb6b2b95f5f47a19c95f71e447"
   },
   {
     "name": "tce-impurifier",
@@ -290,7 +290,7 @@
     "description": "Native Nix profiles",
     "frontends": "Nix",
     "category": "Profiles & environments",
-    "revision": "3302b0a7b5ab2b6f6bc66811551b61849918a2ed"
+    "revision": "a9d464cd242f068fdff59a836f3ae07816fc986c"
   },
   {
     "name": "guix-impurifier",
@@ -298,7 +298,7 @@
     "description": "Guix package integration",
     "frontends": "GNU Guix",
     "category": "Profiles & environments",
-    "revision": "0b8951896f700cd71da850e7dc83a1fa5dd204e4"
+    "revision": "5a509bf8d9c5ee7f3bd73405c0b2b197f627eda7"
   },
   {
     "name": "conda-impurifier",
@@ -349,7 +349,7 @@
     "frontends": "Android package manager, ADB, aapt2, apksigner",
     "category": "Native packages",
     "aliases": "APK Android DEX JNI mobile",
-    "revision": "4948cafb168cd5d068ff02533b08f929ac1f6540"
+    "revision": "d8c782082ff73295b268716e2f123d295265cf7b"
   },
   {
     "name": "termux-impurifier",
@@ -358,6 +358,6 @@
     "frontends": "Termux dpkg, apt, pkg",
     "category": "Native packages",
     "aliases": "Android terminal private prefix native payload",
-    "revision": "e5ed4919941a66009f4d0257461b82767ff0182d"
+    "revision": "958bb861421f107028583c64917ebc87b9753c99"
   }
 ]
