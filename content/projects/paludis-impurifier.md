@@ -69,3 +69,21 @@ The fixture disables the optional Paludis sandbox via its documented environment
 switch. The outer kernel is NixOS and Nix is preinstalled. This is not an Exherbo
 boot, binary-Paludis-package or Nix-installer claim. Upstream marks its optional
 PBINS implementation nonfunctional; this fixture leaves that feature disabled.
+
+## Native payloads and bundled clients
+
+`makeNativeEbuild { name; version; payload; license; dependencies?; ... }` emits
+a native EAPI 6 overlay from a producer-prepared tree. It disables engine
+activation and adds no Nix requirement. The producer supplies a working target
+layout; this does not relocate binaries. The native cave VM installs, executes,
+upgrades and removes a static payload in an independent root without `/nix`.
+That root retains the ordinary native package database, world file and `/etc`
+foundation used by Paludis's post-merge tools.
+
+`makeRuntimeOverlay` optionally accepts `bundledNixStore` and
+`bundledNixNotices`. Supply a static ELF client with upstream notices. Bundling
+omits the default Nix dependency; Python remains required. Compatible external
+clients take precedence, explicit `IMPURIFIER_NIX_STORE` disables fallback, and
+failed mutations are never retried through another client. A separate bundled
+VM repeats the original cave lifecycle suite with an incompatible external
+candidate. Nix provisioning remains deferred.

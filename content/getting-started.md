@@ -104,4 +104,6 @@ The [dracut adapter](/dracut-impurifier/) and [mkinitcpio adapter](/mkinitcpio-i
 
 [termux-impurifier](/termux-impurifier/) builds DEBs for Termux’s private prefix and Android ABI. Supply an already-compatible native tree; ordinary Debian/Linux binaries and global-store layouts are separate contracts. Both targets work without a target-side Nix installation.
 
-Portage and pkgcore offer native ebuild payloads as well as Nix-backed application intent. Systemd-sysext can package a plain `/usr` tree as a native extension. AppImage can wrap a complete native AppDir. Each producer supplies files that already work in the target environment; none of these modes assumes automatic relocation.
+Portage, pkgcore and Paludis offer native ebuild payloads as well as Nix-backed application intent. Systemd-sysext can package a plain `/usr` tree as a native extension. AppImage can wrap a complete native AppDir. Each producer supplies files that already work in the target environment; none of these modes assumes automatic relocation.
+
+Flatpak accepts a prepared `/app` tree and an explicit native runtime reference. Zero Install accepts native implementations; Autopackage accepts complete prefix trees. TCE, PETget, Entropy, Sorcery and Lunar expose native payload constructors using their managers’ installation policies. BitBake/OpenEmbedded can emit native-only recipe layers without a Nix runtime recipe. See each project guide for its constructor and tested boundary.

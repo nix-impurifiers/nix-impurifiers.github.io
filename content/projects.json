@@ -98,7 +98,7 @@
     "description": "Puppy PET packages",
     "frontends": "PETget, Puppy Package Manager",
     "category": "Native packages",
-    "revision": "29927dfa81f1f422605c7523408ec35536d2cc67"
+    "revision": "590b5b2e320256368ed428ee67793d9fcf7aeb54"
   },
   {
     "name": "entropy-impurifier",
@@ -106,7 +106,7 @@
     "description": "Entropy packages",
     "frontends": "equo, Sabayon",
     "category": "Native packages",
-    "revision": "df4c9341b34d56febfe62ac67ff6a9308f90b722"
+    "revision": "94f3718a0c30a168b2a9a8e75816035a9d534c2f"
   },
   {
     "name": "portage-impurifier",
@@ -130,7 +130,7 @@
     "description": "PMS package integration",
     "frontends": "Paludis",
     "category": "Ports & source builds",
-    "revision": "656b7e513166e14ce2187345b2911232ab3d3af2"
+    "revision": "771f9576204b5cb0282ec0dab8330040bdce1bfb"
   },
   {
     "name": "kiss-impurifier",
@@ -154,7 +154,7 @@
     "description": "Source Mage spells",
     "frontends": "Sorcery, cast, dispel",
     "category": "Ports & source builds",
-    "revision": "550157e5b7090df92f9f67399032e0d9cf0a1efe"
+    "revision": "ed8a29df5e86452f2f510ec97bfaeed93d954ae2"
   },
   {
     "name": "lunar-impurifier",
@@ -162,7 +162,7 @@
     "description": "Lunar modules",
     "frontends": "lin, lrm, lvu",
     "category": "Ports & source builds",
-    "revision": "bbd2318b560246ed97d36654f380189b31e9d7e0"
+    "revision": "8bd75df7ff3e81bdf0bba30ab5e2bc1f26daaf67"
   },
   {
     "name": "pkgsrc-impurifier",
@@ -194,7 +194,7 @@
     "description": "OpenEmbedded layers and recipes",
     "frontends": "BitBake, OpenEmbedded, Yocto",
     "category": "Ports & source builds",
-    "revision": "cbd4fcf2cc746681186334e74cf0f3fa7178dcfe"
+    "revision": "3b67006694b718bd672ab835ba00debbf3f15a2e"
   },
   {
     "name": "systemd-sysext-impurifier",
@@ -250,7 +250,7 @@
     "description": "Flatpak applications",
     "frontends": "Flatpak, OSTree",
     "category": "Images & bundles",
-    "revision": "2a692131d71f97befeb86234df5905d944cc7e03"
+    "revision": "8d9201be93bf0e070fa2952198e86cafe27dde68"
   },
   {
     "name": "snap-impurifier",
@@ -274,7 +274,7 @@
     "description": "Autopackage installers",
     "frontends": "Autopackage",
     "category": "Images & bundles",
-    "revision": "a396f8e25c94d6cb267f8e251b694dbdf0b87b95"
+    "revision": "5377574fd8797953a3cea4ac27a8af1301ef54f7"
   },
   {
     "name": "tce-impurifier",
@@ -282,7 +282,7 @@
     "description": "Tiny Core extensions",
     "frontends": "Tiny Core, tce-load",
     "category": "Images & bundles",
-    "revision": "1152ba2fbfc9abd4140636b1e3bf8da2d256172b"
+    "revision": "e3a5bc4d74f7e01edea9c2cfeed6f3ed12781171"
   },
   {
     "name": "nix-impurifier",
@@ -349,7 +349,7 @@
     "frontends": "Android package manager, ADB, aapt2, apksigner",
     "category": "Native packages",
     "aliases": "APK Android DEX JNI mobile",
-    "revision": "b31e5384f8534d5e41b4066671db235e71490c9a"
+    "revision": "4948cafb168cd5d068ff02533b08f929ac1f6540"
   },
   {
     "name": "termux-impurifier",
@@ -358,6 +358,6 @@
     "frontends": "Termux dpkg, apt, pkg",
     "category": "Native packages",
     "aliases": "Android terminal private prefix native payload",
-    "revision": "9289cb086956820fa25f9350bdef72aed0032cb4"
+    "revision": "e5ed4919941a66009f4d0257461b82767ff0182d"
   }
 ]

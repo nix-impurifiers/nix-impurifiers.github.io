@@ -48,3 +48,28 @@ in your image and provide writable Nix state.
 Native SDK and VM test coverage is developed against BitBake 2.18.0 and
 OpenEmbedded Core Yocto 6.0.4. Full machine image/boot coverage and other
 architectures must be distinguished from recipe and native package tests.
+
+## Native payload recipes and bundled clients
+
+`makeNativeRecipe { name; version; payload; license?; licenseFile?; ... }` emits
+a recipe for a producer-prepared tree using a class with no engine activation
+hooks. It adds no Nix requirement. Compose it with
+`makeNativeLayer { applications = [ recipe ]; }`, or pass `runtime = null` to
+`makeLayer`, to omit the Nix runtime recipe. The producer supplies target-compatible
+files; this does not relocate binaries. `compatibleHost` can override the target
+triplet expression while ordinary recipe dependency and license policy remains
+explicit.
+
+The real BitBake/OpenEmbedded producer VM builds both native versions. A consumer
+VM installs the resulting DEBs into a root without `/nix`, executes and upgrades
+the static binary, then removes it. These native recipes do not defer Nix
+activation until first boot. Nix-backed recipes retain the upstream on-target
+postinstall contract and first-boot tests.
+
+`makeRuntime` optionally accepts `bundledNixStore` and `bundledNixNotices` for
+a static ELF client and upstream notices. This omits the default native Nix
+requirement; Python remains required. Compatible external clients take precedence,
+explicit `IMPURIFIER_NIX_STORE` disables fallback, and failed mutations are never
+retried through another client. Bundled producer/consumer variants repeat the
+full existing lifecycle and first-boot suite with an incompatible external client.
+Nix provisioning remains deferred.

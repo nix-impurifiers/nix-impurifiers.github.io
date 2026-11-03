@@ -80,3 +80,24 @@ other architectures and concurrent install/launch/prune remain separate work.
 The historical compiler embeds build timestamps; byte-identical rebuilds are
 not currently claimed. Native MD5 checks detect corruption, not publisher identity;
 obtain artifacts through a trusted distribution channel.
+
+## Native prefix trees and bundled clients
+
+`makeNativePackage { name; version; payload; revision?; }` emits a native installer
+from a producer-prepared prefix tree, without Nix launchers, SDK caches or engine
+requirements. Autopackage's own file-copy and ownership log preserve directories
+and hidden files. The producer supplies files that work in the selected prefix;
+this does not relocate binaries. The x86_64 Linux VM installs, verifies, upgrades
+and removes the native package as an ordinary user, and executes it in an
+isolated root without `/nix`.
+
+Nix-backed artifact constructors optionally accept `bundledNixStore` and
+`bundledNixNotices` for a static ELF client and upstream notices. Their prepared
+SDK then contains Python alone. A compatible external Nix client takes precedence;
+explicit `IMPURIFIER_NIX_STORE` disables fallback and failed mutations are never
+retried through another client. The bundled variant repeats the native lifecycle
+suite without external Nix on the application user's PATH.
+
+The Python SDK and application closure still need initial trusted preparation.
+Preparation uses helper-owned tools and never executes a client from the user's
+prefix as root. Bundling remains separate from the deferred Nix installer.
