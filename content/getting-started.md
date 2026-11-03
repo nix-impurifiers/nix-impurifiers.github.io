@@ -90,9 +90,11 @@ Support for services, configuration, accounts, drivers, rollback and image deplo
 
 ## Native payloads without target-side Nix
 
-The dpkg, RPM, ALPM and APK adapters can export complete closures as ordinary native-owned packages at their original store paths. For example, `adapter.makeNativeDebs { pkg = pkgs.hello; }` produces a collection of DEBs with exact native dependencies between store objects. The native manager owns those files; there is no target Nix database or daemon. Keep this ownership separate from a Nix-managed store and its garbage collection.
+The dpkg, RPM, ALPM, APK, XBPS and opkg adapters can export complete closures as ordinary native-owned packages at their original store paths. For example, `adapter.makeNativeDebs { pkg = pkgs.hello; }` produces a collection of DEBs with exact native dependencies between store objects. The native manager owns those files; there is no target Nix database or daemon. Keep this ownership separate from a Nix-managed store and its garbage collection.
 
 Conda, Spack, Homebrew and MacPorts also accept producer-prepared native prefix trees. The producer supplies ABI-compatible files that work in the target prefix; this is not automatic relocation. Their guides describe the relevant native constructor.
+
+Historical ipkg, pkgtools, pkgutils, KISS, CPT, eopkg, PiSi and pkgsrc also accept producer-prepared filesystem trees with no implicit Nix runtime or activation hooks. Their native dependency and configuration policies still apply. Read each guide for its constructor and platform coverage.
 
 The [dracut adapter](/dracut-impurifier/) and [mkinitcpio adapter](/mkinitcpio-impurifier/) produce native early-userspace modules and hooks. Their payloads run before the real root is available, without target-side Nix.
 
@@ -101,3 +103,5 @@ The [dracut adapter](/dracut-impurifier/) and [mkinitcpio adapter](/mkinitcpio-i
 [android-impurifier](/android-impurifier/) assembles native APKs from Android-compatible DEX, resources, assets and ABI-specific libraries. Sign the unsigned output outside Nix with your own key, then install through Android’s native tools.
 
 [termux-impurifier](/termux-impurifier/) builds DEBs for Termux’s private prefix and Android ABI. Supply an already-compatible native tree; ordinary Debian/Linux binaries and global-store layouts are separate contracts. Both targets work without a target-side Nix installation.
+
+Portage and pkgcore offer native ebuild payloads as well as Nix-backed application intent. Systemd-sysext can package a plain `/usr` tree as a native extension. AppImage can wrap a complete native AppDir. Each producer supplies files that already work in the target environment; none of these modes assumes automatic relocation.

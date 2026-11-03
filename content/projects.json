@@ -50,7 +50,7 @@
     "description": "Historical IPK packages",
     "frontends": "ipkg",
     "category": "Native packages",
-    "revision": "127a00e026f771bf5d842ac9f617552814339cd1"
+    "revision": "6ab998dcd66a91cc395dee0682b4daf9723bfa55"
   },
   {
     "name": "xbps-impurifier",
@@ -66,7 +66,7 @@
     "description": "Slackware packages",
     "frontends": "installpkg, slackpkg, slapt-get, sbopkg, Netpkg",
     "category": "Native packages",
-    "revision": "8232cb0f7caf81df1a7a35c336ee82f562c22752"
+    "revision": "27f2582875dbfa6ef41b3695a0c1df8b03c46274"
   },
   {
     "name": "pkgutils-impurifier",
@@ -74,7 +74,7 @@
     "description": "CRUX packages and ports",
     "frontends": "pkgutils, pkgmk, prt-get",
     "category": "Native packages",
-    "revision": "68f0dcc3e1434e0842bb46126a3fcc31602371f6"
+    "revision": "230759a23281fd2d390a99a7c227f280435c36e5"
   },
   {
     "name": "eopkg-impurifier",
@@ -82,7 +82,7 @@
     "description": "Solus packages",
     "frontends": "eopkg",
     "category": "Native packages",
-    "revision": "3d63758a45fb4f21f5793c45d6fb9ebba71f6e97"
+    "revision": "d184f0fc42025ecb8e59291a3a7ea55b1e2ded2c"
   },
   {
     "name": "pisi-impurifier",
@@ -90,7 +90,7 @@
     "description": "PiSi packages",
     "frontends": "PiSi, Pardus",
     "category": "Native packages",
-    "revision": "8a415473cc1333a85ebfa501c72a85ad1ffc1d78"
+    "revision": "2263bfa7ac2f9eff0519e9fdde5ba519aa3c7bd6"
   },
   {
     "name": "petget-impurifier",
@@ -114,7 +114,7 @@
     "description": "Gentoo ebuilds",
     "frontends": "Portage, emerge",
     "category": "Ports & source builds",
-    "revision": "d9dd2771a25caab5c8033aec514ec87fa3b34159"
+    "revision": "f40d8a0db95eb7769f85d6f8000be7c1126c248c"
   },
   {
     "name": "pkgcore-impurifier",
@@ -122,7 +122,7 @@
     "description": "PMS package integration",
     "frontends": "pkgcore",
     "category": "Ports & source builds",
-    "revision": "564b8de8aa9bcf86033872769e2b5daf79d0e418"
+    "revision": "75e6359561507fda97859a21cc557368541197c4"
   },
   {
     "name": "paludis-impurifier",
@@ -138,7 +138,7 @@
     "description": "KISS packages",
     "frontends": "kiss",
     "category": "Ports & source builds",
-    "revision": "12b10584232ecd43aaa451f9db8400b3e913a126"
+    "revision": "b2ca80a3b42725920be600a344aa9c1b817c05bd"
   },
   {
     "name": "cpt-impurifier",
@@ -146,7 +146,7 @@
     "description": "Carbs packages",
     "frontends": "Carbs Packaging Tools",
     "category": "Ports & source builds",
-    "revision": "c9590e8abcdb906cc17f00fdb9564ccdcc6a6c82"
+    "revision": "83dce871b166a5ae865b16ce85c0a37b630dfb36"
   },
   {
     "name": "sorcery-impurifier",
@@ -170,7 +170,7 @@
     "description": "Portable packages and ports",
     "frontends": "pkgsrc, pkg_add",
     "category": "Ports & source builds",
-    "revision": "cf0e73fd754e9c2fa5d0f17fd2fba3dabc3d54c2"
+    "revision": "d406e789f8196fb238edc42ce0d18a7d1403e19b"
   },
   {
     "name": "homebrew-impurifier",
@@ -202,7 +202,7 @@
     "description": "System extensions",
     "frontends": "systemd-sysext, SquashFS, overlayfs",
     "category": "Images & bundles",
-    "revision": "6830482e1e90fc1893c03e6c9754ea28c8a44961"
+    "revision": "27595d516e5008d63ec4d6ce1c0163c406aa404a"
   },
   {
     "name": "rpm-ostree-impurifier",
@@ -266,7 +266,7 @@
     "description": "AppImage bundles",
     "frontends": "AppImage, AppImageLauncher",
     "category": "Images & bundles",
-    "revision": "49f45cae3c93e06c3b5e6334c4fe1bbf3664e370"
+    "revision": "b37e500de6747767781d129f3bbd6f4d13ed3856"
   },
   {
     "name": "autopackage-impurifier",
@@ -322,7 +322,7 @@
     "description": "Zero Install feeds",
     "frontends": "0install, Zero Install",
     "category": "Profiles & environments",
-    "revision": "0409c7aa3f2348fead52c373c1283cdd1fbf2cbd"
+    "revision": "31eaa3db5adbef5920fb01219b7a3afcd5614835"
   },
   {
     "name": "dracut-impurifier",
@@ -349,7 +349,7 @@
     "frontends": "Android package manager, ADB, aapt2, apksigner",
     "category": "Native packages",
     "aliases": "APK Android DEX JNI mobile",
-    "revision": "6311772b3f9821de43db8cd34b857d4f45d6c9fc"
+    "revision": "b31e5384f8534d5e41b4066671db235e71490c9a"
   },
   {
     "name": "termux-impurifier",
@@ -358,6 +358,6 @@
     "frontends": "Termux dpkg, apt, pkg",
     "category": "Native packages",
     "aliases": "Android terminal private prefix native payload",
-    "revision": "3233e855cefc52f077c500125ade084880ba4a6e"
+    "revision": "9289cb086956820fa25f9350bdef72aed0032cb4"
   }
 ]

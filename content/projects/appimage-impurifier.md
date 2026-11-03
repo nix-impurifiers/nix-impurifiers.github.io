@@ -10,8 +10,8 @@ in backend.makePackage { pkg = pkgs.ripgrep; }
 ```
 
 `makePackage` returns `net` and `offline` image files. Copy the selected file to a
-user-owned location, make it executable, and launch it normally. The host must
-provide working `python3` and `nix-store` commands. Native Nix provisioning is
+user-owned location, make it executable, and launch it normally. Nix-backed images require host `python3` and a working Nix store. They can use
+a compatible external `nix-store` or an explicitly bundled static client. Native Nix provisioning is
 explicitly deferred; this project does not install or configure the Nix daemon.
 
 `makeImage`, `makeNetImage`, and `makeOfflineImage` accept `pkg`, optional
@@ -52,3 +52,22 @@ refresh at each launch and remain rooted until their owning image is pruned.
 
 This backend does not activate a global profile, services, or host accounts.
 See [development notes](docs/development/index.md) for native verification.
+
+## Native AppDirs and bundled clients
+
+`makeNativeImage { name; appDir; }` wraps a producer-prepared AppDir with an
+executable `AppRun`. It adds no Nix/Python launcher, database or daemon requirement.
+Supply desktop metadata and icons in the AppDir if desktop integration is wanted.
+The producer prepares a working target layout; this does not relocate binaries.
+A separate VM executes both real FUSE and extract-and-run inside a root with
+neither `/nix` nor Python, replaces the image and removes it.
+
+Nix-backed `makeImage` and its flavor constructors accept `bundledNixStore` and
+`bundledNixNotices`. Supply a static ELF client and its upstream notices. A
+compatible external client takes precedence; explicit `IMPURIFIER_NIX_STORE`
+disables fallback. Client selection happens before mutation, and failures are
+never retried through another client or store. The bundled-client VM runs the
+full lifecycle suite with no external Nix on the application user's PATH.
+
+Root preparation continues to use trusted helper tools and never executes a
+client from the user-owned image. Bundling a client is not a Nix installer.

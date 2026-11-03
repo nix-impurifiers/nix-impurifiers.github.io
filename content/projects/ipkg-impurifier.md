@@ -82,3 +82,19 @@ complete OpenEmbedded boot. This independently tests ipkg 0.99.163, not its main
 The native client uses `/var/lib/ipkg` in this fixture (configure-time policy).
 
 The exported `runtimeVersion` follows the pinned core source timestamp. Application dependencies require that runtime version or newer, rather than accepting every engine as `0.1.0`. This supports ordinary native engine upgrades without project release tags. Consumer-provided Nix dependency expressions remain independent of the engine's own native version.
+
+## Native payloads and optional bundled clients
+
+`makeNativeIpk { name; version; payload; architecture?; dependencies?; ... }`
+packages a producer-prepared filesystem tree directly. It adds no engine hooks,
+Nix dependency, daemon or database. The producer must prepare a working target
+layout; this does not relocate binaries. The native target-root VM installs,
+executes, upgrades and removes a static payload with no `/nix` directory.
+
+`makeRuntimeIpk` also accepts `bundledNixStore` and `bundledNixNotices`. Supply
+a static ELF client and its upstream notices. Bundling omits the default native
+Nix dependency; Python remains required. A compatible external client takes
+precedence, otherwise the bundled client is selected before mutation. Explicit
+`IMPURIFIER_NIX_STORE` disables fallback; failed mutations are never retried with
+another client. The bundled-client check repeats the full existing native VM
+suite with an incompatible external candidate. This is not a Nix installer.
