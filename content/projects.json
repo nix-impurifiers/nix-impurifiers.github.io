@@ -1,0 +1,327 @@
+[
+  {
+    "name": "dpkg-impurifier",
+    "label": "dpkg",
+    "description": "DEB packages",
+    "frontends": "apt, apt-get, aptitude, Nala, GDebi, Synaptic",
+    "category": "Native packages",
+    "revision": "4931ace4b7990253727a1f165d8e2a380233faa5",
+    "aliases": "deb Debian Ubuntu"
+  },
+  {
+    "name": "rpm-impurifier",
+    "label": "rpm",
+    "description": "RPM packages",
+    "frontends": "DNF 4/5, yum, Zypper, microdnf, tdnf, APT-RPM, urpmi, Poldek",
+    "category": "Native packages",
+    "revision": "9ae4d727003cb03b65fc8350d4dca90325f385d4",
+    "aliases": "dnf4 dnf5 yum3"
+  },
+  {
+    "name": "pacman-impurifier",
+    "label": "pacman",
+    "description": "ALPM packages",
+    "frontends": "pacman, makepkg, Yay, Paru, Pikaur, Aura, Pamac, Pacaur, Trizen",
+    "category": "Native packages",
+    "revision": "de17315b2dde4a95b63fc793927420e51445f373",
+    "aliases": "Arch Manjaro AUR"
+  },
+  {
+    "name": "apk-impurifier",
+    "label": "apk",
+    "description": "Alpine APK",
+    "frontends": "APK 2 and APK 3, OpenRC",
+    "category": "Native packages",
+    "revision": "9cf0a2253f741ce847687e680378515c6099d378",
+    "aliases": "Alpine"
+  },
+  {
+    "name": "opkg-impurifier",
+    "label": "opkg",
+    "description": "IPK packages",
+    "frontends": "opkg, OpenWrt",
+    "category": "Native packages",
+    "revision": "93b18785c61cb4b0db1e98cdc6a591cd3f4f38b7",
+    "aliases": "IPK OpenWrt"
+  },
+  {
+    "name": "ipkg-impurifier",
+    "label": "ipkg",
+    "description": "Historical IPK packages",
+    "frontends": "ipkg",
+    "category": "Native packages",
+    "revision": "127a00e026f771bf5d842ac9f617552814339cd1"
+  },
+  {
+    "name": "xbps-impurifier",
+    "label": "xbps",
+    "description": "XBPS packages and templates",
+    "frontends": "xbps-install, xbps-src, runit",
+    "category": "Native packages",
+    "revision": "d1adb6bacc8ba88dcc7e534dc2f8aecfdb3c3d04"
+  },
+  {
+    "name": "pkgtools-impurifier",
+    "label": "pkgtools",
+    "description": "Slackware packages",
+    "frontends": "installpkg, slackpkg, slapt-get, sbopkg, Netpkg",
+    "category": "Native packages",
+    "revision": "8232cb0f7caf81df1a7a35c336ee82f562c22752"
+  },
+  {
+    "name": "pkgutils-impurifier",
+    "label": "pkgutils",
+    "description": "CRUX packages and ports",
+    "frontends": "pkgutils, pkgmk, prt-get",
+    "category": "Native packages",
+    "revision": "68f0dcc3e1434e0842bb46126a3fcc31602371f6"
+  },
+  {
+    "name": "eopkg-impurifier",
+    "label": "eopkg",
+    "description": "Solus packages",
+    "frontends": "eopkg",
+    "category": "Native packages",
+    "revision": "3d63758a45fb4f21f5793c45d6fb9ebba71f6e97"
+  },
+  {
+    "name": "pisi-impurifier",
+    "label": "pisi",
+    "description": "PiSi packages",
+    "frontends": "PiSi, Pardus",
+    "category": "Native packages",
+    "revision": "8a415473cc1333a85ebfa501c72a85ad1ffc1d78"
+  },
+  {
+    "name": "petget-impurifier",
+    "label": "petget",
+    "description": "Puppy PET packages",
+    "frontends": "PETget, Puppy Package Manager",
+    "category": "Native packages",
+    "revision": "29927dfa81f1f422605c7523408ec35536d2cc67"
+  },
+  {
+    "name": "entropy-impurifier",
+    "label": "entropy",
+    "description": "Entropy packages",
+    "frontends": "equo, Sabayon",
+    "category": "Native packages",
+    "revision": "df4c9341b34d56febfe62ac67ff6a9308f90b722"
+  },
+  {
+    "name": "portage-impurifier",
+    "label": "portage",
+    "description": "Gentoo ebuilds",
+    "frontends": "Portage, emerge",
+    "category": "Ports & source builds",
+    "revision": "d9dd2771a25caab5c8033aec514ec87fa3b34159"
+  },
+  {
+    "name": "pkgcore-impurifier",
+    "label": "pkgcore",
+    "description": "PMS package integration",
+    "frontends": "pkgcore",
+    "category": "Ports & source builds",
+    "revision": "564b8de8aa9bcf86033872769e2b5daf79d0e418"
+  },
+  {
+    "name": "paludis-impurifier",
+    "label": "paludis",
+    "description": "PMS package integration",
+    "frontends": "Paludis",
+    "category": "Ports & source builds",
+    "revision": "656b7e513166e14ce2187345b2911232ab3d3af2"
+  },
+  {
+    "name": "kiss-impurifier",
+    "label": "kiss",
+    "description": "KISS packages",
+    "frontends": "kiss",
+    "category": "Ports & source builds",
+    "revision": "12b10584232ecd43aaa451f9db8400b3e913a126"
+  },
+  {
+    "name": "cpt-impurifier",
+    "label": "cpt",
+    "description": "Carbs packages",
+    "frontends": "Carbs Packaging Tools",
+    "category": "Ports & source builds",
+    "revision": "c9590e8abcdb906cc17f00fdb9564ccdcc6a6c82"
+  },
+  {
+    "name": "sorcery-impurifier",
+    "label": "sorcery",
+    "description": "Source Mage spells",
+    "frontends": "Sorcery, cast, dispel",
+    "category": "Ports & source builds",
+    "revision": "550157e5b7090df92f9f67399032e0d9cf0a1efe"
+  },
+  {
+    "name": "lunar-impurifier",
+    "label": "lunar",
+    "description": "Lunar modules",
+    "frontends": "lin, lrm, lvu",
+    "category": "Ports & source builds",
+    "revision": "bbd2318b560246ed97d36654f380189b31e9d7e0"
+  },
+  {
+    "name": "pkgsrc-impurifier",
+    "label": "pkgsrc",
+    "description": "Portable packages and ports",
+    "frontends": "pkgsrc, pkg_add",
+    "category": "Ports & source builds",
+    "revision": "cf0e73fd754e9c2fa5d0f17fd2fba3dabc3d54c2"
+  },
+  {
+    "name": "homebrew-impurifier",
+    "label": "homebrew",
+    "description": "Homebrew formulae",
+    "frontends": "Homebrew, Linuxbrew",
+    "category": "Ports & source builds",
+    "revision": "e9a80df910f733eff49993f2352dbdc862865053"
+  },
+  {
+    "name": "macports-impurifier",
+    "label": "macports",
+    "description": "MacPorts ports",
+    "frontends": "MacPorts on Linux",
+    "category": "Ports & source builds",
+    "revision": "774793c511abb468b28c779e2dae482bce49e486"
+  },
+  {
+    "name": "bitbake-impurifier",
+    "label": "bitbake",
+    "description": "OpenEmbedded layers and recipes",
+    "frontends": "BitBake, OpenEmbedded, Yocto",
+    "category": "Ports & source builds",
+    "revision": "cbd4fcf2cc746681186334e74cf0f3fa7178dcfe"
+  },
+  {
+    "name": "systemd-sysext-impurifier",
+    "label": "systemd-sysext",
+    "description": "System extensions",
+    "frontends": "systemd-sysext, SquashFS, overlayfs",
+    "category": "Images & bundles",
+    "revision": "6830482e1e90fc1893c03e6c9754ea28c8a44961"
+  },
+  {
+    "name": "rpm-ostree-impurifier",
+    "label": "rpm-ostree",
+    "description": "RPM/OSTree deployments",
+    "frontends": "rpm-ostree, OSTree",
+    "category": "Images & bundles",
+    "revision": "7cf38ebb2475cadf105b282a59862768c5dc32bf"
+  },
+  {
+    "name": "bootc-impurifier",
+    "label": "bootc",
+    "description": "Bootable OCI deployments",
+    "frontends": "bootc, OSTree, OCI",
+    "category": "Images & bundles",
+    "revision": "0d5b376fa1f57c0caeecaaec42d748a3cf257b5f"
+  },
+  {
+    "name": "transactional-update-impurifier",
+    "label": "transactional-update",
+    "description": "Transactional snapshots",
+    "frontends": "transactional-update, Tukit, Snapper",
+    "category": "Images & bundles",
+    "revision": "cb82fbe50fd7b3705c377ec1dac9f799e8a83c20"
+  },
+  {
+    "name": "swupd-impurifier",
+    "label": "swupd",
+    "description": "Clear Linux bundles",
+    "frontends": "swupd",
+    "category": "Images & bundles",
+    "revision": "6a1a67116a3a7c75540aa7c9aff763eae8778a6a"
+  },
+  {
+    "name": "brl-impurifier",
+    "label": "brl",
+    "description": "Bedrock strata",
+    "frontends": "Bedrock Linux, brl",
+    "category": "Images & bundles",
+    "revision": "fa7faed235325620526e5298201f5f4037b79954"
+  },
+  {
+    "name": "flatpak-impurifier",
+    "label": "flatpak",
+    "description": "Flatpak applications",
+    "frontends": "Flatpak, OSTree",
+    "category": "Images & bundles",
+    "revision": "2a692131d71f97befeb86234df5905d944cc7e03"
+  },
+  {
+    "name": "snap-impurifier",
+    "label": "snap",
+    "description": "Classic snaps",
+    "frontends": "snapd, Snap",
+    "category": "Images & bundles",
+    "revision": "685bcfb6b8c058b99500fc28137f8c41a036a9cf"
+  },
+  {
+    "name": "appimage-impurifier",
+    "label": "appimage",
+    "description": "AppImage bundles",
+    "frontends": "AppImage, AppImageLauncher",
+    "category": "Images & bundles",
+    "revision": "49f45cae3c93e06c3b5e6334c4fe1bbf3664e370"
+  },
+  {
+    "name": "autopackage-impurifier",
+    "label": "autopackage",
+    "description": "Autopackage installers",
+    "frontends": "Autopackage",
+    "category": "Images & bundles",
+    "revision": "a396f8e25c94d6cb267f8e251b694dbdf0b87b95"
+  },
+  {
+    "name": "tce-impurifier",
+    "label": "tce",
+    "description": "Tiny Core extensions",
+    "frontends": "Tiny Core, tce-load",
+    "category": "Images & bundles",
+    "revision": "1152ba2fbfc9abd4140636b1e3bf8da2d256172b"
+  },
+  {
+    "name": "nix-impurifier",
+    "label": "nix",
+    "description": "Native Nix profiles",
+    "frontends": "Nix",
+    "category": "Profiles & environments",
+    "revision": "3302b0a7b5ab2b6f6bc66811551b61849918a2ed"
+  },
+  {
+    "name": "guix-impurifier",
+    "label": "guix",
+    "description": "Guix package integration",
+    "frontends": "GNU Guix",
+    "category": "Profiles & environments",
+    "revision": "0b8951896f700cd71da850e7dc83a1fa5dd204e4"
+  },
+  {
+    "name": "conda-impurifier",
+    "label": "conda",
+    "description": "Conda environments",
+    "frontends": "Conda, mamba, micromamba",
+    "category": "Profiles & environments",
+    "revision": "2992e47f48978d88d17565d8b24915eddc361f0e"
+  },
+  {
+    "name": "spack-impurifier",
+    "label": "spack",
+    "description": "Spack packages",
+    "frontends": "Spack, Clingo",
+    "category": "Profiles & environments",
+    "revision": "1610037893d1a1453509013d37e24afb627671db"
+  },
+  {
+    "name": "zeroinstall-impurifier",
+    "label": "zeroinstall",
+    "description": "Zero Install feeds",
+    "frontends": "0install, Zero Install",
+    "category": "Profiles & environments",
+    "revision": "0409c7aa3f2348fead52c373c1283cdd1fbf2cbd"
+  }
+]

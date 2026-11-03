@@ -1,0 +1,48 @@
+#!/usr/bin/env python3
+# SPDX-License-Identifier: MIT
+"""Check the generated site's navigation, local anchors and project coverage."""
+from html.parser import HTMLParser
+import json
+from pathlib import Path
+from urllib.parse import unquote, urlsplit
+
+ROOT = Path(__file__).resolve().parents[1]
+DIST = ROOT / 'dist'
+class Document(HTMLParser):
+    def __init__(self):
+        super().__init__(); self.ids=set(); self.links=[]; self.assets=[]; self.headings=0; self.lang=None
+    def handle_starttag(self, tag, attrs):
+        attrs=dict(attrs)
+        if 'id' in attrs:
+            assert attrs['id'] not in self.ids, f'Duplicate id: {attrs["id"]}'
+            self.ids.add(attrs['id'])
+        if tag=='a' and attrs.get('href'): self.links.append(attrs['href'])
+        if tag in ('script','img') and attrs.get('src'): self.assets.append(attrs['src'])
+        if tag=='link' and attrs.get('href'): self.assets.append(attrs['href'])
+        if tag=='h1': self.headings+=1
+        if tag=='html': self.lang=attrs.get('lang')
+
+pages={}
+for path in DIST.rglob('*.html'):
+    doc=Document(); doc.feed(path.read_text()); pages[path]=doc
+    assert doc.headings==1, f'{path}: expected one h1, got {doc.headings}'
+    assert doc.lang=='en', path
+    assert 'content' in doc.ids, path
+for path, doc in pages.items():
+    for ref in doc.links+doc.assets:
+        url=urlsplit(ref)
+        assert url.scheme.lower() not in ['javascript','file'], f'{path}: unsafe URL {ref}'
+        if url.scheme or url.netloc: continue
+        target=(DIST/unquote(url.path.lstrip('/'))) if url.path.startswith('/') else (path.parent/unquote(url.path))
+        if not url.path: target=path
+        if target.is_dir(): target=target/'index.html'
+        assert target.exists(), f'{path}: missing target {ref}'
+        if url.fragment and target in pages:
+            assert unquote(url.fragment) in pages[target].ids, f'{path}: missing anchor {ref}'
+    assert all(not urlsplit(ref).netloc for ref in doc.assets), f'{path}: third-party asset dependency'
+projects=json.loads((ROOT/'content/projects.json').read_text())
+assert len(projects)==40 and len({p['name'] for p in projects})==40
+for project in projects:
+    assert DIST/project['name']/'index.html' in pages, project['name']
+assert len(pages)==45
+print('Passed: 45 pages, 40 project guides, internal links/anchors, unique headings, local assets.')
