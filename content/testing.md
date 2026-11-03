@@ -1,6 +1,6 @@
 # Tested through native transactions
 
-An archive that builds successfully is only the beginning. Impurifier checks run native package managers and supporting tools inside QEMU VMs, with real Nix stores and package databases.
+An archive that builds successfully is only the beginning. Impurifier checks run native package managers and supporting tools inside QEMU VMs, with actual native tools and package databases. Nix-backed modes use real Nix stores; native payload modes also test operation without target-side Nix.
 
 Each project's README describes the contract its tests exercise and the parts that still need coverage. A passing VM does not imply every distribution, architecture, init system or hardware combination is supported.
 
@@ -46,3 +46,9 @@ VM checks can be substantial builds. Their fixtures may boot NixOS while running
 Native Nix provisioning through an impure package is explicitly deferred. So are the additional platform and integration cases called out by individual adapters: for example, full OpenWrt/procd boot, router hardware, complete desktop stacks and further architectures.
 
 The implemented adapters remain useful within their documented contracts. Read those contracts before choosing one for a deployment.
+
+## Native payloads and early userspace
+
+DEB, RPM, ALPM and APK target-root VMs install native-owned closure objects, upgrade applications, retain shared dependencies, detect altered files and clean up through native tools without a target Nix client, daemon or database. Native prefix tests for Conda, Spack, Homebrew and MacPorts run the installed payload inside chroots without `/nix`. Separate bundled-client suites exercise real static Nix fallback while preserving the native ownership and trust boundaries.
+
+[dracut](/dracut-impurifier/) and [mkinitcpio](/mkinitcpio-impurifier/) each generate and boot initial and regenerated initramfs images under QEMU. Distinct proofs execute under the upstream init implementation before a real root is available. The guest has no root disk, mounted host store or Nix database. These tests establish the early-userspace contract rather than complete distribution boots.

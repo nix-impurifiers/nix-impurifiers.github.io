@@ -49,3 +49,30 @@ release snapshots belonging to missing installations.
 
 This backend does not activate a global profile, system services, or host accounts.
 See [development notes](docs/development/index.md) for verification and limits.
+
+## Native payloads and bundled clients
+
+`makeNativeRepository { name; version; payload; dependencies ? []; archiveURL ? null; }`
+exports a checksummed source archive and ordinary Spack recipe that installs a
+producer-supplied prefix tree directly. It adds no Nix/Python runtime dependency,
+launcher, root registration or Nix database. Native `makeCollection` composes
+versions of these recipes, including recipes without runtime dependencies.
+
+The producer supplies the correct native layout and target ABI. This does not
+relocate an arbitrary Nix closure. The native-payload VM installs two versions as
+an ordinary user, executes both prefixes inside a root with no `/nix`, verifies
+file hashes, and removes the versions independently. Nix is the producer/build
+tool; the native client owns the installed prefixes.
+
+The existing `makeRepository`/net/offline methods also accept `bundledNixStore`
+and nonempty `bundledNixNotices`. A supplied static client makes the default
+native Nix dependency optional. Launch prefers a compatible external client and
+otherwise uses its private installed client. Explicit `IMPURIFIER_NIX_STORE`
+selection is supported; failed mutations are never retried with another client.
+Native Python remains a runtime dependency in this store-managed mode.
+
+Trusted root preparation still uses the administrator's installed helper/client,
+never prefix-owned code. Bundling supplies a client, not daemon provisioning or
+weaker cache trust. The bundled VM exercises ordinary native transactions,
+recovery, host-library capture and removal with an incompatible external client
+candidate so the real static fallback executes.

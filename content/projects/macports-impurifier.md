@@ -67,3 +67,16 @@ sudo /opt/local/bin/macports-impurifier prune --keep 0
 Services, config-file policy, macOS, other prefixes/architectures and remote binary
 archives are not claimed. See [development notes](docs/development/index.md) for
 native SDK compatibility details and VM coverage.
+
+`makeNativePort { payload; name; version; ... }` accepts a producer-prepared
+prefix tree. It emits a native port without impurifier activation hooks, Nix
+requirements or the Nix-backed adapter's `/opt/local` prefix guard. Defaults are
+`platforms = [ "any" ]` and `architectures = [ "noarch" ]`; producers must set
+accurate restrictions for compiled payloads. The producer owns ABI and prefix
+compatibility; the adapter does not relocate binaries.
+
+`makeRuntimePort` optionally accepts a static `bundledNixStore` and upstream
+`bundledNixNotices`. Without explicit dependency overrides, bundling omits the
+external Nix dependency and retains Python. A compatible external client takes
+precedence; failures after selection do not trigger retries against another
+client or store. Bundling is not Nix provisioning.

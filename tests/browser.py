@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: MIT
 import os
+import json
 import functools
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
 import threading
@@ -8,6 +9,7 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 ROOT=Path(__file__).resolve().parents[1]
+PROJECT_COUNT=len(json.loads((ROOT/'content/projects.json').read_text()))
 server = None
 BASE=os.environ.get('SITE_TEST_URL')
 if not BASE:
@@ -23,9 +25,9 @@ with sync_playwright() as p:
     page.on('pageerror',lambda error:errors.append(str(error)))
     response=page.goto(BASE+'/'); assert response.status==200
     page.wait_for_selector('html.js')
-    assert page.locator('[data-project]:visible').count()==40
+    assert page.locator('[data-project]:visible').count()==PROJECT_COUNT
     search_box = page.locator('#project-search').bounding_box()
-    for label in ['Native packages', 'Ports & source builds', 'Images & bundles', 'Profiles & environments', 'All']:
+    for label in ['Native packages', 'Ports & source builds', 'Images & bundles', 'Profiles & environments', 'Early userspace', 'All']:
         page.get_by_role('button', name=label, exact=True).click()
         current = page.locator('#project-search').bounding_box()
         for dimension in ['x', 'width', 'height']:
@@ -43,7 +45,7 @@ with sync_playwright() as p:
     page.locator('#project-search').fill('no-such-frontend')
     assert page.locator('#no-projects').is_visible()
     page.locator('#reset-search').click()
-    assert page.locator('[data-project]:visible').count()==40
+    assert page.locator('[data-project]:visible').count()==PROJECT_COUNT
     page.get_by_role('button',name='Images & bundles',exact=True).click()
     assert page.locator('[data-project]:visible').count()==11
     assert page.get_by_role('button',name='Images & bundles',exact=True).get_attribute('aria-pressed')=='true'
@@ -68,7 +70,7 @@ with sync_playwright() as p:
     scaled=browser.new_context(viewport={'width':1920,'height':1080},device_scale_factor=2,color_scheme='light')
     sp=scaled.new_page(); sp.goto(BASE+'/'); sp.wait_for_selector('html.js')
     scaled_box=sp.locator('#project-search').bounding_box()
-    for label in ['Native packages', 'Ports & source builds', 'Images & bundles', 'Profiles & environments', 'All']:
+    for label in ['Native packages', 'Ports & source builds', 'Images & bundles', 'Profiles & environments', 'Early userspace', 'All']:
         sp.get_by_role('button',name=label,exact=True).click()
         current=sp.locator('#project-search').bounding_box()
         for dimension in ['x','width','height']:
@@ -90,7 +92,7 @@ with sync_playwright() as p:
     assert mp.locator('[data-project]:visible').count()==1
     nojs=browser.new_context(java_script_enabled=False,viewport={'width':390,'height':844})
     np=nojs.new_page(); np.goto(BASE+'/')
-    assert np.locator('[data-project]:visible').count()==40
+    assert np.locator('[data-project]:visible').count()==PROJECT_COUNT
     assert not np.locator('#project-search').is_visible()
     assert np.get_by_role('link',name='dpkg-impurifier',exact=True).is_visible()
     np.get_by_role('link',name='dpkg-impurifier',exact=True).click()
@@ -98,4 +100,4 @@ with sync_playwright() as p:
     assert not errors,errors
     browser.close()
 if server: server.shutdown(); server.server_close()
-print('Passed: desktop/mobile, all 40 entries, search/filter/reset, examples, clipboard, persisted theme, guides and no-JavaScript navigation.')
+print(f'Passed: desktop/mobile, all {PROJECT_COUNT} entries, search/filter/reset, examples, clipboard, persisted theme, guides and no-JavaScript navigation.')

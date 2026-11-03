@@ -48,8 +48,8 @@ for path, doc in pages.items():
             assert hashlib.sha256((DIST/ref.lstrip('/')).read_bytes()).hexdigest().startswith(match[1]), ref
     assert all(not urlsplit(ref).netloc for ref in doc.assets), f'{path}: third-party asset dependency'
 projects=json.loads((ROOT/'content/projects.json').read_text())
-assert len(projects)==40 and len({p['name'] for p in projects})==40
+assert projects and len({p['name'] for p in projects})==len(projects)
 for project in projects:
     assert DIST/project['name']/'index.html' in pages, project['name']
-assert len(pages)==45
-print('Passed: 45 pages, 40 project guides, internal links/anchors, unique headings, local assets.')
+assert len(pages)==len(projects)+5
+print(f'Passed: {len(pages)} pages, {len(projects)} project guides, internal links/anchors, unique headings, local assets.')

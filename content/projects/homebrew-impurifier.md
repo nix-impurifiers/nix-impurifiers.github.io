@@ -56,3 +56,16 @@ to release snapshots belonging to missing implementations.
 
 This backend does not activate a global profile, services, or accounts. See
 [development notes](docs/development/index.md) for native verification and limits.
+
+`makeNativeFormula { payload; name; version; dependencies ? []; archiveURL ? null; }`
+accepts a producer-prepared prefix tree and emits an ordinary source formula.
+Homebrew owns its files; the installed payload has no impurifier launcher, Nix
+client, daemon, database or Python requirement. The producer is responsible for
+ABI compatibility and prefix independence. This does not relocate store paths.
+
+Nix-backed formulae optionally accept `bundledNixStore` (a static ELF `nix-store`)
+and `bundledNixNotices`. They prefer a compatible external client, falling back
+to the private bundled client before any operation. A failed operation is never
+retried with another client. Python remains required. Root preparation continues
+to use the administrator's trusted client. A bundled client does not install Nix
+or grant write access to a store.

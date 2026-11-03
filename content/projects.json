@@ -5,7 +5,7 @@
     "description": "DEB packages",
     "frontends": "apt, apt-get, aptitude, Nala, GDebi, Synaptic",
     "category": "Native packages",
-    "revision": "4931ace4b7990253727a1f165d8e2a380233faa5",
+    "revision": "113b64a4c3aaeef9220e9f06a7db5e72279c9cf1",
     "aliases": "deb Debian Ubuntu"
   },
   {
@@ -14,7 +14,7 @@
     "description": "RPM packages",
     "frontends": "DNF 4/5, yum, Zypper, microdnf, tdnf, APT-RPM, urpmi, Poldek",
     "category": "Native packages",
-    "revision": "9ae4d727003cb03b65fc8350d4dca90325f385d4",
+    "revision": "964548520253731bf17d460b4843bb3408daa0b7",
     "aliases": "dnf4 dnf5 yum3"
   },
   {
@@ -23,7 +23,7 @@
     "description": "ALPM packages",
     "frontends": "pacman, makepkg, Yay, Paru, Pikaur, Aura, Pamac, Pacaur, Trizen",
     "category": "Native packages",
-    "revision": "de17315b2dde4a95b63fc793927420e51445f373",
+    "revision": "03b6f9f8ba336dfdd256bb59f96917588f2d338b",
     "aliases": "Arch Manjaro AUR"
   },
   {
@@ -32,7 +32,7 @@
     "description": "Alpine APK",
     "frontends": "APK 2 and APK 3, OpenRC",
     "category": "Native packages",
-    "revision": "9cf0a2253f741ce847687e680378515c6099d378",
+    "revision": "fa6a04fe28f59f08f632bcc652ecd5e2f6eec963",
     "aliases": "Alpine"
   },
   {
@@ -178,7 +178,7 @@
     "description": "Homebrew formulae",
     "frontends": "Homebrew, Linuxbrew",
     "category": "Ports & source builds",
-    "revision": "e9a80df910f733eff49993f2352dbdc862865053"
+    "revision": "482a3189437661b807b2ed9f313382e3e72dc391"
   },
   {
     "name": "macports-impurifier",
@@ -186,7 +186,7 @@
     "description": "MacPorts ports",
     "frontends": "MacPorts on Linux",
     "category": "Ports & source builds",
-    "revision": "774793c511abb468b28c779e2dae482bce49e486"
+    "revision": "ab35224ad33286110abdd741908d8434b48095eb"
   },
   {
     "name": "bitbake-impurifier",
@@ -306,7 +306,7 @@
     "description": "Conda environments",
     "frontends": "Conda, mamba, micromamba",
     "category": "Profiles & environments",
-    "revision": "2992e47f48978d88d17565d8b24915eddc361f0e"
+    "revision": "579d58284a575ead52a95789b5cf7e59d5345736"
   },
   {
     "name": "spack-impurifier",
@@ -314,7 +314,7 @@
     "description": "Spack packages",
     "frontends": "Spack, Clingo",
     "category": "Profiles & environments",
-    "revision": "1610037893d1a1453509013d37e24afb627671db"
+    "revision": "52150816ee1b25e4175b38475a0cd7ef644811cb"
   },
   {
     "name": "zeroinstall-impurifier",
@@ -323,5 +323,23 @@
     "frontends": "0install, Zero Install",
     "category": "Profiles & environments",
     "revision": "0409c7aa3f2348fead52c373c1283cdd1fbf2cbd"
+  },
+  {
+    "name": "dracut-impurifier",
+    "label": "dracut",
+    "description": "Native dracut modules and embedded early userspace",
+    "frontends": "dracut, initramfs generation",
+    "category": "Early userspace",
+    "revision": "cca1e1dfc098410ebf8fdd7b6ba4b4130209dd51",
+    "aliases": "boot initramfs"
+  },
+  {
+    "name": "mkinitcpio-impurifier",
+    "label": "mkinitcpio",
+    "description": "Native mkinitcpio build and runtime hooks",
+    "frontends": "mkinitcpio, initramfs generation",
+    "category": "Early userspace",
+    "revision": "06364028f8de9ddd6df6016a718a12062bfacab0",
+    "aliases": "boot initramfs"
   }
 ]

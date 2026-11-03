@@ -6,7 +6,7 @@ The quick example below produces a native DEB containing a Nix-built `hello`. Ot
 
 ## Before you begin
 
-You need a working Nix installation and the native runtime dependencies described by your adapter. For dpkg, the runtime also requires Python 3. Native Nix provisioning is a future installer project; the impurifiers do not currently install Nix for you.
+The build machine needs Nix. Target requirements depend on the payload mode: native-owned payloads can run without Nix, while Nix-backed packages need a usable client and store. Selected adapters can bundle a supplied static client and prefer a compatible external one. The Nix-backed dpkg runtime also requires Python 3. Complete Nix provisioning through an impure package remains deferred installer work.
 
 An external Nix installation must be represented accurately in the native package database when another package depends on it. The adapter lets you select that dependency; it does not invent a provider.
 
@@ -87,3 +87,11 @@ Offline artifacts are larger and still require a working Nix runtime. Neither fl
 A native package transaction and Nix profile activation are separate operations. A failed fetch or profile composition can leave the native package installed while retaining the previous profile. Fix the reported cause and follow the adapter's recovery procedure.
 
 Support for services, configuration, accounts, drivers, rollback and image deployment varies by adapter. The [VM coverage guide](/testing/) explains how to read those limits.
+
+## Native payloads without target-side Nix
+
+The dpkg, RPM, ALPM and APK adapters can export complete closures as ordinary native-owned packages at their original store paths. For example, `adapter.makeNativeDebs { pkg = pkgs.hello; }` produces a collection of DEBs with exact native dependencies between store objects. The native manager owns those files; there is no target Nix database or daemon. Keep this ownership separate from a Nix-managed store and its garbage collection.
+
+Conda, Spack, Homebrew and MacPorts also accept producer-prepared native prefix trees. The producer supplies ABI-compatible files that work in the target prefix; this is not automatic relocation. Their guides describe the relevant native constructor.
+
+The [dracut adapter](/dracut-impurifier/) and [mkinitcpio adapter](/mkinitcpio-impurifier/) produce native early-userspace modules and hooks. Their payloads run before the real root is available, without target-side Nix.

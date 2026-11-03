@@ -23,7 +23,7 @@ python -m http.server --directory dist
 ```
 
 `dist/` contains the complete site: the directory, getting-started and testing
-guides, 40 project READMEs and shared engine documentation. It can be hosted by
+guides, all project READMEs and shared engine documentation. It can be hosted by
 any static web server. Browser interactions use plain JavaScript; all
 navigation and documentation remain usable without it.
 
