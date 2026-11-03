@@ -29,7 +29,7 @@ with sync_playwright() as p:
         page.get_by_role('button', name=label, exact=True).click()
         current = page.locator('#project-search').bounding_box()
         for dimension in ['x', 'width', 'height']:
-            assert abs(current[dimension] - search_box[dimension]) < 0.5, (label, dimension, search_box, current)
+            assert abs(current[dimension] - search_box[dimension]) < 0.001, (label, dimension, search_box, current)
     page.screenshot(path=str(OUT/'desktop-light.png'),full_page=True)
     page.locator('#project-search').fill('Zypper')
     assert page.locator('[data-project]:visible').count()==1
@@ -65,6 +65,15 @@ with sync_playwright() as p:
     for slug in ['getting-started','testing','opkg-impurifier','portage-impurifier','bootc-impurifier','bitbake-impurifier','impurifier']:
         response=page.goto(BASE+'/'+slug+'/'); assert response.status==200,slug
         assert page.locator('h1').count()==1,slug
+    scaled=browser.new_context(viewport={'width':1920,'height':1080},device_scale_factor=2,color_scheme='light')
+    sp=scaled.new_page(); sp.goto(BASE+'/'); sp.wait_for_selector('html.js')
+    scaled_box=sp.locator('#project-search').bounding_box()
+    for label in ['Native packages', 'Ports & source builds', 'Images & bundles', 'Profiles & environments', 'All']:
+        sp.get_by_role('button',name=label,exact=True).click()
+        current=sp.locator('#project-search').bounding_box()
+        for dimension in ['x','width','height']:
+            assert abs(current[dimension]-scaled_box[dimension]) < 0.001, (label,dimension,scaled_box,current)
+    sp.screenshot(path=str(OUT/'desktop-1080p-2x.png'),full_page=False)
     mobile=browser.new_context(viewport={'width':390,'height':844},device_scale_factor=1,color_scheme='light',is_mobile=True,has_touch=True)
     mp=mobile.new_page(); mp.on('pageerror',lambda error:errors.append(str(error)))
     for slug in ['','getting-started/','rpm-impurifier/','bitbake-impurifier/']:
@@ -76,7 +85,7 @@ with sync_playwright() as p:
         mp.get_by_role('button', name=label, exact=True).click()
         current = mp.locator('#project-search').bounding_box()
         for dimension in ['x', 'width', 'height']:
-            assert abs(current[dimension] - mobile_box[dimension]) < 0.5, (label, dimension, mobile_box, current)
+            assert abs(current[dimension] - mobile_box[dimension]) < 0.001, (label, dimension, mobile_box, current)
     mp.locator('#project-search').fill('apk')
     assert mp.locator('[data-project]:visible').count()==1
     nojs=browser.new_context(java_script_enabled=False,viewport={'width':390,'height':844})

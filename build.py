@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: MIT
 """Build the static directory and pinned project documentation, without network access."""
 import html
+import hashlib
 from html.parser import HTMLParser
 import json
 from pathlib import Path
@@ -15,6 +16,10 @@ OUT = ROOT / "dist"
 PROJECTS = json.loads((ROOT / "content/projects.json").read_text())
 ORIGIN = "https://github.com/nix-impurifiers"
 ESC = html.escape
+ASSET_URLS = {
+    name: f"/assets/{Path(name).stem}.{hashlib.sha256((ROOT/'assets'/name).read_bytes()).hexdigest()[:12]}{Path(name).suffix}"
+    for name in ['site.css', 'site.js']
+}
 assert len(PROJECTS) == 40 and len({p['name'] for p in PROJECTS}) == 40
 
 THEME = """<script>try{var t=localStorage.getItem('impurifiers-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}</script>"""
@@ -24,7 +29,7 @@ def page(title, description, body, *, docs=False):
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="light dark"><meta name="description" content="{ESC(description, quote=True)}">
 <title>{ESC(title)}{' · nix-impurifiers' if title != 'nix-impurifiers' else ''}</title>
-{THEME}<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/assets/site.css"><script src="/assets/site.js" defer></script></head>
+{THEME}<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="{ASSET_URLS['site.css']}"><script src="{ASSET_URLS['site.js']}" defer></script></head>
 <body><a class="skip" href="#content">Skip to content</a>
 <header class="site-header"><div class="shell"><a class="brand" href="/">nix-impurifiers</a>
 <nav class="site-nav" aria-label="Main navigation"><a href="/#impurifiers">Directory</a><a href="/getting-started/">Get started</a><a class="source-link" href="{ORIGIN}">GitHub ↗</a><button type="button" class="theme-toggle js-only" data-theme-toggle aria-label="Change color theme">Theme: system</button></nav></div></header>
@@ -102,6 +107,8 @@ def homepage():
 def main():
     if OUT.exists(): shutil.rmtree(OUT)
     OUT.mkdir(); shutil.copytree(ROOT/'assets', OUT/'assets')
+    for name, url in ASSET_URLS.items():
+        (OUT/'assets'/name).rename(OUT/url.lstrip('/'))
     (OUT/'index.html').write_text(page('nix-impurifiers','Nix-built applications, installed through native package managers. Explore 40 impurifiers, native VM coverage, and project documentation.',homepage()))
     for p in PROJECTS:
         document(p['name'],(ROOT/'content/projects'/f"{p['name']}.md").read_text(),p['description']+'. '+p['frontends']+'.',revision=p['revision'])

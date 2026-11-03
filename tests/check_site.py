@@ -3,6 +3,8 @@
 """Check the generated site's navigation, local anchors and project coverage."""
 from html.parser import HTMLParser
 import json
+import hashlib
+import re
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
@@ -39,6 +41,11 @@ for path, doc in pages.items():
         assert target.exists(), f'{path}: missing target {ref}'
         if url.fragment and target in pages:
             assert unquote(url.fragment) in pages[target].ids, f'{path}: missing anchor {ref}'
+    for ref in doc.assets:
+        if ref.endswith(('.css', '.js')):
+            match = re.fullmatch(r'/assets/site\.([0-9a-f]{12})\.(css|js)', ref)
+            assert match, f'{path}: stylesheet/script URL must be content-versioned: {ref}'
+            assert hashlib.sha256((DIST/ref.lstrip('/')).read_bytes()).hexdigest().startswith(match[1]), ref
     assert all(not urlsplit(ref).netloc for ref in doc.assets), f'{path}: third-party asset dependency'
 projects=json.loads((ROOT/'content/projects.json').read_text())
 assert len(projects)==40 and len({p['name'] for p in projects})==40
