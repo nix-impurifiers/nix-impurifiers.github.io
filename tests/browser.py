@@ -24,6 +24,12 @@ with sync_playwright() as p:
     response=page.goto(BASE+'/'); assert response.status==200
     page.wait_for_selector('html.js')
     assert page.locator('[data-project]:visible').count()==40
+    search_box = page.locator('#project-search').bounding_box()
+    for label in ['Native packages', 'Ports & source builds', 'Images & bundles', 'Profiles & environments', 'All']:
+        page.get_by_role('button', name=label, exact=True).click()
+        current = page.locator('#project-search').bounding_box()
+        for dimension in ['x', 'width', 'height']:
+            assert abs(current[dimension] - search_box[dimension]) < 0.5, (label, dimension, search_box, current)
     page.screenshot(path=str(OUT/'desktop-light.png'),full_page=True)
     page.locator('#project-search').fill('Zypper')
     assert page.locator('[data-project]:visible').count()==1
@@ -65,6 +71,12 @@ with sync_playwright() as p:
         mp.goto(BASE+'/'+slug)
         assert mp.evaluate('document.documentElement.scrollWidth <= document.documentElement.clientWidth'),slug
     mp.goto(BASE+'/'); mp.screenshot(path=str(OUT/'mobile-light.png'),full_page=True)
+    mobile_box = mp.locator('#project-search').bounding_box()
+    for label in ['Profiles & environments', 'Native packages', 'All']:
+        mp.get_by_role('button', name=label, exact=True).click()
+        current = mp.locator('#project-search').bounding_box()
+        for dimension in ['x', 'width', 'height']:
+            assert abs(current[dimension] - mobile_box[dimension]) < 0.5, (label, dimension, mobile_box, current)
     mp.locator('#project-search').fill('apk')
     assert mp.locator('[data-project]:visible').count()==1
     nojs=browser.new_context(java_script_enabled=False,viewport={'width':390,'height':844})
