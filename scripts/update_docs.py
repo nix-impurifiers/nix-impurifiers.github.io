@@ -5,6 +5,7 @@ import base64
 import json
 from pathlib import Path
 import subprocess
+import sys
 
 ROOT=Path(__file__).resolve().parents[1]
 def api(path): return json.loads(subprocess.check_output(['gh','api',path],text=True))
@@ -13,7 +14,13 @@ def snapshot(name):
     data=api(f'repos/nix-impurifiers/{name}/contents/README.md?ref={revision}')
     return revision,base64.b64decode(data['content']).decode()
 projects=json.loads((ROOT/'content/projects.json').read_text())
+selected=set(sys.argv[1:])
+known={project['name'] for project in projects}|{'impurifier'}
+if selected-known:
+    raise SystemExit('Unknown project(s): '+', '.join(sorted(selected-known)))
 for project in projects:
+    if selected and project['name'] not in selected:
+        continue
     revision,text=snapshot(project['name'])
     (ROOT/'content/projects'/f'{project["name"]}.md').write_text(text)
     project['revision']=revision

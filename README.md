@@ -38,6 +38,8 @@ To update all README snapshots using an authenticated GitHub CLI:
 
 ```sh
 python scripts/update_docs.py
+# Or refresh selected guides and the shared engine:
+python scripts/update_docs.py opkg-impurifier xbps-impurifier
 python build.py
 python tests/check_site.py
 ```

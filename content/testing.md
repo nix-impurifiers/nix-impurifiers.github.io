@@ -52,3 +52,9 @@ The implemented adapters remain useful within their documented contracts. Read t
 DEB, RPM, ALPM and APK target-root VMs install native-owned closure objects, upgrade applications, retain shared dependencies, detect altered files and clean up through native tools without a target Nix client, daemon or database. Native prefix tests for Conda, Spack, Homebrew and MacPorts run the installed payload inside chroots without `/nix`. Separate bundled-client suites exercise real static Nix fallback while preserving the native ownership and trust boundaries.
 
 [dracut](/dracut-impurifier/) and [mkinitcpio](/mkinitcpio-impurifier/) each generate and boot initial and regenerated initramfs images under QEMU. Distinct proofs execute under the upstream init implementation before a real root is available. The guest has no root disk, mounted host store or Nix database. These tests establish the early-userspace contract rather than complete distribution boots.
+
+## Android applications and Termux
+
+[Android](/android-impurifier/) builds actual DEX/JNI applications, signs them with ephemeral test keys, and exercises the native Android package manager. Its software-QEMU fixture covers execution, upgrades with retained app data, rejected signer changes, rejected tampering and uninstall. Resource linking exposes generated Java resource IDs before DEX compilation; private production signing keys stay outside Nix builds.
+
+[Termux](/termux-impurifier/) is a distinct target. Its VM installs the actual Android app and embedded bootstrap, then runs the real Termux package manager as the app UID. A compiled Android-native executable consumes a required native package. Tests cover rootless unpacking, checksums, upgrades, dependency retention, preserved private-directory modes and cleanup. Initial coverage is Android-x86 API 28, not a claim of modern stock Android or ARM coverage.

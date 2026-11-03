@@ -9,7 +9,9 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 ROOT=Path(__file__).resolve().parents[1]
-PROJECT_COUNT=len(json.loads((ROOT/'content/projects.json').read_text()))
+PROJECTS=json.loads((ROOT/'content/projects.json').read_text())
+PROJECT_COUNT=len(PROJECTS)
+FILTERS=list(dict.fromkeys(project['category'] for project in PROJECTS))+['All']
 server = None
 BASE=os.environ.get('SITE_TEST_URL')
 if not BASE:
@@ -27,7 +29,7 @@ with sync_playwright() as p:
     page.wait_for_selector('html.js')
     assert page.locator('[data-project]:visible').count()==PROJECT_COUNT
     search_box = page.locator('#project-search').bounding_box()
-    for label in ['Native packages', 'Ports & source builds', 'Images & bundles', 'Profiles & environments', 'Early userspace', 'All']:
+    for label in FILTERS:
         page.get_by_role('button', name=label, exact=True).click()
         current = page.locator('#project-search').bounding_box()
         for dimension in ['x', 'width', 'height']:
@@ -47,7 +49,7 @@ with sync_playwright() as p:
     page.locator('#reset-search').click()
     assert page.locator('[data-project]:visible').count()==PROJECT_COUNT
     page.get_by_role('button',name='Images & bundles',exact=True).click()
-    assert page.locator('[data-project]:visible').count()==11
+    assert page.locator('[data-project]:visible').count()==sum(project['category']=='Images & bundles' for project in PROJECTS)
     assert page.get_by_role('button',name='Images & bundles',exact=True).get_attribute('aria-pressed')=='true'
     page.get_by_role('button',name='All',exact=True).click()
     page.get_by_role('button',name='RPM',exact=True).click()
@@ -64,13 +66,13 @@ with sync_playwright() as p:
     assert page.locator('h1').inner_text().startswith('rpm-impurifier')
     page.screenshot(path=str(OUT/'docs-dark.png'),full_page=False)
     page.goto(BASE+'/'); page.screenshot(path=str(OUT/'desktop-dark.png'),full_page=False)
-    for slug in ['getting-started','testing','opkg-impurifier','portage-impurifier','bootc-impurifier','bitbake-impurifier','impurifier']:
+    for slug in ['getting-started','testing','opkg-impurifier','portage-impurifier','bootc-impurifier','bitbake-impurifier','android-impurifier','termux-impurifier','dracut-impurifier','mkinitcpio-impurifier','impurifier']:
         response=page.goto(BASE+'/'+slug+'/'); assert response.status==200,slug
         assert page.locator('h1').count()==1,slug
     scaled=browser.new_context(viewport={'width':1920,'height':1080},device_scale_factor=2,color_scheme='light')
     sp=scaled.new_page(); sp.goto(BASE+'/'); sp.wait_for_selector('html.js')
     scaled_box=sp.locator('#project-search').bounding_box()
-    for label in ['Native packages', 'Ports & source builds', 'Images & bundles', 'Profiles & environments', 'Early userspace', 'All']:
+    for label in FILTERS:
         sp.get_by_role('button',name=label,exact=True).click()
         current=sp.locator('#project-search').bounding_box()
         for dimension in ['x','width','height']:
@@ -89,7 +91,9 @@ with sync_playwright() as p:
         for dimension in ['x', 'width', 'height']:
             assert abs(current[dimension] - mobile_box[dimension]) < 0.001, (label, dimension, mobile_box, current)
     mp.locator('#project-search').fill('apk')
-    assert mp.locator('[data-project]:visible').count()==1
+    assert mp.locator('[data-project]:visible').count()==2
+    mobile_matches=mp.locator('[data-project]:visible').all_inner_texts()
+    assert all(any(name in row for row in mobile_matches) for name in ['apk-impurifier', 'android-impurifier'])
     nojs=browser.new_context(java_script_enabled=False,viewport={'width':390,'height':844})
     np=nojs.new_page(); np.goto(BASE+'/')
     assert np.locator('[data-project]:visible').count()==PROJECT_COUNT

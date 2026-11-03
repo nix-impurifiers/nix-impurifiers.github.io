@@ -95,3 +95,9 @@ The dpkg, RPM, ALPM and APK adapters can export complete closures as ordinary na
 Conda, Spack, Homebrew and MacPorts also accept producer-prepared native prefix trees. The producer supplies ABI-compatible files that work in the target prefix; this is not automatic relocation. Their guides describe the relevant native constructor.
 
 The [dracut adapter](/dracut-impurifier/) and [mkinitcpio adapter](/mkinitcpio-impurifier/) produce native early-userspace modules and hooks. Their payloads run before the real root is available, without target-side Nix.
+
+## Android and Termux are separate ecosystems
+
+[android-impurifier](/android-impurifier/) assembles native APKs from Android-compatible DEX, resources, assets and ABI-specific libraries. Sign the unsigned output outside Nix with your own key, then install through Android’s native tools.
+
+[termux-impurifier](/termux-impurifier/) builds DEBs for Termux’s private prefix and Android ABI. Supply an already-compatible native tree; ordinary Debian/Linux binaries and global-store layouts are separate contracts. Both targets work without a target-side Nix installation.
