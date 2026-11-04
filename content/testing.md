@@ -76,3 +76,9 @@ Native bootc layers and transactional-update trees are booted through real image
 [pip](/pip-impurifier/), [npm](/npm-impurifier/) and [RubyGems](/rubygems-impurifier/) perform offline native transactions and execute compiled shared libraries or interpreter extensions. Their prepared payloads must match the consumer ABI. These are interpreter/tool VMs, not claims that arbitrary nixpkgs outputs work on every operating system.
 
 [pkg](/pkg-impurifier/) uses the actual portable FreeBSD/DragonFly package manager for target-root transactions and static execution in a Linux VM. This proves its native archive/manager lifecycle; FreeBSD kernel and executable-ABI coverage remains additional work.
+
+[NuGet](/nuget-impurifier/) restores managed assemblies and runtime-specific native libraries, then verifies an ordinary incremental upgrade runs the new library. Its producer normalizes wrapper metadata and gives assets deterministic content-derived timestamps to prevent stale same-size native files. Reference removal makes consumer compilation fail.
+
+[Maven](/maven-impurifier/) publishes native repository coordinates and POMs; actual Gradle resolves a transitive dependency offline, compiles and runs both versions, and rejects missing artifacts after cache removal. [Composer](/composer-impurifier/) installs local distribution ZIPs with Packagist/network access disabled, executes the native autoloader, updates, checks platform requirements and removes the package. [LuaRocks](/luarocks-impurifier/) installs binary rocks with native dependency checks, executes a compiled Lua extension, upgrades and removes it.
+
+These prepared-artifact tests use their pinned interpreter/SDK ABIs. Further .NET runtime identifiers, Maven plugins, PHP extensions and Lua versions require explicit native coverage.

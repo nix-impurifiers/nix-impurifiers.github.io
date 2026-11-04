@@ -440,5 +440,41 @@
     "category": "Native packages",
     "aliases": "FreeBSD DragonFly BSD pkgng",
     "revision": "6679c52c3ef5a9551b580d032ab2f6190cb9c421"
+  },
+  {
+    "name": "nuget-impurifier",
+    "label": "NuGet",
+    "description": "Prepared managed and runtime-specific native packages",
+    "frontends": ".NET, NuGet, dotnet restore",
+    "aliases": "C# F# dotnet DLL native RID",
+    "category": "Language ecosystems",
+    "revision": "3624b3c8eca8af08bbca5d0f25ea7d5d2d4ab303"
+  },
+  {
+    "name": "maven-impurifier",
+    "label": "Maven",
+    "description": "Prepared JVM artifacts and native repository metadata",
+    "frontends": "Maven repositories, Gradle",
+    "aliases": "Java Kotlin Scala JAR POM transitive dependencies",
+    "category": "Language ecosystems",
+    "revision": "0d00657ec7908158880cc0d64d43a996142dd2ea"
+  },
+  {
+    "name": "composer-impurifier",
+    "label": "Composer",
+    "description": "Prepared PHP distribution archives and autoload metadata",
+    "frontends": "Composer, PHP",
+    "aliases": "PHP Packagist autoload artifact repository",
+    "category": "Language ecosystems",
+    "revision": "85974684025992cd7cea944fc0d233b6e2dfc46b"
+  },
+  {
+    "name": "luarocks-impurifier",
+    "label": "LuaRocks",
+    "description": "Native binary rocks from prepared Lua modules",
+    "frontends": "LuaRocks, Lua",
+    "aliases": "Lua LuaJIT binary rock extension shared library",
+    "category": "Language ecosystems",
+    "revision": "ca1121b2ececdb5683dfad1ba9f4c6ebefe24970"
   }
 ]
