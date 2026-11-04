@@ -82,3 +82,13 @@ Native bootc layers and transactional-update trees are booted through real image
 [Maven](/maven-impurifier/) publishes native repository coordinates and POMs; actual Gradle resolves a transitive dependency offline, compiles and runs both versions, and rejects missing artifacts after cache removal. [Composer](/composer-impurifier/) installs local distribution ZIPs with Packagist/network access disabled, executes the native autoloader, updates, checks platform requirements and removes the package. [LuaRocks](/luarocks-impurifier/) installs binary rocks with native dependency checks, executes a compiled Lua extension, upgrades and removes it.
 
 These prepared-artifact tests use their pinned interpreter/SDK ABIs. Further .NET runtime identifiers, Maven plugins, PHP extensions and Lua versions require explicit native coverage.
+
+## Further existing-platform consumers
+
+[systemd portable services](/systemd-portable-impurifier/) attaches real SquashFS RootImage artifacts with portablectl, runs units inside their embedded closure without a Nix database/socket, replaces the image and detaches it. Its unsigned local fixture explicitly chooses the trusted profile; production sandbox and image-verification policy remain native consumer choices.
+
+[R](/r-impurifier/) installs an already-built binary package, executes a compiled extension, replaces it and removes it through native R. [Perl](/perl-impurifier/) uses cpanm and MakeMaker to install prepared modules and XS libraries, executes both versions, then checks native packlist removal. These test the pinned interpreter ABIs; prepared files must match their consumers.
+
+[Julia](/julia-impurifier/) produces native Pkg.Artifacts bindings and archives. A VM-local feed tests actual platform selection, content verification, compiled-library execution, version replacement, corruption rejection, recovery and offline failure. A separate native metadata check covers platform-independent data. This is an artifact producer, not a Julia registry or environment manager.
+
+[Helm](/helm-impurifier/) installs, upgrades, rolls back and uninstalls a real release against k3s in a VM, verifying its managed ConfigMap after each operation. The fixture uses an agentless control plane; it validates chart/release lifecycle rather than container scheduling or application execution. Container images are a separate OCI artifact contract.

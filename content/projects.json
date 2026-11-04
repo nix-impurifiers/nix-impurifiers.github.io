@@ -476,5 +476,50 @@
     "aliases": "Lua LuaJIT binary rock extension shared library",
     "category": "Language ecosystems",
     "revision": "ca1121b2ececdb5683dfad1ba9f4c6ebefe24970"
+  },
+  {
+    "name": "systemd-portable-impurifier",
+    "label": "systemd portable",
+    "description": "Read-only portable-service images and native unit lifecycle",
+    "frontends": "portablectl, systemd-portabled",
+    "category": "Images & bundles",
+    "aliases": "RootImage service attach detach",
+    "revision": "fe42458e5f98546d0455b9764ab2b7807619f074"
+  },
+  {
+    "name": "r-impurifier",
+    "label": "R",
+    "description": "Installed R binary-package archives with compiled libraries",
+    "frontends": "R CMD INSTALL, Rscript",
+    "category": "Language ecosystems",
+    "aliases": "R CRAN library native extension",
+    "revision": "01502c25ffba06cd0a365f53c83e3cfe7259e6e5"
+  },
+  {
+    "name": "perl-impurifier",
+    "label": "Perl",
+    "description": "Prepared Perl distributions and XS libraries",
+    "frontends": "cpanm, ExtUtils::MakeMaker",
+    "category": "Language ecosystems",
+    "aliases": "Perl CPAN XS packlist",
+    "revision": "3cb887b55e431cd7118774f43442b8851776a505"
+  },
+  {
+    "name": "julia-impurifier",
+    "label": "Julia",
+    "description": "Native Pkg artifacts with content identity and platform bindings",
+    "frontends": "Julia Pkg.Artifacts",
+    "category": "Language ecosystems",
+    "aliases": "Julia artifact git-tree-sha1 platform shared library",
+    "revision": "98257184b8e66db43285a66941b02df18ca0ca8b"
+  },
+  {
+    "name": "helm-impurifier",
+    "label": "Helm",
+    "description": "Native charts from prepared templates and values",
+    "frontends": "Helm, Kubernetes",
+    "category": "Images & bundles",
+    "aliases": "Kubernetes chart k3s install upgrade rollback",
+    "revision": "c2fbf7629d5e6a27eaa3d621b2987bb3abbbb443"
   }
 ]
