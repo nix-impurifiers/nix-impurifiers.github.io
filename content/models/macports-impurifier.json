@@ -8,7 +8,7 @@
     "target_nix": {
       "state": "known",
       "value": "mode-dependent",
-      "evidence": [
+      "source_excerpts": [
         "Emit native MacPorts recipes backed by Nix applications. Original code is MIT\nlicensed. The verified target is Linux x86_64 with MacPorts' `/opt/local` prefix.\nMacPorts owns source checksums, installed images, active files, dependencies,\nrevision upgrades, deactivation and removal. Nix owns application closures.",
         "`makeNativePort { payload; name; version; ... }` accepts a producer-prepared\nprefix tree. It emits a native port without impurifier activation hooks, Nix\nrequirements or the Nix-backed adapter's `/opt/local` prefix guard. Defaults are\n`platforms = [ \"any\" ]` and `architectures = [ \"noarch\" ]`; producers must set\naccurate restrictions for compiled payloads. The producer owns ABI and prefix\ncompatibility; the adapter does not relocate binaries."
       ]
@@ -16,7 +16,7 @@
     "bundled_client": {
       "state": "known",
       "value": true,
-      "evidence": [
+      "source_excerpts": [
         "`makeRuntimePort` optionally accepts a static `bundledNixStore` and upstream\n`bundledNixNotices`. Without explicit dependency overrides, bundling omits the\nexternal Nix dependency and retains Python. A compatible external client takes\nprecedence; failures after selection do not trigger retries against another\nclient or store. Bundling is not Nix provisioning."
       ]
     },
@@ -29,7 +29,7 @@
     "state": "known",
     "language": "nix",
     "value": "let backend = inputs.macports-impurifier.lib.macports-impurifier { inherit pkgs; };\nin backend.makeRepository [\n  (backend.makeRuntimePort {})\n  (backend.makeOfflinePort { pkg = pkgs.ripgrep; })\n]\n",
-    "evidence": [
+    "source_excerpts": [
       "```nix\nlet backend = inputs.macports-impurifier.lib.macports-impurifier { inherit pkgs; };\nin backend.makeRepository [\n  (backend.makeRuntimePort {})\n  (backend.makeOfflinePort { pkg = pkgs.ripgrep; })\n]\n```"
     ]
   }

@@ -1,8 +1,8 @@
 # SPDX-License-Identifier: MIT
-"""Validate explicit documentation records against their reviewed README text.
+"""Check documentation metadata and detect drift from its source snapshots.
 
-These records describe documented contracts. They are not a new backend test
-harness or an inferred implementation/support matrix.
+Source excerpts locate where summaries came from. These checks do not test
+backend behavior; backend integration and VM suites do that.
 """
 import hashlib
 import json
@@ -20,16 +20,16 @@ def validate_fact(fact, definition, source, *, example=False):
         assert set(fact) == {'state', 'reason'}, 'unknown/inapplicable facts cannot carry values'
         assert isinstance(fact['reason'], str) and fact['reason'].strip(), 'reason required'
         return
-    expected = {'state', 'value', 'evidence'} | ({'language'} if example else set())
+    expected = {'state', 'value', 'source_excerpts'} | ({'language'} if example else set())
     assert set(fact) == expected, 'unexpected or missing fact fields'
     value = fact['value']
     kind = definition['type']
     assert (kind == 'boolean' and type(value) is bool
             or kind == 'enum' and value in definition['values']
             or kind == 'text' and isinstance(value, str) and value.strip()), 'invalid fact value'
-    assert isinstance(fact['evidence'], list) and fact['evidence'], 'evidence required'
+    assert isinstance(fact['source_excerpts'], list) and fact['source_excerpts'], 'source_excerpts required'
     assert all(isinstance(quote, str) and quote.strip() and quote in source
-               for quote in fact['evidence']), 'evidence not found in reviewed README'
+               for quote in fact['source_excerpts']), 'source_excerpts not found in reviewed README'
     if example:
         assert isinstance(fact['language'], str) and re.fullmatch(r'[A-Za-z0-9_+-]*', fact['language'])
         assert value in source, 'example must preserve source text'
@@ -46,7 +46,7 @@ def validate_record(project, record, source):
     for key, definition in CONTRACT['facts'].items():
         validate_fact(record['facts'][key], definition, source)
         if key == 'validation' and record['facts'][key]['state'] == 'known':
-            assert record['facts'][key]['value'] in record['facts'][key]['evidence'], 'validation scope must be a verbatim evidence excerpt'
+            assert record['facts'][key]['value'] in record['facts'][key]['source_excerpts'], 'validation scope must be a verbatim source excerpt'
     validate_fact(record['example'], {'type': 'text'}, source, example=True)
     return record
 

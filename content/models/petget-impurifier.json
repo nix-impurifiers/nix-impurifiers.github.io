@@ -8,7 +8,7 @@
     "target_nix": {
       "state": "known",
       "value": "mode-dependent",
-      "evidence": [
+      "source_excerpts": [
         "Build Puppy PET packages that let native PETget own host files and metadata,\nwhile a transactional, garbage-collector-rooted Nix profile supplies programs.\nOriginal code is MIT. Nix itself and Python must already be available; a native\nNix provider/installer is deferred work.",
         "`makeNativePet { name; version; payload; dependencies?; ... }` emits a native\nPET from a producer-prepared filesystem tree without implicit engine scripts\nor Nix dependencies. Native PETget owns installation, replacement and removal.\nThe producer supplies a runnable target layout; binaries are not relocated.\nThe VM installs and upgrades native files through actual PETget before installing\nthe engine, executes the installed static payload in an isolated root without\n`/nix`, then checks native removal. The package-manager fixture itself uses the\nNixOS host tools; this does not claim a full Puppy boot without Nix."
       ]
@@ -16,14 +16,14 @@
     "bundled_client": {
       "state": "known",
       "value": true,
-      "evidence": [
+      "source_excerpts": [
         "`makeRuntimePet` optionally accepts `bundledNixStore` and `bundledNixNotices`\nfor a static ELF client and upstream notices. Bundling omits the default native\nNix dependency; Python remains required. Compatible external clients take\nprecedence, explicit `IMPURIFIER_NIX_STORE` disables fallback, and failed mutations\nare never retried through another client. A bundled-client VM repeats the original\nPETget lifecycle suite with an incompatible external candidate. Nix provisioning\nremains deferred."
       ]
     },
     "validation": {
       "state": "known",
       "value": "The VM runs pinned upstream Woof-CE PETget install scripts and the disclosed removal patch on a full-install\nfilesystem with actual native tools and Xvfb. It tests native archive checks,\nmetadata, upgrade/removal behavior and the Nix-backed adapter. It does not claim\nPuppy's layered save-file, AUFS, overlay boot or desktop integration coverage.",
-      "evidence": [
+      "source_excerpts": [
         "The VM runs pinned upstream Woof-CE PETget install scripts and the disclosed removal patch on a full-install\nfilesystem with actual native tools and Xvfb. It tests native archive checks,\nmetadata, upgrade/removal behavior and the Nix-backed adapter. It does not claim\nPuppy's layered save-file, AUFS, overlay boot or desktop integration coverage."
       ]
     }
@@ -32,7 +32,7 @@
     "state": "known",
     "language": "nix",
     "value": "let\n  pet = inputs.petget-impurifier.lib.petget-impurifier { inherit pkgs; };\nin {\n  runtime = pet.makeRuntimePet {\n    nixDependency = \"my-nix-provider\";\n    pythonDependency = \"python3\";\n  };\n  app = pet.makeOfflinePet {\n    pkg = pkgs.hello;\n    configFiles.\"/etc/hello.conf\" = pkgs.writeText \"hello.conf\" \"example\\n\";\n  };\n}\n",
-    "evidence": [
+    "source_excerpts": [
       "```nix\nlet\n  pet = inputs.petget-impurifier.lib.petget-impurifier { inherit pkgs; };\nin {\n  runtime = pet.makeRuntimePet {\n    nixDependency = \"my-nix-provider\";\n    pythonDependency = \"python3\";\n  };\n  app = pet.makeOfflinePet {\n    pkg = pkgs.hello;\n    configFiles.\"/etc/hello.conf\" = pkgs.writeText \"hello.conf\" \"example\\n\";\n  };\n}\n```"
     ]
   }

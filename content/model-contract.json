@@ -38,7 +38,7 @@
       "type": "boolean"
     },
     "validation": {
-      "title": "Documented validation scope",
+      "title": "Validation scope",
       "type": "text"
     }
   }

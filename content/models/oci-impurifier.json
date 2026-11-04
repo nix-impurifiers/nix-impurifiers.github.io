@@ -8,7 +8,7 @@
     "target_nix": {
       "state": "known",
       "value": "not-added",
-      "evidence": [
+      "source_excerpts": [
         "`makeImage { pkg; program ? pkg.meta.mainProgram; }` embeds a complete Nix-built\napplication closure at its original store paths and chooses its entrypoint.\nThere is no target Nix database, daemon, client or profile activation. The\ncontainer manager owns the entire image filesystem and its retention."
       ]
     },
@@ -19,7 +19,7 @@
     "validation": {
       "state": "known",
       "value": "Use skopeo to copy `oci:result:latest` into a native runtime or registry. The VM\nuses real skopeo and Podman to load and execute native and closure images without\nnetworking, replace a tag with a new application version, and remove images.\nIt also unpacks the native image and checks it has no `/nix` tree. Registry\ncredentials, signing and publication are consumer workflows, not build inputs.",
-      "evidence": [
+      "source_excerpts": [
         "Use skopeo to copy `oci:result:latest` into a native runtime or registry. The VM\nuses real skopeo and Podman to load and execute native and closure images without\nnetworking, replace a tag with a new application version, and remove images.\nIt also unpacks the native image and checks it has no `/nix` tree. Registry\ncredentials, signing and publication are consumer workflows, not build inputs."
       ]
     }

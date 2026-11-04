@@ -8,7 +8,7 @@
     "target_nix": {
       "state": "known",
       "value": "not-added",
-      "evidence": [
+      "source_excerpts": [
         "Build the package with a suitable Nix R toolchain first, or supply another\nprepared installed tree. This step does not rebuild it, change its dependency\npolicy or make arbitrary native libraries ABI-compatible. Consumers need the\nappropriate R version, architecture and external libraries. No target Nix client,\ndatabase, daemon or relocation is added. CRAN publication and repository indexes\nare separate concerns. This is not a Windows/macOS archive-format implementation."
       ]
     },
@@ -19,7 +19,7 @@
     "validation": {
       "state": "known",
       "value": "`nix flake check -L` builds a real R extension, installs its binary archive with\nnative R in QEMU, executes compiled code, replaces it with a second revision,\nexecutes the new code and removes the package. Removal makes loading fail and\nremoves the installed package tree. The fixture tests the pinned Linux R ABI;\nfurther R versions, platforms and dependencies require explicit coverage.",
-      "evidence": [
+      "source_excerpts": [
         "`nix flake check -L` builds a real R extension, installs its binary archive with\nnative R in QEMU, executes compiled code, replaces it with a second revision,\nexecutes the new code and removes the package. Removal makes loading fail and\nremoves the installed package tree. The fixture tests the pinned Linux R ABI;\nfurther R versions, platforms and dependencies require explicit coverage."
       ]
     }
@@ -28,7 +28,7 @@
     "state": "known",
     "language": "nix",
     "value": "backend.makePackage {\n  packageDir = \"${builtPackage}/library/example\";\n}\n",
-    "evidence": [
+    "source_excerpts": [
       "```nix\nbackend.makePackage {\n  packageDir = \"${builtPackage}/library/example\";\n}\n```"
     ]
   }

@@ -8,7 +8,7 @@
     "target_nix": {
       "state": "known",
       "value": "not-added",
-      "evidence": [
+      "source_excerpts": [
         "Expose Nix-built software through native dracut modules and early-boot hooks.\nDracut builds the initramfs. The generated module carries complete runtime\nclosures as plain files; neither the build host consuming the module nor early\nuserspace needs a Nix daemon or database. Files retain their original store paths.\nOriginal adapter code is MIT."
       ]
     },
@@ -19,7 +19,7 @@
     "validation": {
       "state": "known",
       "value": "The QEMU test boots the generated image with the Linux kernel and no root disk or\nshared host store. A native cmdline hook executes the supplied tool, checks that\nno real root or Nix database exists, emits its proof and powers off. This proves\nearly userspace integration, not a complete distribution install or real hardware\ncoverage. Secure Boot and ukify are separate consumers.",
-      "evidence": [
+      "source_excerpts": [
         "The QEMU test boots the generated image with the Linux kernel and no root disk or\nshared host store. A native cmdline hook executes the supplied tool, checks that\nno real root or Nix database exists, emits its proof and powers off. This proves\nearly userspace integration, not a complete distribution install or real hardware\ncoverage. Secure Boot and ukify are separate consumers."
       ]
     }
@@ -28,7 +28,7 @@
     "state": "known",
     "language": "nix",
     "value": "let adapter = inputs.dracut-impurifier.lib.dracut-impurifier { inherit pkgs; };\nin adapter.makeModule {\n  pkg = myEarlyBootTool;\n  name = \"my-tool\";\n  hooks = [{ stage = \"pre-mount\"; priority = 20; script = myBootHook; }];\n}\n",
-    "evidence": [
+    "source_excerpts": [
       "```nix\nlet adapter = inputs.dracut-impurifier.lib.dracut-impurifier { inherit pkgs; };\nin adapter.makeModule {\n  pkg = myEarlyBootTool;\n  name = \"my-tool\";\n  hooks = [{ stage = \"pre-mount\"; priority = 20; script = myBootHook; }];\n}\n```"
     ]
   }

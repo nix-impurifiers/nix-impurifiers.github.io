@@ -8,7 +8,7 @@
     "target_nix": {
       "state": "known",
       "value": "not-added",
-      "evidence": [
+      "source_excerpts": [
         "`main`, `bin`, `dependencies`, `os`, `cpu` and `license` supply native package\nmetadata. The generated package.json replaces any payload package.json.\nLifecycle scripts are not added or executed while packing. Consumers can install\nthe resulting tarball with npm or compatible package managers. Supply an already\ncompatible Node addon or native executable: no automatic relocation, native\ncompilation at install, Nix runtime or registry publication is implied."
       ]
     },
@@ -19,7 +19,7 @@
     "validation": {
       "state": "known",
       "value": "The QEMU test installs an actual compiled N-API addon with real offline npm,\nloads it with Node, upgrades, checks the dependency tree and uninstalls. Node/npm\nare NixOS fixture tools; the package itself contains no Nix launcher or runtime.\nFurther Node versions, native ABIs and operating systems need explicit validation.",
-      "evidence": [
+      "source_excerpts": [
         "The QEMU test installs an actual compiled N-API addon with real offline npm,\nloads it with Node, upgrades, checks the dependency tree and uninstalls. Node/npm\nare NixOS fixture tools; the package itself contains no Nix launcher or runtime.\nFurther Node versions, native ABIs and operating systems need explicit validation."
       ]
     }
@@ -28,7 +28,7 @@
     "state": "known",
     "language": "nix",
     "value": "backend.makePackage { name = \"my-package\"; version = \"1.0.0\"; payload = tree; }\n",
-    "evidence": [
+    "source_excerpts": [
       "```nix\nbackend.makePackage { name = \"my-package\"; version = \"1.0.0\"; payload = tree; }\n```"
     ]
   }

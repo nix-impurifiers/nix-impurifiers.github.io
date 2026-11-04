@@ -110,15 +110,15 @@ def project_pages(project, record):
     example = record['example']
     introduction = f'<p class="section-intro">{ESC(project["description"])}</p>'
     if example['state'] == 'known':
-        example_html = f'<pre><code class="language-{ESC(example["language"],quote=True)}">{ESC(example["value"])}</code></pre><p class="code-note">An unchanged example from the reviewed README. It may be a library fragment; use the full guide for prerequisites and installation.</p>'
+        example_html = f'<pre><code class="language-{ESC(example["language"],quote=True)}">{ESC(example["value"])}</code></pre><p class="code-note">See the full guide for prerequisites, installation and the surrounding configuration.</p>'
     else:
         example_html = f'<p>{ESC(example["reason"])}</p>'
-    runtime_note = {'mode-dependent': 'The project documents both Nix-backed and native-payload paths. Nix-backed operation needs a usable Nix store/client and its native prerequisites; native modes have their own file-layout and ABI contract. Choose the constructor in the full guide.', 'required': 'Nix itself is this backend’s native manager. This is not a promise of a new Nix installer.', 'not-added': 'The backend does not add a target Nix client, daemon or database integration. The consumer, payload architecture, interpreter ABI and external libraries still need to match.'}.get(runtime.get('value'), '')
+    runtime_note = {'mode-dependent': 'This backend supports Nix-backed and native-payload paths. Nix-backed operation needs a usable Nix store/client and its native prerequisites; native modes have their own file-layout and ABI contract. Choose the constructor in the full guide.', 'required': 'Nix itself is this backend’s native manager. This is not a promise of a new Nix installer.', 'not-added': 'The backend does not add a target Nix client, daemon or database integration. The consumer, payload architecture, interpreter ABI and external libraries still need to match.'}.get(runtime.get('value'), '')
     parts = {
         'output': f'<dl class="artifact-summary"><div><dt>Consumer tools</dt><dd>{ESC(project["frontends"])}</dd></div><div><dt>Family</dt><dd>{ESC(project["category"])}</dd></div></dl>',
         'build': f'<p><a href="/{name}/guide/">Open the full guide →</a> · <a href="/getting-started/">General build setup</a></p>{example_html}',
         'runtime': f'<p><strong>{fact_content("target_nix", runtime, name, revision)}</strong></p><p>{ESC(runtime_note)}</p><p><strong>Bundled client:</strong> {fact_content("bundled_client", bundle, name, revision)}</p>',
-        'validation': fact_content('validation', record['facts']['validation'], name, revision) + f'<p class="code-note">This is a documented scope excerpt, not a complete platform guarantee. <a href="/{name}/guide/">Read the full guide’s requirements and limits</a>, and inspect the linked repository tests.</p>'
+        'validation': fact_content('validation', record['facts']['validation'], name, revision) + f'<p class="code-note"><a href="/{name}/guide/">Read the full guide’s requirements and limits</a>.</p>'
     }
     sections = ''.join(f'<section class="overview-section" aria-labelledby="overview-{section["id"]}"><h2 id="overview-{section["id"]}">{ESC(section["title"])}</h2>{parts[section["id"]]}</section>' for section in CONTRACT['sections'])
     renderer = markdown.Markdown(extensions=['toc', 'fenced_code', 'tables']); renderer.convert(source)
@@ -128,7 +128,7 @@ def project_pages(project, record):
             yield from anchors(token.get('children', []))
     old_links = ''.join(f'<li id="{ESC(t["id"],quote=True)}" data-guide-target="/{name}/guide/#{ESC(t["id"],quote=True)}"><a href="/{name}/guide/#{ESC(t["id"],quote=True)}">{ESC(re.sub("<[^>]+>", "", t["name"]))}</a></li>' for t in anchors(renderer.toc_tokens))
     legacy = f'<details class="legacy-guide"><summary>Full guide sections</summary><ul>{old_links}</ul></details>'
-    review = f'<p class="doc-meta">Documented contract reviewed against <a href="{ORIGIN}/{name}/blob/{revision}/README.md">README {revision[:7]} ↗</a>. This is a documentation review, not a new implementation or platform certification. <a href="/{name}/system.json">Read the structured record</a>.</p>'
+    review = f'<p class="doc-meta"><a href="{ORIGIN}/{name}/tree/{revision}">Source revision {revision[:7]} ↗</a></p>'
     body = f'<p class="breadcrumbs"><a href="/">nix-impurifiers</a> / {name}</p>{project_navigation(name,"overview")}<article class="doc-body"><h1>{name}</h1>{introduction}{sections}{legacy}</article>{review}'
     target = OUT/name; target.mkdir(parents=True)
     (target/'index.html').write_text(page(name, project['description'], body, docs=True))
@@ -136,13 +136,9 @@ def project_pages(project, record):
     rows=[]
     for key, definition in CONTRACT['facts'].items():
         fact=record['facts'][key]
-        evidence=''
-        if fact['state']=='known':
-            quotes=''.join('<blockquote>'+rendered(q,name,revision)+'</blockquote>' for q in fact['evidence'])
-            evidence=f'<details><summary>README evidence</summary>{quotes}<a href="{ORIGIN}/{name}/blob/{revision}/README.md">Reviewed source ↗</a></details>'
-        rows.append(f'<tr><th scope="row">{ESC(definition["title"])}</th><td>{ESC(fact["state"])}</td><td>{fact_content(key,fact,name,revision)}{evidence}</td></tr>')
-    matrix = f'<p class="breadcrumbs"><a href="/">nix-impurifiers</a> / <a href="/{name}/">{name}</a></p>{project_navigation(name,"features")}<article class="doc-body"><h1>{name} feature matrix</h1><p>Explicit documentation records. Unknown means unreviewed, not unsupported; not applicable includes its reason.</p><table><thead><tr><th>Contract</th><th>Review state</th><th>Documented behavior</th></tr></thead><tbody>{"".join(rows)}</tbody></table><p><a href="/compare/">Compare all impurifiers →</a></p></article>{review}'
-    (target/'features').mkdir(); (target/'features/index.html').write_text(page(name+' feature matrix', 'Documented runtime and validation contract.', matrix, docs=True))
+        rows.append(f'<tr><th scope="row">{ESC(definition["title"])}</th><td>{fact_content(key,fact,name,revision)}</td></tr>')
+    matrix = f'<p class="breadcrumbs"><a href="/">nix-impurifiers</a> / <a href="/{name}/">{name}</a></p>{project_navigation(name,"features")}<article class="doc-body"><h1>{name} feature matrix</h1><p>Runtime requirements, optional integrations and validation scope.</p><table><thead><tr><th>Feature</th><th>Behavior and requirements</th></tr></thead><tbody>{"".join(rows)}</tbody></table><p><a href="/compare/">Compare all impurifiers →</a></p></article>{review}'
+    (target/'features').mkdir(); (target/'features/index.html').write_text(page(name+' feature matrix', 'Runtime requirements and validation scope.', matrix, docs=True))
     (target/'system.json').write_text(json.dumps(record,indent=2)+'\n')
     (target/'source-review.json').write_text(json.dumps(source_review(project,record),indent=2)+'\n')
 
@@ -151,9 +147,9 @@ def comparison_page():
     rows=[]
     for p in sorted(PROJECTS,key=lambda p:p['name']):
         facts=MODELS[p['name']]['facts']
-        rows.append(f'<tr><th scope="row"><a href="/{p["name"]}/">{p["name"]}</a></th><td>{ESC(p["description"])}</td><td>{ESC(fact_label("target_nix",facts["target_nix"]))}</td><td>{ESC(fact_label("bundled_client",facts["bundled_client"]))}</td><td><a href="/{p["name"]}/features/">Evidence and limits</a></td></tr>')
-    text=f'<section class="comparison doc-body"><p class="eyebrow">Documented contracts</p><h1>Compare impurifiers</h1><p>Choose a runtime model as well as an artifact format. These entries describe reviewed READMEs, not inferred behavior from a package-manager family. Open each matrix for evidence and its native validation scope.</p><p><strong>Depends on payload mode:</strong> the project offers Nix-backed and native-payload paths. <strong>No Nix runtime added:</strong> compatible native consumer tools and payload libraries are still required. <strong>Not applicable</strong> is not a failed capability check.</p><table><thead><tr><th>Impurifier</th><th>Artifact</th><th>Target-side Nix integration</th><th>Bundled Nix client</th><th>Details</th></tr></thead><tbody>{"".join(rows)}</tbody></table></section>'
-    target=OUT/'compare'; target.mkdir(); (target/'index.html').write_text(page('Compare impurifiers','Compare documented runtime contracts and native artifact formats.',text,docs=True))
+        rows.append(f'<tr><th scope="row"><a href="/{p["name"]}/">{p["name"]}</a></th><td>{ESC(p["description"])}</td><td>{ESC(fact_label("target_nix",facts["target_nix"]))}</td><td>{ESC(fact_label("bundled_client",facts["bundled_client"]))}</td><td><a href="/{p["name"]}/features/">Details and limits</a></td></tr>')
+    text=f'<section class="comparison doc-body"><p class="eyebrow">Runtime requirements</p><h1>Compare impurifiers</h1><p>Compare artifact formats and runtime requirements. Open each feature matrix for details and limits.</p><p><strong>Depends on payload mode:</strong> the project offers Nix-backed and native-payload paths. <strong>No Nix runtime added:</strong> compatible native consumer tools and payload libraries are still required.</p><table><thead><tr><th>Impurifier</th><th>Artifact</th><th>Target-side Nix integration</th><th>Bundled Nix client</th><th>Details</th></tr></thead><tbody>{"".join(rows)}</tbody></table></section>'
+    target=OUT/'compare'; target.mkdir(); (target/'index.html').write_text(page('Compare impurifiers','Compare runtime requirements and native artifact formats.',text,docs=True))
 
 
 def homepage():

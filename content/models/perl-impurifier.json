@@ -8,7 +8,7 @@
     "target_nix": {
       "state": "known",
       "value": "not-added",
-      "evidence": [
+      "source_excerpts": [
         "Consumers use cpanm or compatible MakeMaker distribution tooling. The artifact\nis a prepared distribution, not a promise that CPAN can rebuild its original\nsource. Compiled XS must match the consumer Perl ABI and architecture. Declare\nexternal dependencies and supply compatible files; this backend does not relocate\nlibraries, infer ABI compatibility or add a target Nix runtime. Registry upload,\nsource provenance and release-signing policy remain producer concerns."
       ]
     },
@@ -19,7 +19,7 @@
     "validation": {
       "state": "known",
       "value": "`nix flake check -L` builds an actual XS extension with Nix, then uses native\ncpanm/MakeMaker in QEMU to install from a local archive without a consumer compiler\nor remote mirror. It executes the extension, upgrades, executes its replacement\nand uninstalls through cpanm's native packlist handling. Loading then fails and\nthe shared object is gone. Coverage is the pinned Perl ABI on Linux.",
-      "evidence": [
+      "source_excerpts": [
         "`nix flake check -L` builds an actual XS extension with Nix, then uses native\ncpanm/MakeMaker in QEMU to install from a local archive without a consumer compiler\nor remote mirror. It executes the extension, upgrades, executes its replacement\nand uninstalls through cpanm's native packlist handling. Loading then fails and\nthe shared object is gone. Coverage is the pinned Perl ABI on Linux."
       ]
     }
@@ -28,7 +28,7 @@
     "state": "known",
     "language": "nix",
     "value": "backend.makeDistribution {\n  name = \"Example::Library\";\n  version = \"1.00\";\n  payload = preparedTree;\n  modules = {\n    \"Library.pm\" = \"Example/Library.pm\";\n    \"Library.so\" = \"auto/Example/Library/Library.so\";\n  };\n  dependencies = { XSLoader = \"0\"; };\n}\n",
-    "evidence": [
+    "source_excerpts": [
       "```nix\nbackend.makeDistribution {\n  name = \"Example::Library\";\n  version = \"1.00\";\n  payload = preparedTree;\n  modules = {\n    \"Library.pm\" = \"Example/Library.pm\";\n    \"Library.so\" = \"auto/Example/Library/Library.so\";\n  };\n  dependencies = { XSLoader = \"0\"; };\n}\n```"
     ]
   }

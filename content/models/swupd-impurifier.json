@@ -8,7 +8,7 @@
     "target_nix": {
       "state": "known",
       "value": "mode-dependent",
-      "evidence": [
+      "source_excerpts": [
         "Build native third-party swupd repositories whose exported commands run Nix\napplication closures. Original adapter code is MIT; bundled upstream software\nretains its own licenses and notices.",
         "`makeNativeBundle { name; payload; }` accepts a complete prepared filesystem\nbundle and adds only swupd's bundle marker. It adds no Nix runtime or activation\nhooks. Feed it to `makeRepository` alongside other native bundles. The producer\nsupplies files that already work under swupd's third-party prefix; this is not\nrelocation. The VM builds actual signed repositories, installs, executes,\nupdates and removes native bundles. The installed static executable also runs\nin an isolated root without `/nix`. The manager uses NixOS host tools; this is\nnot a complete Clear Linux boot without Nix."
       ]
@@ -16,14 +16,14 @@
     "bundled_client": {
       "state": "known",
       "value": true,
-      "evidence": [
+      "source_excerpts": [
         "Nix-backed constructors accept `bundledNixStore` (a static ELF client) and\n`bundledNixNotices` (upstream notice files). These artifacts carry a private\nclient and a Python-only SDK. Launch selects a compatible external client first,\nthen the bundle, before registering roots or capturing hardware. An explicit\n`IMPURIFIER_NIX_STORE` disables fallback. The trusted preparation helper always\nuses host tools, never the application-owned client as root. An existing Nix\nstore, daemon and initial SDK preparation remain necessary. The bundled suite\nrepeats the full native lifecycle with an incompatible external candidate."
       ]
     },
     "validation": {
       "state": "known",
       "value": "Repository production runs the actual mixer-tools manifest/hash/fullfile\nimplementation as root inside an isolated QEMU VM, because native hashes\ninclude ownership metadata. This deliberately requires Linux VM support rather\nthan synthesizing root ownership. Pass the previous repository as `previous`\nand increase `version` to preserve native file versions and deletion records.\nFormat 40 fullfiles are supported; delta packs and format transitions are not\nimplemented.",
-      "evidence": [
+      "source_excerpts": [
         "Repository production runs the actual mixer-tools manifest/hash/fullfile\nimplementation as root inside an isolated QEMU VM, because native hashes\ninclude ownership metadata. This deliberately requires Linux VM support rather\nthan synthesizing root ownership. Pass the previous repository as `previous`\nand increase `version` to preserve native file versions and deletion records.\nFormat 40 fullfiles are supported; delta packs and format transitions are not\nimplemented."
       ]
     }
@@ -32,7 +32,7 @@
     "state": "known",
     "language": "nix",
     "value": "let\n  adapter = import (swupdImpurifier + \"/nix\") {\n    inherit pkgs;\n    coreSrc = impurifier;\n  };\n  application = adapter.makeOfflineBundle { pkg = myApplication; };\nin adapter.makeRepository {\n  version = 10;\n  bundles = [ application ];\n}\n",
-    "evidence": [
+    "source_excerpts": [
       "```nix\nlet\n  adapter = import (swupdImpurifier + \"/nix\") {\n    inherit pkgs;\n    coreSrc = impurifier;\n  };\n  application = adapter.makeOfflineBundle { pkg = myApplication; };\nin adapter.makeRepository {\n  version = 10;\n  bundles = [ application ];\n}\n```"
     ]
   }

@@ -8,7 +8,7 @@
     "target_nix": {
       "state": "known",
       "value": "mode-dependent",
-      "evidence": [
+      "source_excerpts": [
         "Emit native `.deb` packages whose applications live in a Nix store closure.\n`dpkg` owns install intent, configuration files, users, directories and service\nunits. One transaction trigger reconciles the installed descriptors into\n`/opt/nix/profile`. Repository: [nix-impurifiers/dpkg-impurifier](https://github.com/nix-impurifiers/dpkg-impurifier).",
         "`makeNativeRepository { collections = [ collectionA collectionB ]; }` merges\ncollections, checks duplicate package bytes, and emits an APT `Packages` index.\nIt is an unsigned staging repository; publication/signing policy remains with\nthe caller. Installing named applications from a repository lets APT establish\nautomatic dependency ownership normally."
       ]
@@ -16,14 +16,14 @@
     "bundled_client": {
       "state": "known",
       "value": true,
-      "evidence": [
+      "source_excerpts": [
         "For the existing profile-managed package mode, `makeRuntimeDeb` accepts\n`bundledNixStore` and `bundledNixNotices`. The binary must be static and compatible\nwith the target architecture. With a bundle, the default dependency is Python\nonly; a compatible external Nix client is preferred when available. An explicit\n`nixDependency` still adds a native provider dependency. The static binary's\nupstream license obligations remain with its distributor. This client can use a\nlocal Nix database without a daemon; it is not the deferred daemon installer."
       ]
     },
     "validation": {
       "state": "known",
       "value": "The native frontend matrix covers Debian APT/apt-get, Aptitude, Nala, GDebi and\nSynaptic. A producer VM installs their real snapshot packages and dependencies\noffline. Consumers use signed APT repository metadata, reject tampering while\nretaining the trusted index, verify unchanged package payloads, launch as an\nordinary user, upgrade/preserve edited configuration, purge and verify GC.\nSynaptic uses its real configuration dialog under Xvfb; the test activates Keep.\nGDebi is tested as an installer, with native apt handling removal.\nSee [fixture provenance and boundaries](docs/development/debian-frontends.md).",
-      "evidence": [
+      "source_excerpts": [
         "The native frontend matrix covers Debian APT/apt-get, Aptitude, Nala, GDebi and\nSynaptic. A producer VM installs their real snapshot packages and dependencies\noffline. Consumers use signed APT repository metadata, reject tampering while\nretaining the trusted index, verify unchanged package payloads, launch as an\nordinary user, upgrade/preserve edited configuration, purge and verify GC.\nSynaptic uses its real configuration dialog under Xvfb; the test activates Keep.\nGDebi is tested as an installer, with native apt handling removal.\nSee [fixture provenance and boundaries](docs/development/debian-frontends.md)."
       ]
     }
@@ -32,7 +32,7 @@
     "state": "known",
     "language": "nix",
     "value": "let\n  impurifier = inputs.dpkg-impurifier.lib.dpkg-impurifier { inherit pkgs; };\n  packages = impurifier.makePackage {\n    pkg = pkgs.hello;\n    # Optional overrides: name, version, priority (lower wins).\n  };\nin {\n  hello-net = packages.net;\n  hello-offline = packages.offline;\n  runtime = impurifier.makeRuntimeDeb {\n    nixDependency = \"nix-bin | nix-external-runtime\";\n  };\n}\n",
-    "evidence": [
+    "source_excerpts": [
       "```nix\nlet\n  impurifier = inputs.dpkg-impurifier.lib.dpkg-impurifier { inherit pkgs; };\n  packages = impurifier.makePackage {\n    pkg = pkgs.hello;\n    # Optional overrides: name, version, priority (lower wins).\n  };\nin {\n  hello-net = packages.net;\n  hello-offline = packages.offline;\n  runtime = impurifier.makeRuntimeDeb {\n    nixDependency = \"nix-bin | nix-external-runtime\";\n  };\n}\n```"
     ]
   }

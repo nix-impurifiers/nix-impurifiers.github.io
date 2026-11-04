@@ -8,7 +8,7 @@
     "target_nix": {
       "state": "known",
       "value": "not-added",
-      "evidence": [
+      "source_excerpts": [
         "Expose Nix-built software through native mkinitcpio build and runtime hooks.\nThe generated hook embeds complete runtime closures at their original store\npaths. The consumer and early userspace need no Nix executable, daemon, or\nSQLite database. Original adapter code is MIT."
       ]
     },
@@ -19,7 +19,7 @@
     "validation": {
       "state": "known",
       "value": "The QEMU test uses the real mkinitcpio builder and init program. A native early\nhook executes the supplied tool before root is available, checks absence of a\nNix database, emits a proof and powers off. The guest has no root disk or shared\nhost store. This is early-userspace coverage, not a complete Arch installation,\nSecure Boot, or real hardware qualification.",
-      "evidence": [
+      "source_excerpts": [
         "The QEMU test uses the real mkinitcpio builder and init program. A native early\nhook executes the supplied tool before root is available, checks absence of a\nNix database, emits a proof and powers off. The guest has no root disk or shared\nhost store. This is early-userspace coverage, not a complete Arch installation,\nSecure Boot, or real hardware qualification."
       ]
     }
@@ -28,7 +28,7 @@
     "state": "known",
     "language": "nix",
     "value": "let adapter = inputs.mkinitcpio-impurifier.lib.mkinitcpio-impurifier { inherit pkgs; };\nin adapter.makeHook {\n  pkg = myEarlyBootTool;\n  name = \"my_tool\";\n  runtimeHook = myRuntimeHook;\n}\n",
-    "evidence": [
+    "source_excerpts": [
       "```nix\nlet adapter = inputs.mkinitcpio-impurifier.lib.mkinitcpio-impurifier { inherit pkgs; };\nin adapter.makeHook {\n  pkg = myEarlyBootTool;\n  name = \"my_tool\";\n  runtimeHook = myRuntimeHook;\n}\n```"
     ]
   }

@@ -8,7 +8,7 @@
     "target_nix": {
       "state": "known",
       "value": "not-added",
-      "evidence": [
+      "source_excerpts": [
         "`makeGem { name; version; payload; }` accepts `platform`, `requirePaths`,\n`executables`, `dependencies`, `summary` and `licenses`. `dependencies` maps gem\nnames to RubyGems requirement strings. The default platform is `ruby`; native\nextensions require an accurate platform and a compatible Ruby ABI. Files should\nalready work in the installed gem prefix. No Nix runtime, automatic relocation,\ninstall-time compilation, or registry publication is added."
       ]
     },
@@ -19,7 +19,7 @@
     "validation": {
       "state": "known",
       "value": "The QEMU suite installs and loads a compiled native Ruby extension with actual\nRubyGems, changes versions, verifies the package and uninstalls all versions.\nRuby is a NixOS fixture interpreter; this does not claim a full Nix-free host\nboot or compatibility with other Ruby/OS ABIs.",
-      "evidence": [
+      "source_excerpts": [
         "The QEMU suite installs and loads a compiled native Ruby extension with actual\nRubyGems, changes versions, verifies the package and uninstalls all versions.\nRuby is a NixOS fixture interpreter; this does not claim a full Nix-free host\nboot or compatibility with other Ruby/OS ABIs."
       ]
     }

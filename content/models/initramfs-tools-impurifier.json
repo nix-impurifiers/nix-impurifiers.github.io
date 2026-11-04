@@ -8,7 +8,7 @@
     "target_nix": {
       "state": "known",
       "value": "not-added",
-      "evidence": [
+      "source_excerpts": [
         "Store paths are preserved; the image needs no Nix daemon, database or client.\nThe payload must be suitable for the target kernel and architecture. This does\nnot install a kernel, select modules, configure the real root or manage a host.\n`package` exposes the pinned upstream builder scripts as a test SDK; it is not\na replacement for the host's distro integration or its optional hook packages."
       ]
     },
@@ -19,7 +19,7 @@
     "validation": {
       "state": "known",
       "value": "`nix flake check -L` builds two revisions with upstream mkinitramfs inside a\nproducer VM, then boots both generated images in QEMU with upstream `/init`,\nno root disk and no shared host store. Native init-top scripts execute the\nNix-built payload and verify there is no Nix database or mounted real root.",
-      "evidence": [
+      "source_excerpts": [
         "`nix flake check -L` builds two revisions with upstream mkinitramfs inside a\nproducer VM, then boots both generated images in QEMU with upstream `/init`,\nno root disk and no shared host store. Native init-top scripts execute the\nNix-built payload and verify there is no Nix database or mounted real root."
       ]
     }
@@ -28,7 +28,7 @@
     "state": "known",
     "language": "nix",
     "value": "let\n  backend = import (inputs.initramfs-tools-impurifier + \"/nix\") {\n    inherit pkgs;\n    coreSrc = inputs.impurifier;\n  };\nin backend.makeHook {\n  pkg = earlyTool;\n  name = \"early-tool\";\n  scripts = [{ stage = \"init-top\"; script = earlyHook; }];\n}\n",
-    "evidence": [
+    "source_excerpts": [
       "```nix\nlet\n  backend = import (inputs.initramfs-tools-impurifier + \"/nix\") {\n    inherit pkgs;\n    coreSrc = inputs.impurifier;\n  };\nin backend.makeHook {\n  pkg = earlyTool;\n  name = \"early-tool\";\n  scripts = [{ stage = \"init-top\"; script = earlyHook; }];\n}\n```"
     ]
   }

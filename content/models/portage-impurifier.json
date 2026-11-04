@@ -8,7 +8,7 @@
     "target_nix": {
       "state": "known",
       "value": "mode-dependent",
-      "evidence": [
+      "source_excerpts": [
         "Build Portage overlays that transport Nix applications through native ebuilds\nand binpkgs. Portage owns descriptors, configuration and service integration;\nthe shared [impurifier engine](https://github.com/nix-impurifiers/impurifier)\nrealizes closures and atomically publishes `/opt/nix/profile`.\nOriginal project code is MIT licensed. Application licenses remain their own.",
         "`makeNativeEbuild { name; version; payload; license; dependencies?; ... }` emits\na native PMS overlay from a producer-prepared filesystem tree, with activation\ndisabled and no implicit Nix dependency. The producer supplies the target layout;\nthis does not relocate binaries. The Gentoo VM installs, executes, upgrades and\nremoves a static payload before mounting any Nix store into the native userspace."
       ]
@@ -16,14 +16,14 @@
     "bundled_client": {
       "state": "known",
       "value": true,
-      "evidence": [
+      "source_excerpts": [
         "`makeRuntimeOverlay` optionally accepts `bundledNixStore` and\n`bundledNixNotices` for a static ELF client with upstream notices. This omits\nthe default native Nix requirement; Python remains required. Compatible external\nclients take precedence, explicit `IMPURIFIER_NIX_STORE` disables fallback, and\nfailed mutations are never retried through another client. A separate bundled\nVM repeats the native Gentoo lifecycle suite with an incompatible external\ncandidate. Nix provisioning remains deferred."
       ]
     },
     "validation": {
       "state": "known",
       "value": "`nix flake check -L` boots a QEMU VM with actual pinned Gentoo stage3 userspace,\nPortage, shadow and OpenRC. It tests native solving, flavor replacement,\nconfiguration protection, source-free binpkg installation after GC, lifecycle\nfailure/retry, service admin intent, directory changes without binary changes,\ncustom hook preservation, direct ebuild activation, foreign-root safety and\nnative host-driver dependencies/updates. The guest uses a NixOS kernel and\npreinstalled Nix; this does not claim a Gentoo boot or installer test.",
-      "evidence": [
+      "source_excerpts": [
         "`nix flake check -L` boots a QEMU VM with actual pinned Gentoo stage3 userspace,\nPortage, shadow and OpenRC. It tests native solving, flavor replacement,\nconfiguration protection, source-free binpkg installation after GC, lifecycle\nfailure/retry, service admin intent, directory changes without binary changes,\ncustom hook preservation, direct ebuild activation, foreign-root safety and\nnative host-driver dependencies/updates. The guest uses a NixOS kernel and\npreinstalled Nix; this does not claim a Gentoo boot or installer test."
       ]
     }
@@ -32,7 +32,7 @@
     "state": "known",
     "language": "nix",
     "value": "let\n  impurifier = inputs.portage-impurifier.lib.portage-impurifier { inherit pkgs; };\nin impurifier.makeOverlay {\n  packages = [\n    impurifier.runtimeOverlay\n    (impurifier.makeOfflineEbuild { pkg = pkgs.hello; })\n  ];\n}\n",
-    "evidence": [
+    "source_excerpts": [
       "```nix\nlet\n  impurifier = inputs.portage-impurifier.lib.portage-impurifier { inherit pkgs; };\nin impurifier.makeOverlay {\n  packages = [\n    impurifier.runtimeOverlay\n    (impurifier.makeOfflineEbuild { pkg = pkgs.hello; })\n  ];\n}\n```"
     ]
   }

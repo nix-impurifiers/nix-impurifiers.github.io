@@ -8,7 +8,7 @@
     "target_nix": {
       "state": "known",
       "value": "mode-dependent",
-      "evidence": [
+      "source_excerpts": [
         "Generate native Zero Install feeds and content-addressed implementation archives\nfor Nix applications. Applications run as the user; this backend uses the native\nZero Install cache and app registry.",
         "`makeNativeFeed { name; version; payload; command; dependencies?; architecture?; ... }`\nemits a native feed and implementation archive without Nix launchers, provider\nrequirements or helper scripts. The producer supplies a runnable implementation\ntree; this does not relocate binaries. The architecture string defaults to\n`Linux-x86_64` and can describe another producer target. Native Zero Install owns\nits content-addressed cache. The VM selects and verifies two native versions,\nexecutes their static binaries in a root without `/nix`, and checks independent\ncache eviction."
       ]
@@ -16,14 +16,14 @@
     "bundled_client": {
       "state": "known",
       "value": true,
-      "evidence": [
+      "source_excerpts": [
         "Nix-backed `makeFeed` accepts `bundledNixStore` and `bundledNixNotices` for a static\nELF client with upstream notices. Leave `nixProvider` unset when a native provider\nfeed is unnecessary. Compatible external clients take precedence; explicit\n`IMPURIFIER_NIX_STORE` disables fallback and failed mutations are never retried\nthrough another client. Python remains required. A separate bundled-client VM\nrepeats the original feed lifecycle suite without external Nix on the user's PATH.\nTrusted root preparation never executes a client from a user-owned cache. The\nNix provider/installer remains deferred."
       ]
     },
     "validation": {
       "state": "known",
       "value": "Accounts, host configuration, system services, and global profile composition\nare outside this per-user application's activation contract. The VM tests use\nthe real headless Zero Install 2.18 client, real Nix daemon, provider feeds,\nnative update/version selection, host-library capture, cache verification and GC.\nOriginal code is MIT licensed; see [THIRD_PARTY.md](THIRD_PARTY.md).",
-      "evidence": [
+      "source_excerpts": [
         "Accounts, host configuration, system services, and global profile composition\nare outside this per-user application's activation contract. The VM tests use\nthe real headless Zero Install 2.18 client, real Nix daemon, provider feeds,\nnative update/version selection, host-library capture, cache verification and GC.\nOriginal code is MIT licensed; see [THIRD_PARTY.md](THIRD_PARTY.md)."
       ]
     }
@@ -32,7 +32,7 @@
     "state": "known",
     "language": "nix",
     "value": "let\n  impurifier = inputs.zeroinstall-impurifier.lib.zeroinstall-impurifier { inherit pkgs; };\nin impurifier.makePackage { pkg = pkgs.hello; }\n",
-    "evidence": [
+    "source_excerpts": [
       "```nix\nlet\n  impurifier = inputs.zeroinstall-impurifier.lib.zeroinstall-impurifier { inherit pkgs; };\nin impurifier.makePackage { pkg = pkgs.hello; }\n```"
     ]
   }

@@ -8,7 +8,7 @@
     "target_nix": {
       "state": "known",
       "value": "mode-dependent",
-      "evidence": [
+      "source_excerpts": [
         "Emit native XBPS packages and indexed repositories backed by a shared atomic,\nGC-rooted Nix profile at `/opt/nix/profile`. Original project code is MIT licensed.",
         "`makeNativePackages { pkg; name ? pkg.pname; version ? pkg.version; ... }`\nexports the complete closure as native-owned XBPS packages at its original store\npaths. Each immutable object has one native package and exact reference\nrequirements. The application package owns command links. `programs` defaults to the main\ncommand; use `[]` for a dependency-only payload. `binDir` defaults to `/usr/bin`.\nNative XBPS handles\ninstallation, checksums, dependencies, upgrades and orphan removal; these payloads\nneed no Nix executable, daemon or database. Keep native-owned objects separate\nfrom a Nix-managed store and its garbage collection. This does not relocate files.\nFor producer-prepared system/prefix layouts, the existing `buildXbps { payload;\nname; version; ... }` emits a native package without implicit impurifier hooks\nor runtime requirements."
       ]
@@ -16,14 +16,14 @@
     "bundled_client": {
       "state": "known",
       "value": true,
-      "evidence": [
+      "source_excerpts": [
         "`makeRuntimeXbps` additionally accepts `bundledNixStore` and\n`bundledNixNotices`. The supplied client must be a static ELF executable, and\nupstream notices must be included. Bundling omits the default external Nix\ndependency, retains Python, and uses the actual package architecture. A compatible\nexternal client takes precedence; a failed operation is never retried through a\ndifferent client or store. This is a client bundle, not a Nix installer."
       ]
     },
     "validation": {
       "state": "known",
       "value": "The additional producer/consumer VM uses a pinned, complete upstream\nvoid-packages tree and its native `ethereal` mode inside a disposable NixOS\nVM. Actual SDK programs supply the FHS tool paths; upstream build hooks and\ntransaction clients are unchanged. `-I` skips source-build dependency setup\nin that SDK fixture; a separate native install verifies missing runtime\nrequirements are rejected. The VM checks source corruption, native net/offline\nrecipe builds, two versions, configuration protection, package verification,\nordinary-user launch and GC retention/release. It does not claim a complete\nVoid bootstrap, cross compilation or remote package publication.",
-      "evidence": [
+      "source_excerpts": [
         "The additional producer/consumer VM uses a pinned, complete upstream\nvoid-packages tree and its native `ethereal` mode inside a disposable NixOS\nVM. Actual SDK programs supply the FHS tool paths; upstream build hooks and\ntransaction clients are unchanged. `-I` skips source-build dependency setup\nin that SDK fixture; a separate native install verifies missing runtime\nrequirements are rejected. The VM checks source corruption, native net/offline\nrecipe builds, two versions, configuration protection, package verification,\nordinary-user launch and GC retention/release. It does not claim a complete\nVoid bootstrap, cross compilation or remote package publication."
       ]
     }
@@ -32,7 +32,7 @@
     "state": "known",
     "language": "nix",
     "value": "let impurifier = inputs.xbps-impurifier.lib.xbps-impurifier { inherit pkgs; };\n    app = impurifier.makePackage { pkg = pkgs.hello; };\nin impurifier.makeRepository {\n  packages = [ impurifier.runtimeXbps app.offline ];\n}\n",
-    "evidence": [
+    "source_excerpts": [
       "```nix\nlet impurifier = inputs.xbps-impurifier.lib.xbps-impurifier { inherit pkgs; };\n    app = impurifier.makePackage { pkg = pkgs.hello; };\nin impurifier.makeRepository {\n  packages = [ impurifier.runtimeXbps app.offline ];\n}\n```"
     ]
   }

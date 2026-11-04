@@ -8,7 +8,7 @@
     "target_nix": {
       "state": "known",
       "value": "mode-dependent",
-      "evidence": [
+      "source_excerpts": [
         "Project Nix application closures into native Tukit/Snapper root transactions.\nOriginal adapter code is MIT. The upstream transactional-update SDK and its\nlicenses are preserved separately; it uses GPL/LGPL components.",
         "`makeNativeDeployment { name; payload; }` produces `rootfs/` from a complete\nprepared filesystem tree without an SDK, engine, Nix dependencies or activation\nhooks. Apply its files using native `transactional-update run` or `tukit execute`,\nfor example by copying `rootfs/.` to `/` inside the transaction. The native\ntool owns snapshot activation and rollback. This artifact is not input to the\nNix-backed `transactional-update-impurifier install` helper, which retains its\nNix requirement. No per-file uninstall inventory or automatic relocation is\nadded; native snapshot rollback removes the applied tree."
       ]
@@ -16,14 +16,14 @@
     "bundled_client": {
       "state": "known",
       "value": true,
-      "evidence": [
+      "source_excerpts": [
         "Nix-backed application constructors also accept `bundledNixStore` (a supplied\nstatic ELF executable) and `bundledNixNotices` (upstream notice files). The\napplication carries the client privately and uses a Python-only SDK. Launch\nprefers a compatible external client, then the bundle, before registering roots\nor capturing hardware. Explicit `IMPURIFIER_NIX_STORE` disables fallback.\nTrusted preparation still uses host tools and never executes the image-owned\nclient as root. An existing store, daemon and initial SDK preparation remain\nrequired. The separate bundled VM repeats the native lifecycle with an\nincompatible external candidate; this is not a Nix installer."
       ]
     },
     "validation": {
       "state": "known",
       "value": "`nix flake check -L` boots QEMU with a real Btrfs disk, real Snapper and upstream\ntransactional-update 6.2.0. It exercises failure, boot activation, native rollback\nclones, snapshot deletion, unsigned offline recovery, upgrades, unchanged owned\nfiles, library replacement across reboot, and Nix GC retention/release.\nThe NixOS fixture supplies real FHS tools required by upstream's sanitized PATH,\na separate persistent Nix store, CA certificates and initial bootable snapshots.\nIt does not emulate Snapper metadata or replace Tukit's transaction engine.",
-      "evidence": [
+      "source_excerpts": [
         "`nix flake check -L` boots QEMU with a real Btrfs disk, real Snapper and upstream\ntransactional-update 6.2.0. It exercises failure, boot activation, native rollback\nclones, snapshot deletion, unsigned offline recovery, upgrades, unchanged owned\nfiles, library replacement across reboot, and Nix GC retention/release.\nThe NixOS fixture supplies real FHS tools required by upstream's sanitized PATH,\na separate persistent Nix store, CA certificates and initial bootable snapshots.\nIt does not emulate Snapper metadata or replace Tukit's transaction engine."
       ]
     }
@@ -32,7 +32,7 @@
     "state": "known",
     "language": "nix",
     "value": "imp = inputs.transactional-update-impurifier.lib.transactional-update-impurifier { inherit pkgs; };\ndeployment = imp.makeOfflineDeployment { pkg = pkgs.hello; };\n# Also: makeNetDeployment, makeDeployment { offline = false; ...; },\n# and makePackage, returning { net, offline }.\n",
-    "evidence": [
+    "source_excerpts": [
       "```nix\nimp = inputs.transactional-update-impurifier.lib.transactional-update-impurifier { inherit pkgs; };\ndeployment = imp.makeOfflineDeployment { pkg = pkgs.hello; };\n# Also: makeNetDeployment, makeDeployment { offline = false; ...; },\n# and makePackage, returning { net, offline }.\n```"
     ]
   }

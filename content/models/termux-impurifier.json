@@ -8,7 +8,7 @@
     "target_nix": {
       "state": "known",
       "value": "not-added",
-      "evidence": [
+      "source_excerpts": [
         "Produce native Termux DEBs from Nix-built **Android-compatible** payloads. This\nis distinct from Android application APK packaging and from Debian's runtime ABI.\nThe installed files need no Nix daemon, executable, database or root-owned store."
       ]
     },
@@ -19,7 +19,7 @@
     "validation": {
       "state": "known",
       "value": "The VM fixture installs the actual pinned Termux Android app and its embedded\nbootstrap. Native package operations run as the app UID, using Termux's own dpkg,\nnot a host Linux executable. Coverage includes dependencies, installation,\nupgrade, checksum diagnostics, refusal to remove a required dependency, removal\nand cleanup. The initial device fixture is Android-x86 API 28; other Android\nversions and CPU architectures require additional native tests.",
-      "evidence": [
+      "source_excerpts": [
         "The VM fixture installs the actual pinned Termux Android app and its embedded\nbootstrap. Native package operations run as the app UID, using Termux's own dpkg,\nnot a host Linux executable. Coverage includes dependencies, installation,\nupgrade, checksum diagnostics, refusal to remove a required dependency, removal\nand cleanup. The initial device fixture is Android-x86 API 28; other Android\nversions and CPU architectures require additional native tests."
       ]
     }
@@ -28,7 +28,7 @@
     "state": "known",
     "language": "nix",
     "value": "let termux = termux-impurifier.lib.termux-impurifier { inherit pkgs; };\nin termux.makeNativePackage {\n  name = \"my-command\";\n  version = \"1.0\";\n  architecture = \"aarch64\";\n  payload = myAndroidPrefixTree;\n  dependencies = [ \"libexample (>= 1)\" ];\n}\n",
-    "evidence": [
+    "source_excerpts": [
       "```nix\nlet termux = termux-impurifier.lib.termux-impurifier { inherit pkgs; };\nin termux.makeNativePackage {\n  name = \"my-command\";\n  version = \"1.0\";\n  architecture = \"aarch64\";\n  payload = myAndroidPrefixTree;\n  dependencies = [ \"libexample (>= 1)\" ];\n}\n```"
     ]
   }

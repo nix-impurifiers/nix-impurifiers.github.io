@@ -8,7 +8,7 @@
     "target_nix": {
       "state": "known",
       "value": "mode-dependent",
-      "evidence": [
+      "source_excerpts": [
         "Emit Alpine APK v2 artifacts backed by the shared [impurifier engine](https://github.com/nix-impurifiers/impurifier). Native APK transactions own installation intent and host files; Nix supplies application closures through an atomic, GC-rooted `/opt/nix/profile`.",
         "`makeNativePackages { pkg = myApplication; programs = [ \"my-command\" ]; }` returns\na directory of native packages: one application package exporting commands, and\none package per immutable runtime store object. Exact native dependencies retain\nshared objects. Native tools own the files and package database. The target needs\nno Nix executable, daemon, SQLite database, realization hooks or shared profile.\nFiles remain at their original absolute paths; no relocation is performed.\nInputs may come from any compatible Nix producer. This API currently covers\npayload files and command exports rather than the profile-mode host lifecycle DSL."
       ]
@@ -16,14 +16,14 @@
     "bundled_client": {
       "state": "known",
       "value": true,
-      "evidence": [
+      "source_excerpts": [
         "`makeRuntimeApk` additionally accepts `bundledNixStore` (a supplied static ELF\n`nix-store` executable) and nonempty `bundledNixNotices`. A bundle makes the\nexternal native Nix dependency optional and marks the runtime package with its\nactual target architecture. A compatible external client is preferred; otherwise\nthe private bundled client is used. Explicit `nixDependency` still requests a\nnative provider. Client selection never changes store ownership or trust, and a\nfailed mutation is not retried with another client. This is not daemon setup."
       ]
     },
     "validation": {
       "state": "known",
       "value": "Checks include native APK verification, reference-free artifact closures, shared engine contracts, and a QEMU VM with actual Alpine userspace, APK and OpenRC. Two additional signed-repository VMs run Alpine APK 2 and APK 3 against\nactual APK v2 packages. They check signed indexes and packages, unsigned and\ncorruption rejection, net failure/offline recovery, configuration preservation,\nordinary-user execution, upgrades, automatic runtime removal and GC. APK 2 can\nreport a bad index signature as a warning while retaining previously trusted\nmetadata; the test checks that diagnostic rather than treating exit status zero\nas proof that new metadata was accepted.",
-      "evidence": [
+      "source_excerpts": [
         "Checks include native APK verification, reference-free artifact closures, shared engine contracts, and a QEMU VM with actual Alpine userspace, APK and OpenRC. Two additional signed-repository VMs run Alpine APK 2 and APK 3 against\nactual APK v2 packages. They check signed indexes and packages, unsigned and\ncorruption rejection, net failure/offline recovery, configuration preservation,\nordinary-user execution, upgrades, automatic runtime removal and GC. APK 2 can\nreport a bad index signature as a warning while retaining previously trusted\nmetadata; the test checks that diagnostic rather than treating exit status zero\nas proof that new metadata was accepted."
       ]
     }
@@ -32,7 +32,7 @@
     "state": "known",
     "language": "nix",
     "value": "let impurifier = inputs.apk-impurifier.lib.apk-impurifier { inherit pkgs; };\nin impurifier.makePackage { pkg = pkgs.hello; }\n",
-    "evidence": [
+    "source_excerpts": [
       "```nix\nlet impurifier = inputs.apk-impurifier.lib.apk-impurifier { inherit pkgs; };\nin impurifier.makePackage { pkg = pkgs.hello; }\n```"
     ]
   }

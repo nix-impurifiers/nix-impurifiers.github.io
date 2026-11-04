@@ -8,7 +8,7 @@
     "target_nix": {
       "state": "known",
       "value": "mode-dependent",
-      "evidence": [
+      "source_excerpts": [
         "Native Bedrock Linux application strata backed by Nix.\nOriginal adapter code uses MIT; Bedrock retains its GPL license.",
         "`makeNativeStratum { name; payload; }` archives a complete producer-prepared\nstratum tree. Supply target-compatible executables and the native stratum\nmetadata, such as `/etc/os-release`; the constructor adds no engine or Nix\nactivation. Import its `stratum.tar.gz` with native `brl import`. This does not\nrelocate binaries or install a whole distribution. The VM imports, executes,\nremoves and replaces native strata through real Bedrock, and executes an\ninstalled static proof in an isolated root without `/nix`. The Bedrock host\nremains the documented NixOS fixture with its shared store."
       ]
@@ -16,14 +16,14 @@
     "bundled_client": {
       "state": "known",
       "value": true,
-      "evidence": [
+      "source_excerpts": [
         "Nix-backed constructors accept a static ELF `bundledNixStore` and upstream\n`bundledNixNotices` files. They carry a private client with a Python-only SDK.\nLaunch chooses a compatible external client first, then the bundle, before\nregistration or hardware capture; explicit `IMPURIFIER_NIX_STORE` disables\nfallback. Trusted root preparation still uses host tools and never executes the\nstratum-owned client. An existing store, daemon and initial SDK preparation\nremain required. The bundled VM repeats the native stratum lifecycle with an\nincompatible external candidate."
       ]
     },
     "validation": {
       "state": "known",
       "value": "`nix flake check -L` passes a three-boot native VM suite: real installation\nand boot, native import, crossfs/strat launch, net failure and unsigned-cache\nrejection, trusted offline preparation, unchanged payload checksums, retention\nacross reboot and GC, enable/disable, rename/copy, version coexistence,\nhost-library replacement, removal and pruning. The writable Nix store persists\non the VM disk so the reboot test exercises installed data and roots.",
-      "evidence": [
+      "source_excerpts": [
         "`nix flake check -L` passes a three-boot native VM suite: real installation\nand boot, native import, crossfs/strat launch, net failure and unsigned-cache\nrejection, trusted offline preparation, unchanged payload checksums, retention\nacross reboot and GC, enable/disable, rename/copy, version coexistence,\nhost-library replacement, removal and pruning. The writable Nix store persists\non the VM disk so the reboot test exercises installed data and roots."
       ]
     }
@@ -32,7 +32,7 @@
     "state": "known",
     "language": "nix",
     "value": "let adapter = import (brlImpurifier + \"/nix\") {\n  inherit pkgs;\n  coreSrc = impurifier;\n}; in adapter.makeOfflineStratum { pkg = myApplication; }\n",
-    "evidence": [
+    "source_excerpts": [
       "```nix\nlet adapter = import (brlImpurifier + \"/nix\") {\n  inherit pkgs;\n  coreSrc = impurifier;\n}; in adapter.makeOfflineStratum { pkg = myApplication; }\n```"
     ]
   }

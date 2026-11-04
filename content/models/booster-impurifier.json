@@ -8,7 +8,7 @@
     "target_nix": {
       "state": "known",
       "value": "not-added",
-      "evidence": [
+      "source_excerpts": [
         "The upstream generator receives every store object in the package's closure\nthrough its `extra_files` configuration. Absolute paths remain unchanged and\nneed no Nix database, daemon or client at boot. `extraFiles` adds prepared\nabsolute paths; their own non-Nix dependencies remain the producer's concern.\n`kernel` must provide `modules` and `modDirVersion`. Native Booster configuration\npasses through `config`, except closure files and stripping are controlled by\nthe backend. Builds use universal mode, with explicit kernel/module selection;\nhost-only discovery is unavailable in a pure build."
       ]
     },
@@ -19,7 +19,7 @@
     "validation": {
       "state": "known",
       "value": "`nix flake check -L` builds two revisions with the native generator and boots\nupstream Booster `/init` in QEMU. Its native emergency shell executes each\nembedded tool without a root disk, shared store or Nix database. The fixture\nadds static BusyBox at Booster's documented rescue path; it does not replace\ninit. This verifies early tool availability, not every storage/root layout.",
-      "evidence": [
+      "source_excerpts": [
         "`nix flake check -L` builds two revisions with the native generator and boots\nupstream Booster `/init` in QEMU. Its native emergency shell executes each\nembedded tool without a root disk, shared store or Nix database. The fixture\nadds static BusyBox at Booster's documented rescue path; it does not replace\ninit. This verifies early tool availability, not every storage/root layout."
       ]
     }
@@ -28,7 +28,7 @@
     "state": "known",
     "language": "nix",
     "value": "let\n  backend = import (inputs.booster-impurifier + \"/nix\") {\n    inherit pkgs;\n    coreSrc = inputs.impurifier;\n  };\nin backend.makeImage {\n  pkg = earlyTool;\n  kernel = pkgs.linuxPackages.kernel;\n  extraFiles = [];\n  config = { compression = \"gzip\"; };\n}\n",
-    "evidence": [
+    "source_excerpts": [
       "```nix\nlet\n  backend = import (inputs.booster-impurifier + \"/nix\") {\n    inherit pkgs;\n    coreSrc = inputs.impurifier;\n  };\nin backend.makeImage {\n  pkg = earlyTool;\n  kernel = pkgs.linuxPackages.kernel;\n  extraFiles = [];\n  config = { compression = \"gzip\"; };\n}\n```"
     ]
   }

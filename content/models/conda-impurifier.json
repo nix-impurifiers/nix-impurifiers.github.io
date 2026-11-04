@@ -8,7 +8,7 @@
     "target_nix": {
       "state": "known",
       "value": "mode-dependent",
-      "evidence": [
+      "source_excerpts": [
         "Build native Conda packages for Nix applications, with per-environment launchers,\nNix GC roots, and explicit host-library capture. The same package/channel format\nworks with micromamba, mamba, and Conda's libmamba and classic solvers.",
         "`makeNativePackage { name; version; payload; dependencies ? []; license ? ...; }`\npackages a producer-supplied Conda prefix tree directly. It adds no impurifier\nruntime, Nix dependency, profile hooks, roots or database. This is the named\nhigh-level entry point for the existing native artifact builder. Its default\nbuild identity includes the producer output and release epoch. Supply the actual\npayload license; the default is `LicenseRef-Unknown`."
       ]
@@ -16,14 +16,14 @@
     "bundled_client": {
       "state": "known",
       "value": true,
-      "evidence": [
+      "source_excerpts": [
         "For the existing store-managed mode, `makeRuntimePackage` accepts\n`bundledNixStore` and nonempty `bundledNixNotices`. The supplied executable must be\nstatic and target-compatible. Bundling makes the default external Nix dependency\noptional. Launch prefers a compatible external client, falls back to the private\nprefix client, and honors explicit `IMPURIFIER_NIX_STORE` selection. Failed\noperations are not retried with another store client. All four frontend/solver\nvariants exercise actual bundled-client fallback from an incompatible candidate."
       ]
     },
     "validation": {
       "state": "known",
       "value": "Conda's default libmamba solver uses cached channel metadata in `--offline` mode,\neven for a local channel. A native local-only `conda search --override-channels\n-c file://... PACKAGE` refresh prepares that cache. The tests keep native Python/\npip policy enabled and exercise all four frontend/solver combinations in QEMU.",
-      "evidence": [
+      "source_excerpts": [
         "Conda's default libmamba solver uses cached channel metadata in `--offline` mode,\neven for a local channel. A native local-only `conda search --override-channels\n-c file://... PACKAGE` refresh prepares that cache. The tests keep native Python/\npip policy enabled and exercise all four frontend/solver combinations in QEMU."
       ]
     }
@@ -32,7 +32,7 @@
     "state": "known",
     "language": "nix",
     "value": "let\n  impurifier = inputs.conda-impurifier.lib.conda-impurifier { inherit pkgs; };\nin impurifier.makePackage { pkg = pkgs.hello; }\n",
-    "evidence": [
+    "source_excerpts": [
       "```nix\nlet\n  impurifier = inputs.conda-impurifier.lib.conda-impurifier { inherit pkgs; };\nin impurifier.makePackage { pkg = pkgs.hello; }\n```"
     ]
   }

@@ -8,7 +8,7 @@
     "target_nix": {
       "state": "known",
       "value": "mode-dependent",
-      "evidence": [
+      "source_excerpts": [
         "Emit real Guix package definitions that install Nix-backed application launchers.\nGuix owns the package files, profiles and generations; Nix owns the application\nclosure. Original code is MIT licensed. Guix and its bootstrap distribution\nretain their GPL and component notices; they are dependencies, not relicensed\nproject code.",
         "`makeNativePackage { name; version; payload; license ? null; }` emits a native\nGuix package definition and a complete prepared prefix tree. Its trivial native\nbuilder copies those files into the Guix output without adding a Nix SDK,\nlauncher or activation. The producer supplies files that already work in their\nGuix output prefix; this does not relocate binaries. Optional `license` names a\nGuix license identifier such as `expat`; omitted license metadata is `#f`.\nGuix's own store, daemon, builder and profile semantics still apply."
       ]
@@ -16,14 +16,14 @@
     "bundled_client": {
       "state": "known",
       "value": true,
-      "evidence": [
+      "source_excerpts": [
         "Nix-backed constructors accept `bundledNixStore` (a static ELF client) and\n`bundledNixNotices` (upstream notice files). They carry a private client and omit\nthe SDK CLI. Launch selects a compatible external client before the bundle,\nbefore registering immutable roots or capturing hardware; explicit\n`IMPURIFIER_NIX_STORE` disables fallback. Trusted initial preparation uses host\ntools and never executes the Guix-output-owned client as root. Existing Nix\nstore/daemon infrastructure and initial SDK preparation remain necessary. The\nbundled VM repeats the profile, rollback, hardware and GC lifecycle with an\nincompatible external candidate."
       ]
     },
     "validation": {
       "state": "known",
       "value": "The native VM fixture installs the official Guix 1.5.0 binary distribution,\nincluding its original store database, and uses its matching daemon/client.\nGuix's build sandbox remains enabled. Offline profile tests use native\n`--bootstrap` profile mode and explicitly select the distribution's real\nGuile 3.0 compiler through `%guile-for-build`; this omits optional profile hooks\nwhose separate build dependencies are absent from the binary bootstrap.\nFull default-profile hooks, Guix System/Home services, signed remote channels\nand native Nix provisioning need separate coverage.",
-      "evidence": [
+      "source_excerpts": [
         "The native VM fixture installs the official Guix 1.5.0 binary distribution,\nincluding its original store database, and uses its matching daemon/client.\nGuix's build sandbox remains enabled. Offline profile tests use native\n`--bootstrap` profile mode and explicitly select the distribution's real\nGuile 3.0 compiler through `%guile-for-build`; this omits optional profile hooks\nwhose separate build dependencies are absent from the binary bootstrap.\nFull default-profile hooks, Guix System/Home services, signed remote channels\nand native Nix provisioning need separate coverage."
       ]
     }
@@ -32,7 +32,7 @@
     "state": "known",
     "language": "nix",
     "value": "let\n  impurifier = inputs.guix-impurifier.lib.guix-impurifier { inherit pkgs; };\nin impurifier.makeOfflinePackage { pkg = pkgs.hello; }\n",
-    "evidence": [
+    "source_excerpts": [
       "```nix\nlet\n  impurifier = inputs.guix-impurifier.lib.guix-impurifier { inherit pkgs; };\nin impurifier.makeOfflinePackage { pkg = pkgs.hello; }\n```"
     ]
   }

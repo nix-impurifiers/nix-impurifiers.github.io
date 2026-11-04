@@ -8,7 +8,7 @@
     "target_nix": {
       "state": "known",
       "value": "not-added",
-      "evidence": [
+      "source_excerpts": [
         "`makePackage { name; version; payload; abi; }` takes a prepared prefix tree and\nan explicit consumer ABI such as `FreeBSD:15:amd64`. `prefix` defaults to\n`/usr/local`; `origin`, `description` and native `dependencies` are configurable.\nDependencies map names to pkg's `{ origin; version; }` records. Upstream pkg\ncreates the manifest, archive and checksums from the staged files. No Nix\nruntime, database, daemon, activation or relocation is added."
       ]
     },
@@ -19,7 +19,7 @@
     "validation": {
       "state": "known",
       "value": "The current VM runs unmodified portable pkg on Linux and tests target-root\ninstallation, compiled static execution without `/nix`, checksum verification,\nversion replacement and removal. It does not claim a FreeBSD kernel boot or\nvalidation of FreeBSD-native executable payloads. Producers must supply the\nright native ABI and dependency metadata; those platform cases remain explicit\nadditional coverage.",
-      "evidence": [
+      "source_excerpts": [
         "The current VM runs unmodified portable pkg on Linux and tests target-root\ninstallation, compiled static execution without `/nix`, checksum verification,\nversion replacement and removal. It does not claim a FreeBSD kernel boot or\nvalidation of FreeBSD-native executable payloads. Producers must supply the\nright native ABI and dependency metadata; those platform cases remain explicit\nadditional coverage."
       ]
     }

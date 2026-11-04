@@ -8,7 +8,7 @@
     "target_nix": {
       "state": "known",
       "value": "not-added",
-      "evidence": [
+      "source_excerpts": [
         "This distributes prepared files, rather than making arbitrary nixpkgs programs\nPHP-compatible. PHP versions, required extensions and native ABIs remain producer\nresponsibilities. No Nix client, daemon, database or relocation is added."
       ]
     },
@@ -19,7 +19,7 @@
     "validation": {
       "state": "known",
       "value": "`nix flake check -L` runs Composer inside QEMU with network access disabled and\nPackagist disabled: install from local artifacts, load a class through the actual\nComposer autoloader, upgrade, check platform requirements and remove. It verifies\nthat the package and class are unavailable after removal. Native PHP extensions\nand additional platforms need their own compatibility tests.",
-      "evidence": [
+      "source_excerpts": [
         "`nix flake check -L` runs Composer inside QEMU with network access disabled and\nPackagist disabled: install from local artifacts, load a class through the actual\nComposer autoloader, upgrade, check platform requirements and remove. It verifies\nthat the package and class are unavailable after removal. Native PHP extensions\nand additional platforms need their own compatibility tests."
       ]
     }
@@ -28,7 +28,7 @@
     "state": "known",
     "language": "nix",
     "value": "backend.makePackage {\n  name = \"example/library\";\n  version = \"1.0.0\";\n  payload = preparedTree;\n  autoload.\"psr-4\".\"Example\\\\\" = \"src/\";\n  require.php = \">=8.0\";\n  license = \"MIT\";\n}\n",
-    "evidence": [
+    "source_excerpts": [
       "```nix\nbackend.makePackage {\n  name = \"example/library\";\n  version = \"1.0.0\";\n  payload = preparedTree;\n  autoload.\"psr-4\".\"Example\\\\\" = \"src/\";\n  require.php = \">=8.0\";\n  license = \"MIT\";\n}\n```"
     ]
   }

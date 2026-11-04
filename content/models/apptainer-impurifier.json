@@ -8,7 +8,7 @@
     "target_nix": {
       "state": "known",
       "value": "not-added",
-      "evidence": [
+      "source_excerpts": [
         "`makeImage { pkg; program ? pkg.meta.mainProgram; }` embeds a complete Nix-built\nclosure and a native runscript. `makeNativeImage { rootfs; }` instead accepts a\ncomplete prepared filesystem tree. Both accept `name` and the native numeric\nSIF `architecture` code (default 2, amd64). Raw trees supply their own runscript,\nshell and runtime files. Payloads must already match the target ABI; no relocation\nor target Nix daemon/database is added."
       ]
     },
@@ -19,7 +19,7 @@
     "validation": {
       "state": "known",
       "value": "The QEMU suite runs actual Apptainer as an ordinary user, executes two image\nversions under containment, checks that Nix's database/socket are absent, replaces\nthe image and verifies removal. The NixOS fixture provides the runtime; further\nHPC site policy, GPU and architecture combinations need separate coverage.",
-      "evidence": [
+      "source_excerpts": [
         "The QEMU suite runs actual Apptainer as an ordinary user, executes two image\nversions under containment, checks that Nix's database/socket are absent, replaces\nthe image and verifies removal. The NixOS fixture provides the runtime; further\nHPC site policy, GPU and architecture combinations need separate coverage."
       ]
     }

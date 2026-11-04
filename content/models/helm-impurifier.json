@@ -8,7 +8,7 @@
     "target_nix": {
       "state": "known",
       "value": "not-added",
-      "evidence": [
+      "source_excerpts": [
         "Nix can produce chart templates, configuration and other templated resources.\nContainer image building is a separate OCI artifact contract; pass concrete\nimage references through values. Consumers use normal Helm install/upgrade/\nrollback/uninstall. This backend does not manage clusters, publish images/charts,\nstore registry credentials or require target Nix. Signing/provenance generation\nmust follow archive normalization and remain external producer operations."
       ]
     },
@@ -19,7 +19,7 @@
     "validation": {
       "state": "known",
       "value": "`nix flake check -L` uses actual Helm against a real k3s Kubernetes API in QEMU.\nIt installs a chart, verifies its managed ConfigMap, upgrades and verifies the\nnew value, rolls back and verifies the original value, then uninstalls and\nrequires the object to be gone. The fixture is an agentless control plane and\ndoes not claim container scheduling, image pulling or application execution.",
-      "evidence": [
+      "source_excerpts": [
         "`nix flake check -L` uses actual Helm against a real k3s Kubernetes API in QEMU.\nIt installs a chart, verifies its managed ConfigMap, upgrades and verifies the\nnew value, rolls back and verifies the original value, then uninstalls and\nrequires the object to be gone. The fixture is an agentless control plane and\ndoes not claim container scheduling, image pulling or application execution."
       ]
     }
@@ -28,7 +28,7 @@
     "state": "known",
     "language": "nix",
     "value": "backend.makeChart {\n  name = \"example\";\n  version = \"1.0.0\";\n  templates = preparedTemplates;\n  values.image = \"registry.example.org/application@sha256:...\";\n}\n",
-    "evidence": [
+    "source_excerpts": [
       "```nix\nbackend.makeChart {\n  name = \"example\";\n  version = \"1.0.0\";\n  templates = preparedTemplates;\n  values.image = \"registry.example.org/application@sha256:...\";\n}\n```"
     ]
   }

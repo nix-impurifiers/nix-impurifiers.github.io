@@ -8,7 +8,7 @@
     "target_nix": {
       "state": "known",
       "value": "not-added",
-      "evidence": [
+      "source_excerpts": [
         "`payload` is the wheel's import tree. `tag` defaults to `py3-none-any`; set a\nplatform/ABI tag and `pure = false` for native files. `dependencies` carries\nnative Python requirements; `entryPoints` maps console script names to\n`module:function`. `summary` supplies metadata. Tags describe compatibility,\nnot relocation: producers supply files that already work for the consumer ABI.\nSymlinks must be materialized. Metadata and hashed RECORD entries are generated\nreproducibly. No Nix client, database, daemon or install hooks are added."
       ]
     },
@@ -19,7 +19,7 @@
     "validation": {
       "state": "known",
       "value": "Install with `pip install ./result/*.whl`, uv or another compatible installer.\nThe QEMU suite uses real pip and a venv to install, import a compiled native\nlibrary, upgrade, check dependencies and uninstall. Python/pip are NixOS fixture\ntools; this does not claim a full Nix-free operating-system boot. Registry\npublication and further platform/ABI tags require their own validation.",
-      "evidence": [
+      "source_excerpts": [
         "Install with `pip install ./result/*.whl`, uv or another compatible installer.\nThe QEMU suite uses real pip and a venv to install, import a compiled native\nlibrary, upgrade, check dependencies and uninstall. Python/pip are NixOS fixture\ntools; this does not claim a full Nix-free operating-system boot. Registry\npublication and further platform/ABI tags require their own validation."
       ]
     }
@@ -28,7 +28,7 @@
     "state": "known",
     "language": "nix",
     "value": "backend.makeWheel { name = \"my-package\"; version = \"1.0\"; payload = preparedTree; }\n",
-    "evidence": [
+    "source_excerpts": [
       "```nix\nbackend.makeWheel { name = \"my-package\"; version = \"1.0\"; payload = preparedTree; }\n```"
     ]
   }

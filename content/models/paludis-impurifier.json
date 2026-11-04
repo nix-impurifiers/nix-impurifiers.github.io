@@ -8,7 +8,7 @@
     "target_nix": {
       "state": "known",
       "value": "mode-dependent",
-      "evidence": [
+      "source_excerpts": [
         "Emit PMS EAPI 6 overlays that transport Nix applications through actual Paludis\n`cave` transactions. Paludis owns native files; the shared\n[impurifier engine](https://github.com/nix-impurifiers/impurifier) realizes and\nroots closures, then atomically publishes `/opt/nix/profile`. Original code is\nMIT. Application licenses and GPL-covered native tooling remain independent.",
         "`makeNativeEbuild { name; version; payload; license; dependencies?; ... }` emits\na native EAPI 6 overlay from a producer-prepared tree. It disables engine\nactivation and adds no Nix requirement. The producer supplies a working target\nlayout; this does not relocate binaries. The native cave VM installs, executes,\nupgrades and removes a static payload in an independent root without `/nix`.\nThat root retains the ordinary native package database, world file and `/etc`\nfoundation used by Paludis's post-merge tools."
       ]
@@ -16,14 +16,14 @@
     "bundled_client": {
       "state": "known",
       "value": true,
-      "evidence": [
+      "source_excerpts": [
         "`makeRuntimeOverlay` optionally accepts `bundledNixStore` and\n`bundledNixNotices`. Supply a static ELF client with upstream notices. Bundling\nomits the default Nix dependency; Python remains required. Compatible external\nclients take precedence, explicit `IMPURIFIER_NIX_STORE` disables fallback, and\nfailed mutations are never retried through another client. A separate bundled\nVM repeats the original cave lifecycle suite with an incompatible external\ncandidate. Nix provisioning remains deferred."
       ]
     },
     "validation": {
       "state": "known",
       "value": "`nix flake check -L` uses QEMU, the real pinned cave client, and real Gentoo OpenRC\nuserspace. Tests cover native solving/blockers, configuration ownership,\ntransaction batching, lifecycle retries, accounts/directories, service intent,\ndirect phase activation, foreign-root guards, native driver dependencies and GC.\nThe fixture disables the optional Paludis sandbox via its documented environment\nswitch. The outer kernel is NixOS and Nix is preinstalled. This is not an Exherbo\nboot, binary-Paludis-package or Nix-installer claim. Upstream marks its optional\nPBINS implementation nonfunctional; this fixture leaves that feature disabled.",
-      "evidence": [
+      "source_excerpts": [
         "`nix flake check -L` uses QEMU, the real pinned cave client, and real Gentoo OpenRC\nuserspace. Tests cover native solving/blockers, configuration ownership,\ntransaction batching, lifecycle retries, accounts/directories, service intent,\ndirect phase activation, foreign-root guards, native driver dependencies and GC.\nThe fixture disables the optional Paludis sandbox via its documented environment\nswitch. The outer kernel is NixOS and Nix is preinstalled. This is not an Exherbo\nboot, binary-Paludis-package or Nix-installer claim. Upstream marks its optional\nPBINS implementation nonfunctional; this fixture leaves that feature disabled."
       ]
     }
@@ -32,7 +32,7 @@
     "state": "known",
     "language": "nix",
     "value": "let\n  impurifier = inputs.paludis-impurifier.lib.paludis-impurifier {inherit pkgs;};\nin impurifier.makeOverlay {\n  packages = [\n    impurifier.runtimeOverlay\n    (impurifier.makeOfflineEbuild {pkg=pkgs.hello;})\n  ];\n}\n",
-    "evidence": [
+    "source_excerpts": [
       "```nix\nlet\n  impurifier = inputs.paludis-impurifier.lib.paludis-impurifier {inherit pkgs;};\nin impurifier.makeOverlay {\n  packages = [\n    impurifier.runtimeOverlay\n    (impurifier.makeOfflineEbuild {pkg=pkgs.hello;})\n  ];\n}\n```"
     ]
   }

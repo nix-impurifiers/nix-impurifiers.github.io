@@ -86,7 +86,7 @@ verbatim validation-scope excerpt. They are documentation metadata, not an
 implementation conformance model or a new operational test harness.
 
 Facts use `known`, `unknown` or `not-applicable`. Known facts require literal
-README evidence; unknown/inapplicable facts require reasons and cannot carry
+source excerpts for maintenance; unknown/inapplicable facts require reasons and cannot carry
 values. Unknown is not converted to false. Source examples remain unchanged;
 records without a fenced example explicitly point to the full guide.
 
@@ -94,7 +94,7 @@ To refresh a guide:
 
 1. Run `scripts/update_docs.py` for the selected backend.
 2. Review runtime/mode statements, scope and the example against the pinned
-   README. Edit the explicit record and evidence when they change.
+   README. Edit the explicit record and source excerpts when they change.
 3. Update `reviewedRevision` and `readmeSha256` after that review. Do not use a
    regex or package-manager family to infer a new capability.
 4. Run `python -m unittest discover -s tests -p 'test_*.py'`, `python build.py`,
@@ -103,8 +103,8 @@ To refresh a guide:
 A changed README hash blocks publication until its record is reviewed. A newer
 commit with identical README content can retain the earlier review identity;
 `source-review.json` reports `readme-unchanged`. Source review covers README
-content, not every implementation file. Backend native/VM tests remain the
-implementation evidence.
+content, not every implementation file. These checks detect documentation drift only. Backend behavior is tested by
+the native integration and VM suites.
 
 The build exports `catalog.json`, a global `source-review.json`, and per-project
 `system.json`/`source-review.json`. The full README remains at `/<name>/guide/`,

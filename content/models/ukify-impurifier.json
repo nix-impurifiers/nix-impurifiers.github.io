@@ -8,7 +8,7 @@
     "target_nix": {
       "state": "known",
       "value": "not-added",
-      "evidence": [
+      "source_excerpts": [
         "`makeUKI { kernel; initrds = [ initramfs ]; }` produces an **unsigned** EFI file.\nIt also accepts `cmdline`, `osRelease`, `uname` and `stub`. The default stub is\nx86_64; producers targeting another architecture must supply the matching stub\nand kernel. Native dracut, mkinitcpio or other builder outputs can be initrds.\nNo target Nix runtime or relocation is added."
       ]
     },
@@ -19,7 +19,7 @@
     "validation": {
       "state": "known",
       "value": "The QEMU check enrolls an ephemeral test certificate in Secure-Boot-capable OVMF,\nboots initial and updated signed UKIs, checks the guest's actual SecureBoot EFI\nvariable, and requires firmware rejection after altering the embedded kernel.\nThe early userspace has no root disk, host store or target Nix database.",
-      "evidence": [
+      "source_excerpts": [
         "The QEMU check enrolls an ephemeral test certificate in Secure-Boot-capable OVMF,\nboots initial and updated signed UKIs, checks the guest's actual SecureBoot EFI\nvariable, and requires firmware rejection after altering the embedded kernel.\nThe early userspace has no root disk, host store or target Nix database."
       ]
     }
@@ -28,7 +28,7 @@
     "state": "known",
     "language": "",
     "value": "ukify-impurifier sign result --key private.key --certificate certificate.pem --output signed.efi\n",
-    "evidence": [
+    "source_excerpts": [
       "```\nukify-impurifier sign result --key private.key --certificate certificate.pem --output signed.efi\n```"
     ]
   }

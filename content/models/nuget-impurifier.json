@@ -8,7 +8,7 @@
     "target_nix": {
       "state": "known",
       "value": "not-added",
-      "evidence": [
+      "source_excerpts": [
         "`backend` is `import (inputs.nuget-impurifier + \"/nix\") { inherit pkgs; coreSrc = inputs.impurifier; }`.\nThe payload uses NuGet's native layout: for example `lib/net10.0/Example.dll`\nand `runtimes/linux-x64/native/libexample.so`. `authors`, `description`, native\nframework dependency groups and optional `licenseExpression` supply metadata.\nThe default omits a payload license claim. Package versions are immutable\nthree-component releases with an optional prerelease suffix."
       ]
     },
@@ -19,7 +19,7 @@
     "validation": {
       "state": "known",
       "value": "`nix flake check -L` compares two independent native package builds for\nreproducibility, and uses native .NET in QEMU to restore two package versions,\ncompile a consumer, resolve and execute an actual RID-specific native shared\nlibrary, and verify an ordinary rebuild runs the updated library. Removing the\nPackageReference makes the consumer fail to compile. This tests Linux x64 and\n.NET 10; other runtime identifiers, Windows and signing require separate tests.\nNuGet's package cache follows its normal retention policy after reference removal.",
-      "evidence": [
+      "source_excerpts": [
         "`nix flake check -L` compares two independent native package builds for\nreproducibility, and uses native .NET in QEMU to restore two package versions,\ncompile a consumer, resolve and execute an actual RID-specific native shared\nlibrary, and verify an ordinary rebuild runs the updated library. Removing the\nPackageReference makes the consumer fail to compile. This tests Linux x64 and\n.NET 10; other runtime identifiers, Windows and signing require separate tests.\nNuGet's package cache follows its normal retention policy after reference removal."
       ]
     }
@@ -28,7 +28,7 @@
     "state": "known",
     "language": "nix",
     "value": "backend.makePackage {\n  name = \"Example.Library\";\n  version = \"1.0.0\";\n  payload = preparedTree;\n  licenseExpression = \"MIT\";\n  dependencies.\"net10.0\" = { \"Other.Library\" = \"[1.0.0,2.0.0)\"; };\n}\n",
-    "evidence": [
+    "source_excerpts": [
       "```nix\nbackend.makePackage {\n  name = \"Example.Library\";\n  version = \"1.0.0\";\n  payload = preparedTree;\n  licenseExpression = \"MIT\";\n  dependencies.\"net10.0\" = { \"Other.Library\" = \"[1.0.0,2.0.0)\"; };\n}\n```"
     ]
   }

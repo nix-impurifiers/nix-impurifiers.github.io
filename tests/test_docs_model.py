@@ -45,15 +45,15 @@ class DocumentationContract(unittest.TestCase):
         record['facts']['target_nix']['value']='inferred-from-family'
         with self.assertRaises(AssertionError):validate_record(project,record,source)
 
-    def test_evidence_must_exist_and_example_must_remain_source_text(self):
+    def test_source_excerpts_must_exist_and_example_must_remain_source_text(self):
         project,record,source=self.fixture()
-        record['facts']['target_nix']['evidence']=['Unreviewed assertion.']
+        record['facts']['target_nix']['source_excerpts']=['Unreviewed assertion.']
         with self.assertRaises(AssertionError):validate_record(project,record,source)
         project,record,source=self.fixture()
         record['example']['value']='invented command'
         with self.assertRaises(AssertionError):validate_record(project,record,source)
 
-    def test_validation_scope_cannot_expand_its_evidence(self):
+    def test_validation_scope_cannot_expand_its_source_excerpts(self):
         project,record,source=self.fixture()
         record['facts']['validation']['value']='Every operating system is supported.'
         with self.assertRaisesRegex(AssertionError,'verbatim'):

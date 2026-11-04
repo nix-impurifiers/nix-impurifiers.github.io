@@ -8,7 +8,7 @@
     "target_nix": {
       "state": "known",
       "value": "not-added",
-      "evidence": [
+      "source_excerpts": [
         "Build native Android application APKs from Nix-built Android inputs. This is a\nseparate ecosystem from Termux packages. No Nix executable, daemon, store database,\nNixOS userspace or glibc is required on the device."
       ]
     },
@@ -19,7 +19,7 @@
     "validation": {
       "state": "known",
       "value": "VM coverage uses a pinned Android-x86 9.0-r2 userspace under software QEMU. Its\nfixture application contains real DEX and a Nix-built Android-targeted JNI library\nwithout libc dependencies. Tests exercise native signature verification, package\ninstallation, upgrade, persistent app data, JNI execution, rejected signer changes,\nrejected tampering and uninstall. This fixture is not a claim of modern stock\nAndroid, ARM device, split APK, app bundle or app-store publication coverage.",
-      "evidence": [
+      "source_excerpts": [
         "VM coverage uses a pinned Android-x86 9.0-r2 userspace under software QEMU. Its\nfixture application contains real DEX and a Nix-built Android-targeted JNI library\nwithout libc dependencies. Tests exercise native signature verification, package\ninstallation, upgrade, persistent app data, JNI execution, rejected signer changes,\nrejected tampering and uninstall. This fixture is not a claim of modern stock\nAndroid, ARM device, split APK, app bundle or app-store publication coverage."
       ]
     }
@@ -28,7 +28,7 @@
     "state": "known",
     "language": "nix",
     "value": "let android = android-impurifier.lib.android-impurifier { inherit pkgs; };\nin android.makeApplication {\n  name = \"my-app\";\n  manifest = ./AndroidManifest.xml;\n  framework = \"${androidPlatform}/android.jar\";\n  dexFiles = [ myDex ];\n  nativeLibraries.arm64-v8a.\"libapp.so\" = myAndroidLibrary;\n  assets = ./assets;\n  resources = ./res;\n}\n",
-    "evidence": [
+    "source_excerpts": [
       "```nix\nlet android = android-impurifier.lib.android-impurifier { inherit pkgs; };\nin android.makeApplication {\n  name = \"my-app\";\n  manifest = ./AndroidManifest.xml;\n  framework = \"${androidPlatform}/android.jar\";\n  dexFiles = [ myDex ];\n  nativeLibraries.arm64-v8a.\"libapp.so\" = myAndroidLibrary;\n  assets = ./assets;\n  resources = ./res;\n}\n```"
     ]
   }

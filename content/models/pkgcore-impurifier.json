@@ -8,7 +8,7 @@
     "target_nix": {
       "state": "known",
       "value": "mode-dependent",
-      "evidence": [
+      "source_excerpts": [
         "Build PMS overlays that transport Nix applications through native pkgcore\n`pmerge` transactions. pkgcore owns package files, configuration and integration;\nthe [impurifier engine](https://github.com/nix-impurifiers/impurifier) realizes\nclosures and atomically publishes `/opt/nix/profile`. Original code is MIT.\nApplication and upstream tooling licenses remain their own.",
         "`makeNativeEbuild { name; version; payload; license; dependencies?; ... }` emits\na native overlay from a producer-prepared filesystem tree, without activation\nor an implicit Nix dependency. The producer supplies a working target layout;\nthis does not relocate binaries. The VM uses actual pmerge with a separate native\nROOT, executes the installed static payload in that root without `/nix`, then\nupgrades and removes it. The native target needs its ordinary package database\nand world-file foundation."
       ]
@@ -16,14 +16,14 @@
     "bundled_client": {
       "state": "known",
       "value": true,
-      "evidence": [
+      "source_excerpts": [
         "`makeRuntimeOverlay` optionally accepts `bundledNixStore` and\n`bundledNixNotices`. Supply a static ELF client and its upstream notices. Bundling\nomits the default native Nix requirement; Python remains required. Compatible\nexternal clients take precedence, explicit `IMPURIFIER_NIX_STORE` disables\nfallback, and failed mutations are never retried through another client. A\nseparate bundled-client VM repeats the original pkgcore lifecycle suite with an\nincompatible external candidate. Nix provisioning remains deferred."
       ]
     },
     "validation": {
       "state": "known",
       "value": "`nix flake check -L` uses QEMU, the real pinned pkgcore client, and pinned Gentoo\nOpenRC userspace. The fixture supplies Nix and Python beforehand. The outer\nkernel is NixOS; these checks do not establish a full Gentoo boot or installer.\nUpstream Python dependencies and native pkgcore tooling are pinned separately\nin `nix/tools.nix`; public emitters need only the standard library and Nix tools.",
-      "evidence": [
+      "source_excerpts": [
         "`nix flake check -L` uses QEMU, the real pinned pkgcore client, and pinned Gentoo\nOpenRC userspace. The fixture supplies Nix and Python beforehand. The outer\nkernel is NixOS; these checks do not establish a full Gentoo boot or installer.\nUpstream Python dependencies and native pkgcore tooling are pinned separately\nin `nix/tools.nix`; public emitters need only the standard library and Nix tools."
       ]
     }
@@ -32,7 +32,7 @@
     "state": "known",
     "language": "nix",
     "value": "let\n  impurifier = inputs.pkgcore-impurifier.lib.pkgcore-impurifier { inherit pkgs; };\nin impurifier.makeOverlay {\n  packages = [\n    impurifier.runtimeOverlay\n    (impurifier.makeOfflineEbuild { pkg = pkgs.hello; })\n  ];\n}\n",
-    "evidence": [
+    "source_excerpts": [
       "```nix\nlet\n  impurifier = inputs.pkgcore-impurifier.lib.pkgcore-impurifier { inherit pkgs; };\nin impurifier.makeOverlay {\n  packages = [\n    impurifier.runtimeOverlay\n    (impurifier.makeOfflineEbuild { pkg = pkgs.hello; })\n  ];\n}\n```"
     ]
   }

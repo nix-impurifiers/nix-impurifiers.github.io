@@ -8,7 +8,7 @@
     "target_nix": {
       "state": "known",
       "value": "mode-dependent",
-      "evidence": [
+      "source_excerpts": [
         "Emit native Homebrew formulae and taps backed by Nix applications. Original code\nis MIT licensed. Homebrew owns its Cellar, opt links, command links, receipts,\nupgrades and cleanup; Nix owns the application closures. Linux is the tested target.",
         "`makeNativeFormula { payload; name; version; dependencies ? []; archiveURL ? null; }`\naccepts a producer-prepared prefix tree and emits an ordinary source formula.\nHomebrew owns its files; the installed payload has no impurifier launcher, Nix\nclient, daemon, database or Python requirement. The producer is responsible for\nABI compatibility and prefix independence. This does not relocate store paths."
       ]
@@ -16,7 +16,7 @@
     "bundled_client": {
       "state": "known",
       "value": true,
-      "evidence": [
+      "source_excerpts": [
         "Nix-backed formulae optionally accept `bundledNixStore` (a static ELF `nix-store`)\nand `bundledNixNotices`. They prefer a compatible external client, falling back\nto the private bundled client before any operation. A failed operation is never\nretried with another client. Python remains required. Root preparation continues\nto use the administrator's trusted client. A bundled client does not install Nix\nor grant write access to a store."
       ]
     },
@@ -29,7 +29,7 @@
     "state": "known",
     "language": "nix",
     "value": "let backend = inputs.homebrew-impurifier.lib.homebrew-impurifier { inherit pkgs; };\nin backend.makePackage { pkg = pkgs.ripgrep; }\n",
-    "evidence": [
+    "source_excerpts": [
       "```nix\nlet backend = inputs.homebrew-impurifier.lib.homebrew-impurifier { inherit pkgs; };\nin backend.makePackage { pkg = pkgs.ripgrep; }\n```"
     ]
   }

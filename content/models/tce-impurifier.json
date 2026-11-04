@@ -8,7 +8,7 @@
     "target_nix": {
       "state": "known",
       "value": "mode-dependent",
-      "evidence": [
+      "source_excerpts": [
         "Emit native Tiny Core `.tcz` extensions and boot sets backed by GC-rooted Nix\nprofiles. Real `tce-load` owns extension mounts, symlinked files and startup\nscripts; the shared [engine](https://github.com/nix-impurifiers/impurifier) owns\nclosure import and `/opt/nix/profile` generations. Original code is MIT.\nApplication and upstream Tiny Core licenses remain independent.",
         "The high-level compiler supports CLI programs, declared native libraries, users,\ndirectories, priority and idempotent onInstall/onUpgrade hooks. `/etc`\nconfiguration and service declarations are rejected: Tiny Core's native\nconfiguration backup and service startup are consumer boot policy. It does not\nassume OpenRC or systemd is installed. The shared account helper uses actual\nshadow tools where present and otherwise BusyBox. `buildTcz` emits lower-level\nnative payloads for consumer-owned integration; `activate` defaults to false.\nLicense metadata defaults to application SPDX IDs when available and can be\noverridden through `license`. Native package ownership does not relicense the\napplication. Runtime archives retain the shared engine's MIT notice."
       ]
@@ -16,14 +16,14 @@
     "bundled_client": {
       "state": "known",
       "value": true,
-      "evidence": [
+      "source_excerpts": [
         "`makeRuntimeTcz` optionally accepts `bundledNixStore` and `bundledNixNotices`.\nSupply a static ELF client and upstream notices. Bundling omits the default Nix\ndependency; Python remains required. Compatible external clients take precedence,\nexplicit `IMPURIFIER_NIX_STORE` disables fallback, and failed mutations are never\nretried through another client. A bundled variant repeats the original boot-set\nlifecycle suite with an incompatible external candidate. Nix provisioning remains\ndeferred, and native extensions still do not claim live unloading."
       ]
     },
     "validation": {
       "state": "known",
       "value": "`nix flake check -L` runs QEMU with the real pinned Tiny Core 16 userspace,\ntce-load, tce-setup, tce-remove, BusyBox, sudo and account tools. The outer kernel\nis NixOS. The VM tests runtime minimums, net failure, offline boot recovery,\nunchanged-generation account restoration, native refusal of live removal,\napplication/driver upgrades through actual VM reboots, lifecycle persistence,\nGC and boot deselection. Nix/Python are preinstalled and explicitly represented\nby a fixture provider. Application data is mounted persistently by the fixture;\nthis is not a full Tiny Core kernel/init boot or Nix-installer test.",
-      "evidence": [
+      "source_excerpts": [
         "`nix flake check -L` runs QEMU with the real pinned Tiny Core 16 userspace,\ntce-load, tce-setup, tce-remove, BusyBox, sudo and account tools. The outer kernel\nis NixOS. The VM tests runtime minimums, net failure, offline boot recovery,\nunchanged-generation account restoration, native refusal of live removal,\napplication/driver upgrades through actual VM reboots, lifecycle persistence,\nGC and boot deselection. Nix/Python are preinstalled and explicitly represented\nby a fixture provider. Application data is mounted persistently by the fixture;\nthis is not a full Tiny Core kernel/init boot or Nix-installer test."
       ]
     }
@@ -32,7 +32,7 @@
     "state": "known",
     "language": "nix",
     "value": "let\n  impurifier = inputs.tce-impurifier.lib.tce-impurifier {inherit pkgs;};\nin impurifier.makeBootSet {\n  packages = [\n    (impurifier.makeRuntimeTcz {\n      nixDependency = \"your-native-nix-provider\";\n      pythonDependency = \"python3\";\n    })\n    (impurifier.makeOfflineTcz {pkg=pkgs.hello;})\n  ];\n}\n",
-    "evidence": [
+    "source_excerpts": [
       "```nix\nlet\n  impurifier = inputs.tce-impurifier.lib.tce-impurifier {inherit pkgs;};\nin impurifier.makeBootSet {\n  packages = [\n    (impurifier.makeRuntimeTcz {\n      nixDependency = \"your-native-nix-provider\";\n      pythonDependency = \"python3\";\n    })\n    (impurifier.makeOfflineTcz {pkg=pkgs.hello;})\n  ];\n}\n```"
     ]
   }

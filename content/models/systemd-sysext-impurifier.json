@@ -8,7 +8,7 @@
     "target_nix": {
       "state": "known",
       "value": "mode-dependent",
-      "evidence": [
+      "source_excerpts": [
         "Build native SquashFS system extension images carrying Nix applications, package\nintent, systemd units and offline closure caches. Native `systemd-sysext` owns\nmerging `/usr`; the [shared engine](https://github.com/nix-impurifiers/impurifier)\nowns GC roots and atomic `/opt/nix/profile` generations. Original code is MIT.",
         "`makeNativeExtension { payload; name?; osRelease?; }` creates a SquashFS\nextension from a producer-prepared `/usr` tree. It contains no implicit engine,\nactivation boot code, Python or Nix requirement. Native systemd-sysext owns the\nmerged view; the producer supplies a working target layout without relocation.\nThe VM merges, executes, upgrades and unmerges an actual image in a separate root\nwithout `/nix` or the engine. Files outside `/usr` and collisions are rejected."
       ]
@@ -16,14 +16,14 @@
     "bundled_client": {
       "state": "known",
       "value": true,
-      "evidence": [
+      "source_excerpts": [
         "Nix-backed `makeExtension` accepts `bundledNixStore` and `bundledNixNotices` for\na static ELF client and its upstream notices. A compatible external client takes\nprecedence; explicit `IMPURIFIER_NIX_STORE` disables fallback and failed mutations\nare never retried through another client. Python remains required. A separate\nbundled-client VM repeats the original image lifecycle and reboot suite with an\nincompatible external candidate. Nix provisioning remains deferred."
       ]
     },
     "validation": {
       "state": "known",
       "value": "`nix flake check -L` boots QEMU and uses actual systemd-sysext, loop devices,\nSquashFS, overlayfs, Nix, sysusers/tmpfiles and service management. The guest has\na persistent writable Nix store. It checks net failure, offline import from\nread-only images, atomic image replacement, lifecycle retry, administrator\nintent, real reboot after GC, and native unmerge/removal. The NixOS fixture makes\nnative unit directories writable while preserving dependency symlinks; this does\nnot claim arbitrary declarative NixOS service-enablement compatibility.",
-      "evidence": [
+      "source_excerpts": [
         "`nix flake check -L` boots QEMU and uses actual systemd-sysext, loop devices,\nSquashFS, overlayfs, Nix, sysusers/tmpfiles and service management. The guest has\na persistent writable Nix store. It checks net failure, offline import from\nread-only images, atomic image replacement, lifecycle retry, administrator\nintent, real reboot after GC, and native unmerge/removal. The NixOS fixture makes\nnative unit directories writable while preserving dependency symlinks; this does\nnot claim arbitrary declarative NixOS service-enablement compatibility."
       ]
     }
@@ -32,7 +32,7 @@
     "state": "known",
     "language": "nix",
     "value": "let\n  impurifier = inputs.systemd-sysext-impurifier.lib.systemd-sysext-impurifier {inherit pkgs;};\nin impurifier.makeExtension {\n  applications = [\n    {pkg=pkgs.hello; offline=true;}\n  ];\n}\n",
-    "evidence": [
+    "source_excerpts": [
       "```nix\nlet\n  impurifier = inputs.systemd-sysext-impurifier.lib.systemd-sysext-impurifier {inherit pkgs;};\nin impurifier.makeExtension {\n  applications = [\n    {pkg=pkgs.hello; offline=true;}\n  ];\n}\n```"
     ]
   }
