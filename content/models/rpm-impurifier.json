@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "repository": "nix-impurifiers/rpm-impurifier",
+  "reviewedRevision": "6e72217960f50ff568d4ae907ab09a830ea978e2",
+  "readmeSha256": "5d52dc4c8a259b31c230f6a876ce913bd154e76598cf45d6e622fac4a02fdbf0",
+  "reviewBasis": "project-readme",
+  "facts": {
+    "target_nix": {
+      "state": "known",
+      "value": "mode-dependent",
+      "evidence": [
+        "Emit native RPM packages that project Nix applications into `/opt/nix/profile`.\nRPM owns install intent, configuration files and host integration. The pinned\n[`impurifier` core](https://github.com/nix-impurifiers/impurifier) supplies closure\ncaches, collision checks, GC roots, atomic publication and activation recovery.\nThis backend targets RPM, with consumer-controlled native dependencies; there\nis no distribution-detection table.",
+        "`makeNativeRpms { pkg = myApplication; programs = [ \"my-command\" ]; }` returns\na directory of native packages: one application package exporting commands, and\none package per immutable runtime store object. Exact native dependencies retain\nshared objects. Native tools own the files and package database. The target needs\nno Nix executable, daemon, SQLite database, realization hooks or shared profile.\nFiles remain at their original absolute paths; no relocation is performed.\nInputs may come from any compatible Nix producer. This API currently covers\npayload files and command exports rather than the profile-mode host lifecycle DSL."
+      ]
+    },
+    "bundled_client": {
+      "state": "known",
+      "value": true,
+      "evidence": [
+        "`makeRuntimeRpm` additionally accepts `bundledNixStore` (a supplied static ELF\n`nix-store` executable) and nonempty `bundledNixNotices`. A bundle makes the\nexternal native Nix dependency optional and marks the runtime package with its\nactual target architecture. A compatible external client is preferred; otherwise\nthe private bundled client is used. Explicit `nixDependency` still requests a\nnative provider. Client selection never changes store ownership or trust, and a\nfailed mutation is not retried with another client. This is not daemon setup."
+      ]
+    },
+    "validation": {
+      "state": "known",
+      "value": "Net packages substitute through administrator-configured Nix caches. Offline\npackages contain the full application closure as a package-owned local cache;\nthose imports select only that cache and disable remote builders. They do not\nchange global cache trust. RPM artifact headers contain store hashes in cache\nfilenames, so these self-contained native archives explicitly discard Nix output\nreferences. A contract check and an absent-at-boot VM assertion prevent the test\nimage from silently preinstalling the application closure.",
+      "evidence": [
+        "Net packages substitute through administrator-configured Nix caches. Offline\npackages contain the full application closure as a package-owned local cache;\nthose imports select only that cache and disable remote builders. They do not\nchange global cache trust. RPM artifact headers contain store hashes in cache\nfilenames, so these self-contained native archives explicitly discard Nix output\nreferences. A contract check and an absent-at-boot VM assertion prevent the test\nimage from silently preinstalling the application closure."
+      ]
+    }
+  },
+  "example": {
+    "state": "known",
+    "language": "nix",
+    "value": "let impurifier = inputs.rpm-impurifier.lib.rpm-impurifier { inherit pkgs; };\nin impurifier.makePackage {\n  pkg = pkgs.hello;\n  # Optional: name, version, release (default \"1\"), priority, license.\n}\n",
+    "evidence": [
+      "```nix\nlet impurifier = inputs.rpm-impurifier.lib.rpm-impurifier { inherit pkgs; };\nin impurifier.makePackage {\n  pkg = pkgs.hello;\n  # Optional: name, version, release (default \"1\"), priority, license.\n}\n```"
+    ]
+  }
+}

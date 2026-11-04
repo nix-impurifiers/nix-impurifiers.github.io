@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "repository": "nix-impurifiers/lunar-impurifier",
+  "reviewedRevision": "8bd75df7ff3e81bdf0bba30ab5e2bc1f26daaf67",
+  "readmeSha256": "594029f935c184b7cf648e93b036493bb0ade2faa459f93da2134def3f2f1ed7",
+  "reviewBasis": "project-readme",
+  "facts": {
+    "target_nix": {
+      "state": "known",
+      "value": "mode-dependent",
+      "evidence": [
+        "Build native Lunar modules and moonbases backed by transactional Nix profiles.\nActual `lin`, dependency resolution, installwatch and `lrm` own host files; Nix\nowns application closures and garbage-collection roots. Original code is MIT.\nSee THIRD_PARTY.md for the independently licensed native tools used in tests.",
+        "`buildModule` emits arbitrary native payloads and dependencies, allowing an\nindependent impure Nix provider package. Building a new native Nix installer is\ndeferred work, not excluded from the project."
+      ]
+    },
+    "bundled_client": {
+      "state": "known",
+      "value": true,
+      "evidence": [
+        "`makeRuntimeModule` optionally accepts `bundledNixStore` and\n`bundledNixNotices` for a static ELF client and upstream notices. Bundling omits\nthe default Nix dependency; Python and the native file tracker remain required.\nCompatible external clients take precedence, explicit `IMPURIFIER_NIX_STORE`\ndisables fallback, and failed mutations are never retried through another\nclient. A bundled variant repeats the original lifecycle suite with an\nincompatible external candidate. Nix provisioning remains deferred."
+      ]
+    },
+    "validation": {
+      "state": "known",
+      "value": "Run `nix flake check -L` for the actual QEMU native client suite and `nix fmt`\nfor formatting. The fixture runs upstream Lunar scripts unmodified with a real\ncurrent installwatch library. It does not establish full Lunar boot/init or\nhistorical installwatch coverage.",
+      "evidence": [
+        "Run `nix flake check -L` for the actual QEMU native client suite and `nix fmt`\nfor formatting. The fixture runs upstream Lunar scripts unmodified with a real\ncurrent installwatch library. It does not establish full Lunar boot/init or\nhistorical installwatch coverage."
+      ]
+    }
+  },
+  "example": {
+    "state": "known",
+    "language": "nix",
+    "value": "let\n  lunar = inputs.lunar-impurifier.lib.lunar-impurifier { inherit pkgs; };\nin lunar.makeMoonbase {\n  modules = [\n    (lunar.makeRuntimeModule {\n      nixDependency = \"my-nix-provider\";\n      pythonDependency = \"python3\";\n      installwatchDependency = \"installwatch\";\n    })\n    (lunar.makeOfflineModule {\n      pkg = pkgs.hello;\n      nativeLicense = \"gpl\";\n    })\n  ];\n}\n",
+    "evidence": [
+      "```nix\nlet\n  lunar = inputs.lunar-impurifier.lib.lunar-impurifier { inherit pkgs; };\nin lunar.makeMoonbase {\n  modules = [\n    (lunar.makeRuntimeModule {\n      nixDependency = \"my-nix-provider\";\n      pythonDependency = \"python3\";\n      installwatchDependency = \"installwatch\";\n    })\n    (lunar.makeOfflineModule {\n      pkg = pkgs.hello;\n      nativeLicense = \"gpl\";\n    })\n  ];\n}\n```"
+    ]
+  }
+}

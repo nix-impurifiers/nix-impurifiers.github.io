@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "repository": "nix-impurifiers/apptainer-impurifier",
+  "reviewedRevision": "1924896d6c03f74b0a7fb7bc2bd9fc3856a58e35",
+  "readmeSha256": "d9fce1036fe2633c954f96b9af1241d5c31cfc497ad54f74e60d251e22d815b5",
+  "reviewBasis": "project-readme",
+  "facts": {
+    "target_nix": {
+      "state": "known",
+      "value": "not-added",
+      "evidence": [
+        "`makeImage { pkg; program ? pkg.meta.mainProgram; }` embeds a complete Nix-built\nclosure and a native runscript. `makeNativeImage { rootfs; }` instead accepts a\ncomplete prepared filesystem tree. Both accept `name` and the native numeric\nSIF `architecture` code (default 2, amd64). Raw trees supply their own runscript,\nshell and runtime files. Payloads must already match the target ABI; no relocation\nor target Nix daemon/database is added."
+      ]
+    },
+    "bundled_client": {
+      "state": "not-applicable",
+      "reason": "This backend adds no Nix client integration; its native consumer and payload ABI are the relevant runtime contract."
+    },
+    "validation": {
+      "state": "known",
+      "value": "The QEMU suite runs actual Apptainer as an ordinary user, executes two image\nversions under containment, checks that Nix's database/socket are absent, replaces\nthe image and verifies removal. The NixOS fixture provides the runtime; further\nHPC site policy, GPU and architecture combinations need separate coverage.",
+      "evidence": [
+        "The QEMU suite runs actual Apptainer as an ordinary user, executes two image\nversions under containment, checks that Nix's database/socket are absent, replaces\nthe image and verifies removal. The NixOS fixture provides the runtime; further\nHPC site policy, GPU and architecture combinations need separate coverage."
+      ]
+    }
+  },
+  "example": {
+    "state": "unknown",
+    "reason": "This README describes its API without a fenced example. Consult the full guide."
+  }
+}

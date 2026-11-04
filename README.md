@@ -70,3 +70,44 @@ not needed for the public GitHub Pages deployment or local static hosting.
 
 Original website code is MIT licensed. Project README snapshots retain their
 source attribution; referenced upstream software retains its own license.
+
+## Structured project documentation
+
+Each backend has an overview, full guide and documentation matrix, with a
+cross-project comparison at `/compare/`. This adopts the useful organization of
+the sibling [nix-purifiers documentation system](https://github.com/nix-purifiers/nix-purifiers.github.io/tree/e323c4e7749b7fb66fc8cd413ade4a399d02fe55/docs-site),
+while retaining this site's palette, catalog and consumer-specific terminology.
+
+`content/model-contract.json` owns the common overview sections and fact
+vocabulary. Every catalog entry has an explicit `content/models/<name>.json`;
+there are no family defaults for behavior. Records currently describe reviewed
+README contracts: target-side Nix integration, optional bundled clients and a
+verbatim validation-scope excerpt. They are documentation metadata, not an
+implementation conformance model or a new operational test harness.
+
+Facts use `known`, `unknown` or `not-applicable`. Known facts require literal
+README evidence; unknown/inapplicable facts require reasons and cannot carry
+values. Unknown is not converted to false. Source examples remain unchanged;
+records without a fenced example explicitly point to the full guide.
+
+To refresh a guide:
+
+1. Run `scripts/update_docs.py` for the selected backend.
+2. Review runtime/mode statements, scope and the example against the pinned
+   README. Edit the explicit record and evidence when they change.
+3. Update `reviewedRevision` and `readmeSha256` after that review. Do not use a
+   regex or package-manager family to infer a new capability.
+4. Run `python -m unittest discover -s tests -p 'test_*.py'`, `python build.py`,
+   `python tests/check_site.py` and the browser suite.
+
+A changed README hash blocks publication until its record is reviewed. A newer
+commit with identical README content can retain the earlier review identity;
+`source-review.json` reports `readme-unchanged`. Source review covers README
+content, not every implementation file. Backend native/VM tests remain the
+implementation evidence.
+
+The build exports `catalog.json`, a global `source-review.json`, and per-project
+`system.json`/`source-review.json`. The full README remains at `/<name>/guide/`,
+preserving its headings and complete prose. Old overview fragments redirect to
+those guide headings with JavaScript; without it, Full guide sections retains
+the corresponding links.

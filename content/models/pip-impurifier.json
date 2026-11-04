@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "repository": "nix-impurifiers/pip-impurifier",
+  "reviewedRevision": "810b865dfc919996715f9b732dc0f40501d832a3",
+  "readmeSha256": "62013036b3aa58d35f80c6316fc1b9efb86bf88b9081ab0eb8ff08a1ed527c46",
+  "reviewBasis": "project-readme",
+  "facts": {
+    "target_nix": {
+      "state": "known",
+      "value": "not-added",
+      "evidence": [
+        "`payload` is the wheel's import tree. `tag` defaults to `py3-none-any`; set a\nplatform/ABI tag and `pure = false` for native files. `dependencies` carries\nnative Python requirements; `entryPoints` maps console script names to\n`module:function`. `summary` supplies metadata. Tags describe compatibility,\nnot relocation: producers supply files that already work for the consumer ABI.\nSymlinks must be materialized. Metadata and hashed RECORD entries are generated\nreproducibly. No Nix client, database, daemon or install hooks are added."
+      ]
+    },
+    "bundled_client": {
+      "state": "not-applicable",
+      "reason": "This backend adds no Nix client integration; its native consumer and payload ABI are the relevant runtime contract."
+    },
+    "validation": {
+      "state": "known",
+      "value": "Install with `pip install ./result/*.whl`, uv or another compatible installer.\nThe QEMU suite uses real pip and a venv to install, import a compiled native\nlibrary, upgrade, check dependencies and uninstall. Python/pip are NixOS fixture\ntools; this does not claim a full Nix-free operating-system boot. Registry\npublication and further platform/ABI tags require their own validation.",
+      "evidence": [
+        "Install with `pip install ./result/*.whl`, uv or another compatible installer.\nThe QEMU suite uses real pip and a venv to install, import a compiled native\nlibrary, upgrade, check dependencies and uninstall. Python/pip are NixOS fixture\ntools; this does not claim a full Nix-free operating-system boot. Registry\npublication and further platform/ABI tags require their own validation."
+      ]
+    }
+  },
+  "example": {
+    "state": "known",
+    "language": "nix",
+    "value": "backend.makeWheel { name = \"my-package\"; version = \"1.0\"; payload = preparedTree; }\n",
+    "evidence": [
+      "```nix\nbackend.makeWheel { name = \"my-package\"; version = \"1.0\"; payload = preparedTree; }\n```"
+    ]
+  }
+}

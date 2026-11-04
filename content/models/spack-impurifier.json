@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "repository": "nix-impurifiers/spack-impurifier",
+  "reviewedRevision": "52150816ee1b25e4175b38475a0cd7ef644811cb",
+  "readmeSha256": "21fbcd33742064afa3b72a5bbdefd0f9374eff33018860b1196f0b1180c6f2d1",
+  "reviewBasis": "project-readme",
+  "facts": {
+    "target_nix": {
+      "state": "known",
+      "value": "mode-dependent",
+      "evidence": [
+        "Emit native Spack repositories whose installed applications run from Nix. Original\ncode is MIT licensed. Spack owns installation prefixes and its native database;\nNix owns the application closure. This backend targets per-user Linux installs.",
+        "`makeNativeRepository { name; version; payload; dependencies ? []; archiveURL ? null; }`\nexports a checksummed source archive and ordinary Spack recipe that installs a\nproducer-supplied prefix tree directly. It adds no Nix/Python runtime dependency,\nlauncher, root registration or Nix database. Native `makeCollection` composes\nversions of these recipes, including recipes without runtime dependencies."
+      ]
+    },
+    "bundled_client": {
+      "state": "known",
+      "value": true,
+      "evidence": [
+        "The existing `makeRepository`/net/offline methods also accept `bundledNixStore`\nand nonempty `bundledNixNotices`. A supplied static client makes the default\nnative Nix dependency optional. Launch prefers a compatible external client and\notherwise uses its private installed client. Explicit `IMPURIFIER_NIX_STORE`\nselection is supported; failed mutations are never retried with another client.\nNative Python remains a runtime dependency in this store-managed mode."
+      ]
+    },
+    "validation": {
+      "state": "known",
+      "value": "The producer supplies the correct native layout and target ABI. This does not\nrelocate an arbitrary Nix closure. The native-payload VM installs two versions as\nan ordinary user, executes both prefixes inside a root with no `/nix`, verifies\nfile hashes, and removes the versions independently. Nix is the producer/build\ntool; the native client owns the installed prefixes.",
+      "evidence": [
+        "The producer supplies the correct native layout and target ABI. This does not\nrelocate an arbitrary Nix closure. The native-payload VM installs two versions as\nan ordinary user, executes both prefixes inside a root with no `/nix`, verifies\nfile hashes, and removes the versions independently. Nix is the producer/build\ntool; the native client owns the installed prefixes."
+      ]
+    }
+  },
+  "example": {
+    "state": "known",
+    "language": "nix",
+    "value": "let\n  backend = inputs.spack-impurifier.lib.spack-impurifier { inherit pkgs; };\nin backend.makePackage { pkg = pkgs.ripgrep; }\n",
+    "evidence": [
+      "```nix\nlet\n  backend = inputs.spack-impurifier.lib.spack-impurifier { inherit pkgs; };\nin backend.makePackage { pkg = pkgs.ripgrep; }\n```"
+    ]
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "repository": "nix-impurifiers/bootc-impurifier",
+  "reviewedRevision": "7eb147c821db238ab1de43436235da56bd79566c",
+  "readmeSha256": "04d0cae6159905308cd6ed671521080dea3a1ae0151979b062d961a49df83efb",
+  "reviewBasis": "project-readme",
+  "facts": {
+    "target_nix": {
+      "state": "known",
+      "value": "mode-dependent",
+      "evidence": [
+        "Build bootable OCI images containing Nix-backed application commands, then\nprepare their closures without changing immutable image files. Original code\nis MIT. Native bootc and OSTree own image import, staging, boot and rollback.",
+        "`makeImage { base; applications = [ ]; extraContents = [ nativeTree ]; }`\ncomposes a prepared filesystem tree without a Nix application SDK or engine.\nThe producer supplies a bootc-compatible base and files that work in that\nbase; this does not relocate binaries. Native payloads use bootc's image\nownership, upgrades, rollback and image replacement. The VM boots native-only\napplication layers, executes a static proof, upgrades, rolls back and removes\nit. The installed proof also runs in a separate root without `/nix`; the\nNixOS base itself still uses its existing store and host tools."
+      ]
+    },
+    "bundled_client": {
+      "state": "known",
+      "value": true,
+      "evidence": [
+        "Nix-backed application constructors also accept `bundledNixStore` (a supplied\nstatic ELF executable) and `bundledNixNotices` (upstream notice files). The\napplication carries the client privately and uses a Python-only SDK. Launch\nprefers a compatible external client, then the bundle, before registering roots\nor capturing hardware. Explicit `IMPURIFIER_NIX_STORE` disables fallback.\nTrusted preparation still uses host tools and never executes the image-owned\nclient as root. An existing store, daemon and initial SDK preparation remain\nrequired. The separate bundled VM repeats the native lifecycle with an\nincompatible external candidate; this is not a Nix installer."
+      ]
+    },
+    "validation": {
+      "state": "known",
+      "value": "The fixture produces its base in a real VM with native RPM ownership of the\nactual NixOS release file, native OSTree composition, and native OCI export.\nConsumers boot real Btrfs/OSTree deployments and exercise image corruption\nrejection, net/offline recovery, preparation privileges, unchanged owned files,\nupgrades, native rollback, pinned-image retention and deletion, driver library\nreplacement across reboot, removal, and Nix GC retention/release. The fixture supplies genuine FHS SDK tools, managed SELinux reference\npolicy and container tooling; kernel SELinux enforcement is separate coverage.\nThe NixOS kernel/initrd is supplied externally, so this does not test installing\na bootloader or bootc's disk installer.",
+      "evidence": [
+        "The fixture produces its base in a real VM with native RPM ownership of the\nactual NixOS release file, native OSTree composition, and native OCI export.\nConsumers boot real Btrfs/OSTree deployments and exercise image corruption\nrejection, net/offline recovery, preparation privileges, unchanged owned files,\nupgrades, native rollback, pinned-image retention and deletion, driver library\nreplacement across reboot, removal, and Nix GC retention/release. The fixture supplies genuine FHS SDK tools, managed SELinux reference\npolicy and container tooling; kernel SELinux enforcement is separate coverage.\nThe NixOS kernel/initrd is supplied externally, so this does not test installing\na bootloader or bootc's disk installer."
+      ]
+    }
+  },
+  "example": {
+    "state": "known",
+    "language": "nix",
+    "value": "imp = inputs.bootc-impurifier.lib.bootc-impurifier { inherit pkgs; };\nimage = imp.makeOfflineImage {\n  base = myBootcBase; # A single-image OCI layout, already fetched or built.\n  applications = [{ pkg = pkgs.hello; }];\n  name = \"my-host\";\n  tag = \"v1\";\n};\n",
+    "evidence": [
+      "```nix\nimp = inputs.bootc-impurifier.lib.bootc-impurifier { inherit pkgs; };\nimage = imp.makeOfflineImage {\n  base = myBootcBase; # A single-image OCI layout, already fetched or built.\n  applications = [{ pkg = pkgs.hello; }];\n  name = \"my-host\";\n  tag = \"v1\";\n};\n```"
+    ]
+  }
+}

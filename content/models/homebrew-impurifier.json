@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "repository": "nix-impurifiers/homebrew-impurifier",
+  "reviewedRevision": "482a3189437661b807b2ed9f313382e3e72dc391",
+  "readmeSha256": "32be7ed5efb95ec1366a12038cebea1d40bd8a92606ddcd455c2ca2ef17fc80a",
+  "reviewBasis": "project-readme",
+  "facts": {
+    "target_nix": {
+      "state": "known",
+      "value": "mode-dependent",
+      "evidence": [
+        "Emit native Homebrew formulae and taps backed by Nix applications. Original code\nis MIT licensed. Homebrew owns its Cellar, opt links, command links, receipts,\nupgrades and cleanup; Nix owns the application closures. Linux is the tested target.",
+        "`makeNativeFormula { payload; name; version; dependencies ? []; archiveURL ? null; }`\naccepts a producer-prepared prefix tree and emits an ordinary source formula.\nHomebrew owns its files; the installed payload has no impurifier launcher, Nix\nclient, daemon, database or Python requirement. The producer is responsible for\nABI compatibility and prefix independence. This does not relocate store paths."
+      ]
+    },
+    "bundled_client": {
+      "state": "known",
+      "value": true,
+      "evidence": [
+        "Nix-backed formulae optionally accept `bundledNixStore` (a static ELF `nix-store`)\nand `bundledNixNotices`. They prefer a compatible external client, falling back\nto the private bundled client before any operation. A failed operation is never\nretried with another client. Python remains required. Root preparation continues\nto use the administrator's trusted client. A bundled client does not install Nix\nor grant write access to a store."
+      ]
+    },
+    "validation": {
+      "state": "unknown",
+      "reason": "A concise native-test scope has not yet been reviewed in this README. Consult its full guide and repository tests."
+    }
+  },
+  "example": {
+    "state": "known",
+    "language": "nix",
+    "value": "let backend = inputs.homebrew-impurifier.lib.homebrew-impurifier { inherit pkgs; };\nin backend.makePackage { pkg = pkgs.ripgrep; }\n",
+    "evidence": [
+      "```nix\nlet backend = inputs.homebrew-impurifier.lib.homebrew-impurifier { inherit pkgs; };\nin backend.makePackage { pkg = pkgs.ripgrep; }\n```"
+    ]
+  }
+}

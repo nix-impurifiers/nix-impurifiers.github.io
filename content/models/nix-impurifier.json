@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "repository": "nix-impurifiers/nix-impurifier",
+  "reviewedRevision": "a9d464cd242f068fdff59a836f3ae07816fc986c",
+  "readmeSha256": "67aabea0e0813431ca4b439e4ddd7f975389340b3075de39920eb35081a65db5",
+  "reviewBasis": "project-readme",
+  "facts": {
+    "target_nix": {
+      "state": "known",
+      "value": "required",
+      "evidence": [
+        "This backend's native manager is Nix itself: native profiles necessarily use\nNix's store, database and client. A Nix-free installation mode belongs to the\nadapter for the manager that will own those files (for example, dpkg or Flatpak),\nnot to a second mode of Nix profiles. Bundling a client inside a captured-library\nwrapper would not provision a store or replace the profile manager. Providing\nNix through an impure native package remains deferred installer work."
+      ]
+    },
+    "bundled_client": {
+      "state": "not-applicable",
+      "reason": "Nix itself is the native manager; this is not a separate optional Nix-client integration."
+    },
+    "validation": {
+      "state": "known",
+      "value": "`nix flake check -L` runs a network-disabled QEMU VM with the real Nix daemon and\nan unprivileged user. It tests rejection of pure host capture, native profile\ninstall and upgrade, symlinked library capture, immutable behavior after the host\nlibrary changes/disappears, rollback, GC and removal. Native Nix itself and the\nfixture application are preinstalled; this is not an installer test.",
+      "evidence": [
+        "`nix flake check -L` runs a network-disabled QEMU VM with the real Nix daemon and\nan unprivileged user. It tests rejection of pure host capture, native profile\ninstall and upgrade, symlinked library capture, immutable behavior after the host\nlibrary changes/disappears, rollback, GC and removal. Native Nix itself and the\nfixture application are preinstalled; this is not an installer test."
+      ]
+    }
+  },
+  "example": {
+    "state": "known",
+    "language": "nix",
+    "value": "let\n  impurifier = inputs.nix-impurifier.lib.nix-impurifier {inherit pkgs;};\nin impurifier.makePackage {\n  pkg = myApplication;\n  libraries.\"libdriver.so.1\" = \"/usr/lib/libdriver.so.1\";\n  programs = [\"my-program\"];\n}\n",
+    "evidence": [
+      "```nix\nlet\n  impurifier = inputs.nix-impurifier.lib.nix-impurifier {inherit pkgs;};\nin impurifier.makePackage {\n  pkg = myApplication;\n  libraries.\"libdriver.so.1\" = \"/usr/lib/libdriver.so.1\";\n  programs = [\"my-program\"];\n}\n```"
+    ]
+  }
+}

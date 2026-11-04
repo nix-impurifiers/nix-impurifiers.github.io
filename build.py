@@ -10,10 +10,12 @@ import re
 import shutil
 from urllib.parse import urlsplit
 import markdown
+from docs_model import CONTRACT, load_records, fact_label, source_review
 
 ROOT = Path(__file__).resolve().parent
 OUT = ROOT / "dist"
 PROJECTS = json.loads((ROOT / "content/projects.json").read_text())
+MODELS = load_records(PROJECTS)
 ORIGIN = "https://github.com/nix-impurifiers"
 ESC = html.escape
 ASSET_URLS = {
@@ -32,9 +34,9 @@ def page(title, description, body, *, docs=False):
 {THEME}<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="{ASSET_URLS['site.css']}"><script src="{ASSET_URLS['site.js']}" defer></script></head>
 <body><a class="skip" href="#content">Skip to content</a>
 <header class="site-header"><div class="shell"><a class="brand" href="/">nix-impurifiers</a>
-<nav class="site-nav" aria-label="Main navigation"><a href="/#impurifiers">Directory</a><a href="/getting-started/">Get started</a><a class="source-link" href="{ORIGIN}">GitHub ↗</a><button type="button" class="theme-toggle js-only" data-theme-toggle aria-label="Change color theme">Theme: system</button></nav></div></header>
+<nav class="site-nav" aria-label="Main navigation"><a href="/#impurifiers">Directory</a><a href="/getting-started/">Get started</a><a href="/compare/">Compare</a><a class="source-link" href="{ORIGIN}">GitHub ↗</a><button type="button" class="theme-toggle js-only" data-theme-toggle aria-label="Change color theme">Theme: system</button></nav></div></header>
 <main id="content" class="shell{' docs' if docs else ''}">{body}</main>
-<footer class="site-footer"><div class="shell">Nix-built applications. Native package-manager intent.
+<footer class="site-footer"><div class="shell">Nix-built software and artifacts. Native consumer workflows.
 <p class="footer-links"><a href="{ORIGIN}/nix-impurifiers.github.io">Website source ↗</a><a href="/impurifier/">Shared engine</a><a href="https://nix-purifiers.github.io/">nix-purifiers ↗</a><span>Original code: MIT</span></p></div></footer></body></html>'''
 
 class RewriteLinks(HTMLParser):
@@ -62,21 +64,96 @@ class RewriteLinks(HTMLParser):
     def handle_comment(self, data): self.parts.append('<!--'+data+'-->')
 
 
-def document(slug, text, description, *, revision=None):
+def document(slug, text, description, *, revision=None, repository=None, navigation=""):
+    repository = repository or slug
     renderer = markdown.Markdown(extensions=['fenced_code','tables','toc','sane_lists'], extension_configs={'toc':{'permalink':True,'toc_depth':'2-3'}})
     body = renderer.convert(text)
     if revision:
-        links = RewriteLinks(slug, revision); links.feed(body); body = ''.join(links.parts)
+        links = RewriteLinks(repository, revision); links.feed(body); body = ''.join(links.parts)
     toc = f'<nav class="doc-toc" aria-label="On this page">{renderer.toc}</nav>' if renderer.toc_tokens else ''
     # Put the document heading before its contents list.
     heading = re.match(r'(<h1\b.*?</h1>)', body, re.S)
     first = heading[1] if heading else ''
     rest = body[len(first):]
-    meta = f'<p class="doc-meta">Documentation from <a href="{ORIGIN}/{slug}/blob/{revision}/README.md">the project README at {revision[:7]} ↗</a>. See the repository for the latest changes.</p>' if revision else ''
+    meta = f'<p class="doc-meta">Documentation from <a href="{ORIGIN}/{repository}/blob/{revision}/README.md">the project README at {revision[:7]} ↗</a>. See the repository for the latest changes.</p>' if revision else ''
     title = re.sub('<[^>]+>', '', first).strip().replace('&para;', '').strip() if first else slug
-    content = f'<p class="breadcrumbs"><a href="/">nix-impurifiers</a> / {ESC(slug)}</p><article class="doc-body">{first}{toc}{rest}</article>{meta}'
+    breadcrumb = f'<a href="/{repository}/">{repository}</a> / Full guide' if repository != slug else ESC(slug)
+    content = f'<p class="breadcrumbs"><a href="/">nix-impurifiers</a> / {breadcrumb}</p>{navigation}<article class="doc-body">{first}{toc}{rest}</article>{meta}'
     directory=OUT/slug; directory.mkdir(parents=True)
     (directory/'index.html').write_text(page(html.unescape(title), description, content, docs=True))
+
+
+def project_navigation(name, active):
+    items = [('overview', f'/{name}/', 'Overview'), ('guide', f'/{name}/guide/', 'Full guide'), ('features', f'/{name}/features/', 'Feature matrix')]
+    links = ''.join(f'<a href="{url}"' + (' aria-current="page"' if key == active else '') + f'>{label}</a>' for key, url, label in items)
+    return f'<nav class="documentation-navigation" aria-label="Project documentation">{links}<a class="project-source" href="{ORIGIN}/{name}">Source ↗</a></nav>'
+
+
+def rendered(text, name, revision):
+    body = markdown.markdown(text, extensions=['fenced_code', 'tables', 'sane_lists'])
+    links = RewriteLinks(name, revision); links.feed(body)
+    return ''.join(links.parts)
+
+
+def fact_content(key, fact, name, revision):
+    if fact['state'] != 'known':
+        return f'<strong>{fact_label(key, fact)}.</strong> {ESC(fact["reason"])}'
+    if key == 'validation':
+        return rendered(fact['value'], name, revision)
+    return ESC(fact_label(key, fact))
+
+
+def project_pages(project, record):
+    name = project['name']; revision = record['reviewedRevision']
+    source = (ROOT/'content/projects'/f'{name}.md').read_text()
+    runtime = record['facts']['target_nix']; bundle = record['facts']['bundled_client']
+    example = record['example']
+    introduction = f'<p class="section-intro">{ESC(project["description"])}</p>'
+    if example['state'] == 'known':
+        example_html = f'<pre><code class="language-{ESC(example["language"],quote=True)}">{ESC(example["value"])}</code></pre><p class="code-note">An unchanged example from the reviewed README. It may be a library fragment; use the full guide for prerequisites and installation.</p>'
+    else:
+        example_html = f'<p>{ESC(example["reason"])}</p>'
+    runtime_note = {'mode-dependent': 'The project documents both Nix-backed and native-payload paths. Nix-backed operation needs a usable Nix store/client and its native prerequisites; native modes have their own file-layout and ABI contract. Choose the constructor in the full guide.', 'required': 'Nix itself is this backend’s native manager. This is not a promise of a new Nix installer.', 'not-added': 'The backend adds no target Nix client, daemon or database integration. The consumer, payload architecture, interpreter ABI and external libraries still need to match.'}.get(runtime.get('value'), '')
+    parts = {
+        'output': f'<dl class="artifact-summary"><div><dt>Consumer tools</dt><dd>{ESC(project["frontends"])}</dd></div><div><dt>Family</dt><dd>{ESC(project["category"])}</dd></div></dl>',
+        'build': f'<p><a href="/{name}/guide/">Open the full guide →</a> · <a href="/getting-started/">General build setup</a></p>{example_html}',
+        'runtime': f'<p><strong>{fact_content("target_nix", runtime, name, revision)}</strong></p><p>{ESC(runtime_note)}</p><p><strong>Bundled client:</strong> {fact_content("bundled_client", bundle, name, revision)}</p>',
+        'validation': fact_content('validation', record['facts']['validation'], name, revision) + f'<p class="code-note">This is a documented scope excerpt, not a complete platform guarantee. <a href="/{name}/guide/">Read the full guide’s requirements and limits</a>, and inspect the linked repository tests.</p>'
+    }
+    sections = ''.join(f'<section class="overview-section" aria-labelledby="overview-{section["id"]}"><h2 id="overview-{section["id"]}">{ESC(section["title"])}</h2>{parts[section["id"]]}</section>' for section in CONTRACT['sections'])
+    renderer = markdown.Markdown(extensions=['toc', 'fenced_code', 'tables']); renderer.convert(source)
+    def anchors(tokens):
+        for token in tokens:
+            yield token
+            yield from anchors(token.get('children', []))
+    old_links = ''.join(f'<li id="{ESC(t["id"],quote=True)}" data-guide-target="/{name}/guide/#{ESC(t["id"],quote=True)}"><a href="/{name}/guide/#{ESC(t["id"],quote=True)}">{ESC(re.sub("<[^>]+>", "", t["name"]))}</a></li>' for t in anchors(renderer.toc_tokens))
+    legacy = f'<details class="legacy-guide"><summary>Full guide sections</summary><ul>{old_links}</ul></details>'
+    review = f'<p class="doc-meta">Documented contract reviewed against <a href="{ORIGIN}/{name}/blob/{revision}/README.md">README {revision[:7]} ↗</a>. This is a documentation review, not a new implementation or platform certification. <a href="/{name}/system.json">Read the structured record</a>.</p>'
+    body = f'<p class="breadcrumbs"><a href="/">nix-impurifiers</a> / {name}</p>{project_navigation(name,"overview")}<article class="doc-body"><h1>{name}</h1>{introduction}{sections}{legacy}</article>{review}'
+    target = OUT/name; target.mkdir(parents=True)
+    (target/'index.html').write_text(page(name, project['description'], body, docs=True))
+    document(name+'/guide', source, project['description']+' Full guide.', revision=project['revision'], repository=name, navigation=project_navigation(name,'guide'))
+    rows=[]
+    for key, definition in CONTRACT['facts'].items():
+        fact=record['facts'][key]
+        evidence=''
+        if fact['state']=='known':
+            quotes=''.join('<blockquote>'+rendered(q,name,revision)+'</blockquote>' for q in fact['evidence'])
+            evidence=f'<details><summary>README evidence</summary>{quotes}<a href="{ORIGIN}/{name}/blob/{revision}/README.md">Reviewed source ↗</a></details>'
+        rows.append(f'<tr><th scope="row">{ESC(definition["title"])}</th><td>{ESC(fact["state"])}</td><td>{fact_content(key,fact,name,revision)}{evidence}</td></tr>')
+    matrix = f'<p class="breadcrumbs"><a href="/">nix-impurifiers</a> / <a href="/{name}/">{name}</a></p>{project_navigation(name,"features")}<article class="doc-body"><h1>{name} feature matrix</h1><p>Explicit documentation records. Unknown means unreviewed, not unsupported; not applicable includes its reason.</p><table><thead><tr><th>Contract</th><th>Review state</th><th>Documented behavior</th></tr></thead><tbody>{"".join(rows)}</tbody></table><p><a href="/compare/">Compare all impurifiers →</a></p></article>{review}'
+    (target/'features').mkdir(); (target/'features/index.html').write_text(page(name+' feature matrix', 'Documented runtime and validation contract.', matrix, docs=True))
+    (target/'system.json').write_text(json.dumps(record,indent=2)+'\n')
+    (target/'source-review.json').write_text(json.dumps(source_review(project,record),indent=2)+'\n')
+
+
+def comparison_page():
+    rows=[]
+    for p in sorted(PROJECTS,key=lambda p:p['name']):
+        facts=MODELS[p['name']]['facts']
+        rows.append(f'<tr><th scope="row"><a href="/{p["name"]}/">{p["name"]}</a></th><td>{ESC(p["description"])}</td><td>{ESC(fact_label("target_nix",facts["target_nix"]))}</td><td>{ESC(fact_label("bundled_client",facts["bundled_client"]))}</td><td><a href="/{p["name"]}/features/">Evidence and limits</a></td></tr>')
+    text=f'<section class="comparison doc-body"><p class="eyebrow">Documented contracts</p><h1>Compare impurifiers</h1><p>Choose a runtime model as well as an artifact format. These entries describe reviewed READMEs, not inferred behavior from a package-manager family. Open each matrix for evidence and its native validation scope.</p><p><strong>Depends on payload mode:</strong> the project offers Nix-backed and native-payload paths. <strong>No Nix runtime added:</strong> compatible native consumer tools and payload libraries are still required. <strong>Not applicable</strong> is not a failed capability check.</p><table><thead><tr><th>Impurifier</th><th>Artifact</th><th>Target-side Nix integration</th><th>Bundled Nix client</th><th>Details</th></tr></thead><tbody>{"".join(rows)}</tbody></table></section>'
+    target=OUT/'compare'; target.mkdir(); (target/'index.html').write_text(page('Compare impurifiers','Compare documented runtime contracts and native artifact formats.',text,docs=True))
 
 
 def homepage():
@@ -95,12 +172,12 @@ def homepage():
         'pacman': 'let\n  adapter = inputs.pacman-impurifier.lib.pacman-impurifier {\n    inherit pkgs;\n  };\nin adapter.makeOfflinePackage { pkg = pkgs.hello; }',
     }
     templates=''.join(f'<template id="example-{key}">{ESC(value)}</template>' for key,value in examples.items())
-    return f'''<section class="hero"><p class="eyebrow">Native packages, Nix closures</p><h1>Nix-built software.<br><span>Your package manager.</span></h1><p class="lead">Install Nix-built applications through the tools your system already uses. Impurifiers connect native package-manager intent with Nix application closures.</p><p class="hero-links"><a href="/getting-started/">Get started →</a><a href="#impurifiers">Find your impurifier ↓</a></p></section>
-<section class="section" aria-labelledby="how-heading"><h2 id="how-heading">Keep the familiar part.</h2><p>Your package manager handles the native transaction. Nix supplies the application. Choose native-owned files, a Nix-backed application, or a target-specific bundle. The adapter preserves the target’s ownership and installation model.</p><div class="flow" aria-label="A typical impurifier package flow"><div class="flow-step"><strong>01 / Nix closure</strong><p>Build an application and its dependencies with Nix.</p></div><span class="flow-arrow" aria-hidden="true">→</span><div class="flow-step"><strong>02 / Native artifact</strong><p>Emit a package, recipe, profile or image for the target manager.</p></div><span class="flow-arrow" aria-hidden="true">→</span><div class="flow-step"><strong>03 / Application</strong><p>Install or consume through native tools, with the payload and runtime model suited to the target.</p></div></div>
+    return f'''<section class="hero"><p class="eyebrow">Nix builds. Native consumers.</p><h1>Nix-built software.<br><span>Your native tools.</span></h1><p class="lead">Turn Nix-built software and prepared payloads into native packages, images, language artifacts and boot components. Keep the consumer’s own installation and runtime model.</p><p class="hero-links"><a href="/getting-started/">Get started →</a><a href="#impurifiers">Find your impurifier ↓</a></p></section>
+<section class="section" aria-labelledby="how-heading"><h2 id="how-heading">Keep the familiar part.</h2><p>Native tools consume the artifact. Nix produces its payload and metadata. Choose native-owned files, a Nix-backed application or a target-specific bundle, according to the consumer’s ownership and runtime model.</p><div class="flow" aria-label="A typical impurifier package flow"><div class="flow-step"><strong>01 / Nix-built payload</strong><p>Build compatible software or prepare its files with Nix.</p></div><span class="flow-arrow" aria-hidden="true">→</span><div class="flow-step"><strong>02 / Native artifact</strong><p>Emit a package, recipe, profile or image for the target manager.</p></div><span class="flow-arrow" aria-hidden="true">→</span><div class="flow-step"><strong>03 / Native consumer</strong><p>Install or consume through native tools, with the payload and runtime model suited to the target.</p></div></div>
 <div class="example-head"><span class="example-label">An offline application</span><div class="example-tabs js-only" role="group" aria-label="Package example"><button type="button" data-example="dpkg" aria-pressed="true">DEB</button><button type="button" data-example="rpm" aria-pressed="false">RPM</button><button type="button" data-example="pacman" aria-pressed="false">ALPM</button></div></div><pre><code id="package-example" class="language-nix">{ESC(examples['dpkg'])}\n</code></pre>{templates}<p class="code-note">A library fragment for your flake. <a id="example-docs" href="/dpkg-impurifier/">Read the dpkg guide →</a></p></section>
-<section id="impurifiers" class="section" aria-labelledby="directory-heading"><h2 id="directory-heading">Find your impurifier.</h2><p class="section-intro">Choose by package manager, not by distribution. Each guide describes its native dependencies, integration and tested limits.</p><div class="toolbar js-only"><label class="sr-only" for="project-search">Search impurifiers and frontends</label><input id="project-search" type="search" placeholder="Search by manager, frontend or format…" autocomplete="off" spellcheck="false" aria-controls="project-directory"><span id="project-count" class="count" role="status" aria-live="polite">{len(PROJECTS)} impurifiers</span></div><fieldset class="filters js-only"><legend class="sr-only">Filter by package-manager family</legend>{filters}</fieldset><div id="project-directory">{''.join(groups)}</div><p id="no-projects" class="empty-state" hidden>No matching impurifier. <button id="reset-search" type="button">Clear search and filters</button></p></section>
-<section class="section" aria-labelledby="transport-heading"><h2 id="transport-heading">Two ways to carry the closure.</h2><div class="transport"><div><h3>Net</h3><p>A small artifact carries the descriptor and integration. The target resolves the closure through its configured Nix substituters.</p></div><div><h3>Offline</h3><p>The artifact carries a local closure cache. Import uses that cache with remote substitution and remote builders disabled.</p></div></div><p class="aside-note">Selected adapters also offer native payloads with no target-side Nix. Nix-backed packages may use an external client or optionally bundle a static one. Providing a complete Nix installation through an impure package remains deferred installer work.</p></section>
-<section class="section" aria-labelledby="testing-heading"><h2 id="testing-heading">Transactions tested in VMs.</h2><p>Native tools and real package databases exercise more than archive creation: failure, offline recovery, upgrades, configuration and garbage collection.</p><ul class="checks"><li>Native ownership and meaningful runtime dependencies.</li><li>Failed activation followed by an actual offline recovery.</li><li>Retention while installed; release after removal and pruning.</li></ul><p><a href="/testing/">Read the coverage and its limits →</a></p></section>
+<section id="impurifiers" class="section" aria-labelledby="directory-heading"><h2 id="directory-heading">Find your impurifier.</h2><p class="section-intro">Choose by package manager or artifact ecosystem. Start with a common overview, compare the documented runtime contract, then open the complete guide for native setup and limits.</p><div class="toolbar js-only"><label class="sr-only" for="project-search">Search impurifiers and frontends</label><input id="project-search" type="search" placeholder="Search by manager, frontend or format…" autocomplete="off" spellcheck="false" aria-controls="project-directory"><span id="project-count" class="count" role="status" aria-live="polite">{len(PROJECTS)} impurifiers</span></div><fieldset class="filters js-only"><legend class="sr-only">Filter by package-manager family</legend>{filters}</fieldset><div id="project-directory">{''.join(groups)}</div><p id="no-projects" class="empty-state" hidden>No matching impurifier. <button id="reset-search" type="button">Clear search and filters</button></p></section>
+<section class="section" aria-labelledby="transport-heading"><h2 id="transport-heading">Choose the runtime contract.</h2><p>Not every artifact needs Nix on the target. Native-owned closures and prepared payloads use the consumer’s own runtime; Nix-backed modes manage a Nix store and profile. <a href="/compare/">Compare the documented modes →</a></p><p>For Nix-backed transports:</p><div class="transport"><div><h3>Net</h3><p>A small artifact carries the descriptor and integration. The target resolves the closure through its configured Nix substituters.</p></div><div><h3>Offline</h3><p>The artifact carries a local closure cache. Import uses that cache with remote substitution and remote builders disabled.</p></div></div><p class="aside-note">Selected adapters also offer native payloads with no target-side Nix. Nix-backed packages may use an external client or optionally bundle a static one. Providing a complete Nix installation through an impure package remains deferred installer work.</p></section>
+<section class="section" aria-labelledby="testing-heading"><h2 id="testing-heading">Transactions tested in VMs.</h2><p>Validation follows the consumer: native package transactions, interpreter execution, container/image lifecycles, early boots and Kubernetes release operations. Each overview names its documented scope; a passing fixture does not establish every platform or mode.</p><ul class="checks"><li>Native ownership and meaningful runtime dependencies.</li><li>Failed activation followed by an actual offline recovery.</li><li>Retention while installed; release after removal and pruning.</li></ul><p><a href="/testing/">Read the coverage and its limits →</a></p></section>
 <section class="section" aria-labelledby="family-heading"><h2 id="family-heading">The other direction.</h2><p><a href="https://nix-purifiers.github.io/">nix-purifiers</a> brings a build tool’s dependencies into Nix. Impurifiers bring Nix-built applications into native package-manager workflows.</p><p>Nix-backed adapters use the <a href="/impurifier/">shared impurifier engine</a>. Original project code is MIT licensed; upstream software retains its own license.</p></section>'''
 
 
@@ -111,7 +188,11 @@ def main():
         (OUT/'assets'/name).rename(OUT/url.lstrip('/'))
     (OUT/'index.html').write_text(page('nix-impurifiers',f'Nix-built applications, installed through native tools. Explore {len(PROJECTS)} impurifiers, native VM coverage, and project documentation.',homepage()))
     for p in PROJECTS:
-        document(p['name'],(ROOT/'content/projects'/f"{p['name']}.md").read_text(),p['description']+'. '+p['frontends']+'.',revision=p['revision'])
+        project_pages(p, MODELS[p['name']])
+    comparison_page()
+    (OUT/'model-contract.json').write_text(json.dumps(CONTRACT, indent=2)+'\n')
+    (OUT/'catalog.json').write_text(json.dumps({'version': CONTRACT['version'], 'contract': '/model-contract.json', 'projects': [dict(p, model=MODELS[p['name']]) for p in PROJECTS]}, indent=2)+'\n')
+    (OUT/'source-review.json').write_text(json.dumps([source_review(p, MODELS[p['name']]) for p in PROJECTS], indent=2)+'\n')
     revision=json.loads((ROOT/'content/engine.json').read_text())['revision']
     document('impurifier',(ROOT/'content/engine.md').read_text(),'The shared transactional Nix profile engine for impurifiers.',revision=revision)
     for slug in ['getting-started','testing']:

@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "repository": "nix-impurifiers/sorcery-impurifier",
+  "reviewedRevision": "ed8a29df5e86452f2f510ec97bfaeed93d954ae2",
+  "readmeSha256": "b60a696bf50d62c9f6c4a3628625bafafd62a502a7145abcf0d90776825d5f1a",
+  "reviewBasis": "project-readme",
+  "facts": {
+    "target_nix": {
+      "state": "known",
+      "value": "mode-dependent",
+      "evidence": [
+        "Build native Sorcery spells and grimoires backed by transactional Nix profiles.\nSorcery's actual `cast`, dependency resolver, CastFS and `dispel` own host files;\nNix owns application closures and garbage-collection roots. Original code is MIT.\nSee THIRD_PARTY.md for native tools and compatibility patches.",
+        "`makeNetSpell` emits a small installable reference that needs its Nix closure to\nbe available. `makeOfflineSpell` embeds a NAR cache. Both use the same logical\nnative spell name, with a `-net` or `-offline` native version suffix. One flavor\nmay be selected in a grimoire at a time. `makeGrimoire` rejects duplicate names.\n`buildSpell` also accepts arbitrary native payloads and exact-name dependencies,\nwhich can express a future impure Nix provider package. Nix provisioning and a\nnew installer remain deferred work."
+      ]
+    },
+    "bundled_client": {
+      "state": "known",
+      "value": true,
+      "evidence": [
+        "`makeRuntimeSpell` optionally accepts `bundledNixStore` and\n`bundledNixNotices` for a static ELF client and upstream notices. Bundling omits\nthe default Nix dependency; Python and the native file tracker remain required.\nCompatible external clients take precedence, explicit `IMPURIFIER_NIX_STORE`\ndisables fallback, and failed mutations are never retried through another\nclient. A bundled variant repeats the original lifecycle suite with an\nincompatible external candidate. Nix provisioning remains deferred."
+      ]
+    },
+    "validation": {
+      "state": "known",
+      "value": "Run `nix flake check -L` for the QEMU native transaction suite and `nix fmt` for\nformatting. Tests run upstream Sorcery scripts with actual CastFS/Linux FUSE on a\nfull-install filesystem. They do not establish Source Mage boot/init integration,\nall architecture profiles or historical installwatch compatibility.",
+      "evidence": [
+        "Run `nix flake check -L` for the QEMU native transaction suite and `nix fmt` for\nformatting. Tests run upstream Sorcery scripts with actual CastFS/Linux FUSE on a\nfull-install filesystem. They do not establish Source Mage boot/init integration,\nall architecture profiles or historical installwatch compatibility."
+      ]
+    }
+  },
+  "example": {
+    "state": "known",
+    "language": "nix",
+    "value": "let\n  sorcery = inputs.sorcery-impurifier.lib.sorcery-impurifier { inherit pkgs; };\nin sorcery.makeGrimoire {\n  spells = [\n    (sorcery.makeRuntimeSpell {\n      nixDependency = \"my-nix-provider\";\n      pythonDependency = \"python3\";\n    })\n    (sorcery.makeOfflineSpell { pkg = pkgs.hello; })\n  ];\n}\n",
+    "evidence": [
+      "```nix\nlet\n  sorcery = inputs.sorcery-impurifier.lib.sorcery-impurifier { inherit pkgs; };\nin sorcery.makeGrimoire {\n  spells = [\n    (sorcery.makeRuntimeSpell {\n      nixDependency = \"my-nix-provider\";\n      pythonDependency = \"python3\";\n    })\n    (sorcery.makeOfflineSpell { pkg = pkgs.hello; })\n  ];\n}\n```"
+    ]
+  }
+}

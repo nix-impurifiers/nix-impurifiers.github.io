@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "repository": "nix-impurifiers/eopkg-impurifier",
+  "reviewedRevision": "d184f0fc42025ecb8e59291a3a7ea55b1e2ded2c",
+  "readmeSha256": "f451ede54f6181bff360b6c020ac68935b9de7448d3bec27937b275537dd367a",
+  "reviewBasis": "project-readme",
+  "facts": {
+    "target_nix": {
+      "state": "known",
+      "value": "mode-dependent",
+      "evidence": [
+        "Build native eopkg format 1.2 archives for Nix applications. Original project\ncode is MIT licensed. Upstream eopkg and its dependencies retain their own\nlicenses. This backend is package-manager scoped; consumers choose native\nproviders and distribution metadata.",
+        "`makeNativePackage { name; version; payload; dependencies?; configPaths?; ... }`\naccepts a producer-prepared filesystem tree. It adds no engine intent or Nix\ndependency; ordinary `eopkg` owns and installs its files. Distribution metadata\nand native dependency expressions remain consumer policy. The producer supplies\na working target layout; this does not relocate binaries. A native VM executes\na static payload in a target root without `/nix`, upgrades and removes it."
+      ]
+    },
+    "bundled_client": {
+      "state": "known",
+      "value": true,
+      "evidence": [
+        "`makeRuntimePackage` accepts `bundledNixStore` and `bundledNixNotices` for a static\nELF client and its upstream notices. Bundling omits the default Nix dependency;\nPython and the manager's Python API remain required. Compatible external clients\ntake precedence, explicit `IMPURIFIER_NIX_STORE` disables fallback, and failed\nmutations are never retried through another client. A bundled-client VM repeats\nthe original lifecycle suite with an incompatible external candidate. The Nix\nprovider/installer remains deferred."
+      ]
+    },
+    "validation": {
+      "state": "known",
+      "value": "The emitter validates archives with upstream eopkg's reader. `nix flake check -L`\nalso boots QEMU and runs the actual pinned eopkg 5.0 client, with native version,\ndistribution and architecture checks enabled. Coverage includes legacy-runtime\nrejection before unpack, dependency solving, offline recovery, flavor switches,\nprotected and unedited config, batch activation, accounts/services/lifecycle/admin intent,\ndriver refresh, foreign-root safety, removal and GC. The outer OS/init is NixOS;\npreinstalled providers are inventory markers, not installers. The fixture does\nnot install usysconf and eopkg reports its normal missing-usysconf diagnostic;\nfull Solus/usysconf integration remains separate coverage.",
+      "evidence": [
+        "The emitter validates archives with upstream eopkg's reader. `nix flake check -L`\nalso boots QEMU and runs the actual pinned eopkg 5.0 client, with native version,\ndistribution and architecture checks enabled. Coverage includes legacy-runtime\nrejection before unpack, dependency solving, offline recovery, flavor switches,\nprotected and unedited config, batch activation, accounts/services/lifecycle/admin intent,\ndriver refresh, foreign-root safety, removal and GC. The outer OS/init is NixOS;\npreinstalled providers are inventory markers, not installers. The fixture does\nnot install usysconf and eopkg reports its normal missing-usysconf diagnostic;\nfull Solus/usysconf integration remains separate coverage."
+      ]
+    }
+  },
+  "example": {
+    "state": "known",
+    "language": "nix",
+    "value": "let impurifier = inputs.eopkg-impurifier.lib.eopkg-impurifier { inherit pkgs; };\nin impurifier.makeOfflinePackage { pkg = pkgs.hello; }\n",
+    "evidence": [
+      "```nix\nlet impurifier = inputs.eopkg-impurifier.lib.eopkg-impurifier { inherit pkgs; };\nin impurifier.makeOfflinePackage { pkg = pkgs.hello; }\n```"
+    ]
+  }
+}

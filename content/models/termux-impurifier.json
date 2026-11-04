@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "repository": "nix-impurifiers/termux-impurifier",
+  "reviewedRevision": "958bb861421f107028583c64917ebc87b9753c99",
+  "readmeSha256": "be9ab323e80d1b4e9be8598f78fba77f3546aee55ff977c41921415336c39cb3",
+  "reviewBasis": "project-readme",
+  "facts": {
+    "target_nix": {
+      "state": "known",
+      "value": "not-added",
+      "evidence": [
+        "Produce native Termux DEBs from Nix-built **Android-compatible** payloads. This\nis distinct from Android application APK packaging and from Debian's runtime ABI.\nThe installed files need no Nix daemon, executable, database or root-owned store."
+      ]
+    },
+    "bundled_client": {
+      "state": "not-applicable",
+      "reason": "This backend adds no Nix client integration; its native consumer and payload ABI are the relevant runtime contract."
+    },
+    "validation": {
+      "state": "known",
+      "value": "The VM fixture installs the actual pinned Termux Android app and its embedded\nbootstrap. Native package operations run as the app UID, using Termux's own dpkg,\nnot a host Linux executable. Coverage includes dependencies, installation,\nupgrade, checksum diagnostics, refusal to remove a required dependency, removal\nand cleanup. The initial device fixture is Android-x86 API 28; other Android\nversions and CPU architectures require additional native tests.",
+      "evidence": [
+        "The VM fixture installs the actual pinned Termux Android app and its embedded\nbootstrap. Native package operations run as the app UID, using Termux's own dpkg,\nnot a host Linux executable. Coverage includes dependencies, installation,\nupgrade, checksum diagnostics, refusal to remove a required dependency, removal\nand cleanup. The initial device fixture is Android-x86 API 28; other Android\nversions and CPU architectures require additional native tests."
+      ]
+    }
+  },
+  "example": {
+    "state": "known",
+    "language": "nix",
+    "value": "let termux = termux-impurifier.lib.termux-impurifier { inherit pkgs; };\nin termux.makeNativePackage {\n  name = \"my-command\";\n  version = \"1.0\";\n  architecture = \"aarch64\";\n  payload = myAndroidPrefixTree;\n  dependencies = [ \"libexample (>= 1)\" ];\n}\n",
+    "evidence": [
+      "```nix\nlet termux = termux-impurifier.lib.termux-impurifier { inherit pkgs; };\nin termux.makeNativePackage {\n  name = \"my-command\";\n  version = \"1.0\";\n  architecture = \"aarch64\";\n  payload = myAndroidPrefixTree;\n  dependencies = [ \"libexample (>= 1)\" ];\n}\n```"
+    ]
+  }
+}

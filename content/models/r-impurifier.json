@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "repository": "nix-impurifiers/r-impurifier",
+  "reviewedRevision": "01502c25ffba06cd0a365f53c83e3cfe7259e6e5",
+  "readmeSha256": "0c6c4221c0fbc4413dfd4eaf4c70fcdf3aa378675fc4981e39d5ad3a34314653",
+  "reviewBasis": "project-readme",
+  "facts": {
+    "target_nix": {
+      "state": "known",
+      "value": "not-added",
+      "evidence": [
+        "Build the package with a suitable Nix R toolchain first, or supply another\nprepared installed tree. This step does not rebuild it, change its dependency\npolicy or make arbitrary native libraries ABI-compatible. Consumers need the\nappropriate R version, architecture and external libraries. No target Nix client,\ndatabase, daemon or relocation is added. CRAN publication and repository indexes\nare separate concerns. This is not a Windows/macOS archive-format implementation."
+      ]
+    },
+    "bundled_client": {
+      "state": "not-applicable",
+      "reason": "This backend adds no Nix client integration; its native consumer and payload ABI are the relevant runtime contract."
+    },
+    "validation": {
+      "state": "known",
+      "value": "`nix flake check -L` builds a real R extension, installs its binary archive with\nnative R in QEMU, executes compiled code, replaces it with a second revision,\nexecutes the new code and removes the package. Removal makes loading fail and\nremoves the installed package tree. The fixture tests the pinned Linux R ABI;\nfurther R versions, platforms and dependencies require explicit coverage.",
+      "evidence": [
+        "`nix flake check -L` builds a real R extension, installs its binary archive with\nnative R in QEMU, executes compiled code, replaces it with a second revision,\nexecutes the new code and removes the package. Removal makes loading fail and\nremoves the installed package tree. The fixture tests the pinned Linux R ABI;\nfurther R versions, platforms and dependencies require explicit coverage."
+      ]
+    }
+  },
+  "example": {
+    "state": "known",
+    "language": "nix",
+    "value": "backend.makePackage {\n  packageDir = \"${builtPackage}/library/example\";\n}\n",
+    "evidence": [
+      "```nix\nbackend.makePackage {\n  packageDir = \"${builtPackage}/library/example\";\n}\n```"
+    ]
+  }
+}

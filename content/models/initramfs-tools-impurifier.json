@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "repository": "nix-impurifiers/initramfs-tools-impurifier",
+  "reviewedRevision": "5735465f7d2f6f97ab68735b089b9d5f66ef04c0",
+  "readmeSha256": "fd71d27eea5e6f93585e6d7cc50d4918fd15546648b62f82afe877762b11526c",
+  "reviewBasis": "project-readme",
+  "facts": {
+    "target_nix": {
+      "state": "known",
+      "value": "not-added",
+      "evidence": [
+        "Store paths are preserved; the image needs no Nix daemon, database or client.\nThe payload must be suitable for the target kernel and architecture. This does\nnot install a kernel, select modules, configure the real root or manage a host.\n`package` exposes the pinned upstream builder scripts as a test SDK; it is not\na replacement for the host's distro integration or its optional hook packages."
+      ]
+    },
+    "bundled_client": {
+      "state": "not-applicable",
+      "reason": "This backend adds no Nix client integration; its native consumer and payload ABI are the relevant runtime contract."
+    },
+    "validation": {
+      "state": "known",
+      "value": "`nix flake check -L` builds two revisions with upstream mkinitramfs inside a\nproducer VM, then boots both generated images in QEMU with upstream `/init`,\nno root disk and no shared host store. Native init-top scripts execute the\nNix-built payload and verify there is no Nix database or mounted real root.",
+      "evidence": [
+        "`nix flake check -L` builds two revisions with upstream mkinitramfs inside a\nproducer VM, then boots both generated images in QEMU with upstream `/init`,\nno root disk and no shared host store. Native init-top scripts execute the\nNix-built payload and verify there is no Nix database or mounted real root."
+      ]
+    }
+  },
+  "example": {
+    "state": "known",
+    "language": "nix",
+    "value": "let\n  backend = import (inputs.initramfs-tools-impurifier + \"/nix\") {\n    inherit pkgs;\n    coreSrc = inputs.impurifier;\n  };\nin backend.makeHook {\n  pkg = earlyTool;\n  name = \"early-tool\";\n  scripts = [{ stage = \"init-top\"; script = earlyHook; }];\n}\n",
+    "evidence": [
+      "```nix\nlet\n  backend = import (inputs.initramfs-tools-impurifier + \"/nix\") {\n    inherit pkgs;\n    coreSrc = inputs.impurifier;\n  };\nin backend.makeHook {\n  pkg = earlyTool;\n  name = \"early-tool\";\n  scripts = [{ stage = \"init-top\"; script = earlyHook; }];\n}\n```"
+    ]
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "repository": "nix-impurifiers/maven-impurifier",
+  "reviewedRevision": "0d00657ec7908158880cc0d64d43a996142dd2ea",
+  "readmeSha256": "886d06140cabe5543122ed7e5ccf3b762afaab47b385a058b0130a8cc854150f",
+  "reviewBasis": "project-readme",
+  "facts": {
+    "target_nix": {
+      "state": "known",
+      "value": "not-added",
+      "evidence": [
+        "Maven, Gradle and compatible clients can consume the directory as a repository.\nThe artifact is copied unchanged; it may be built by Nix with any suitable JVM\ntoolchain. Target bytecode and native-library ABI compatibility remain producer\nresponsibilities. No Nix runtime, recompilation or relocation is introduced.\nRepository hosting, credentials and detached signing are external operations.\nChecksums are compatibility metadata, not a substitute for repository trust."
+      ]
+    },
+    "bundled_client": {
+      "state": "not-applicable",
+      "reason": "This backend adds no Nix client integration; its native consumer and payload ABI are the relevant runtime contract."
+    },
+    "validation": {
+      "state": "known",
+      "value": "`nix flake check -L` uses actual Gradle inside QEMU, offline, to resolve a JAR\nand its transitive POM dependency, compile and execute a consumer, select a new\nversion and execute it again. Removing the artifacts and native dependency cache\nmakes resolution fail. Gradle is the tested Maven-format consumer; this does not\nclaim every Maven plugin or repository server has been tested. Consumer caches\nand build outputs follow their native retention rules.",
+      "evidence": [
+        "`nix flake check -L` uses actual Gradle inside QEMU, offline, to resolve a JAR\nand its transitive POM dependency, compile and execute a consumer, select a new\nversion and execute it again. Removing the artifacts and native dependency cache\nmakes resolution fail. Gradle is the tested Maven-format consumer; this does not\nclaim every Maven plugin or repository server has been tested. Consumer caches\nand build outputs follow their native retention rules."
+      ]
+    }
+  },
+  "example": {
+    "state": "known",
+    "language": "nix",
+    "value": "backend.makeArtifact {\n  groupId = \"org.example\";\n  artifactId = \"library\";\n  version = \"1.0.0\";\n  artifact = preparedJar;\n  dependencies = [{ groupId = \"org.example\"; artifactId = \"helper\"; version = \"2.0.0\"; }];\n  classifiers.sources = preparedSourcesJar;\n}\n",
+    "evidence": [
+      "```nix\nbackend.makeArtifact {\n  groupId = \"org.example\";\n  artifactId = \"library\";\n  version = \"1.0.0\";\n  artifact = preparedJar;\n  dependencies = [{ groupId = \"org.example\"; artifactId = \"helper\"; version = \"2.0.0\"; }];\n  classifiers.sources = preparedSourcesJar;\n}\n```"
+    ]
+  }
+}

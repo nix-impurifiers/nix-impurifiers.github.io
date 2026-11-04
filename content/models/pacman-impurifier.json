@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "repository": "nix-impurifiers/pacman-impurifier",
+  "reviewedRevision": "1ac4f4e81b6e61cef5b852e4f7b380a106493e30",
+  "readmeSha256": "71fa1bd718779de363cc8c766af4772e2de480689f34b233f07d9dc94f14be72",
+  "reviewBasis": "project-readme",
+  "facts": {
+    "target_nix": {
+      "state": "known",
+      "value": "mode-dependent",
+      "evidence": [
+        "Emit native ALPM packages backed by the shared [impurifier engine](https://github.com/nix-impurifiers/impurifier) and an atomic, GC-rooted `/opt/nix/profile`.",
+        "`makeNativePackages { pkg = myApplication; programs = [ \"my-command\" ]; }` returns\na directory of native packages: one application package exporting commands, and\none package per immutable runtime store object. Exact native dependencies retain\nshared objects. Native tools own the files and package database. The target needs\nno Nix executable, daemon, SQLite database, realization hooks or shared profile.\nFiles remain at their original absolute paths; no relocation is performed.\nInputs may come from any compatible Nix producer. This API currently covers\npayload files and command exports rather than the profile-mode host lifecycle DSL."
+      ]
+    },
+    "bundled_client": {
+      "state": "known",
+      "value": true,
+      "evidence": [
+        "`makeRuntimePackage` additionally accepts `bundledNixStore` (a supplied static ELF\n`nix-store` executable) and nonempty `bundledNixNotices`. A bundle makes the\nexternal native Nix dependency optional and marks the runtime package with its\nactual target architecture. A compatible external client is preferred; otherwise\nthe private bundled client is used. Explicit `nixDependency` still requests a\nnative provider. Client selection never changes store ownership or trust, and a\nfailed mutation is not retried with another client. This is not daemon setup."
+      ]
+    },
+    "validation": {
+      "state": "known",
+      "value": "Checks cover native archive metadata and reference-free artifact closures, engine contracts, and a QEMU VM using actual pacman, Nix and systemd. The VM disables networking and exercises failed substitution, offline recovery, flavor switching, edited configuration, upgrades, transaction batching, service accounts/directories, administrator intent, removal and GC. It runs NixOS with native-style mutable service directories; a complete Arch installation remains additional compatibility coverage.",
+      "evidence": [
+        "Checks cover native archive metadata and reference-free artifact closures, engine contracts, and a QEMU VM using actual pacman, Nix and systemd. The VM disables networking and exercises failed substitution, offline recovery, flavor switching, edited configuration, upgrades, transaction batching, service accounts/directories, administrator intent, removal and GC. It runs NixOS with native-style mutable service directories; a complete Arch installation remains additional compatibility coverage."
+      ]
+    }
+  },
+  "example": {
+    "state": "known",
+    "language": "nix",
+    "value": "let impurifier = inputs.pacman-impurifier.lib.pacman-impurifier { inherit pkgs; };\nin impurifier.makePackage { pkg = pkgs.hello; }\n",
+    "evidence": [
+      "```nix\nlet impurifier = inputs.pacman-impurifier.lib.pacman-impurifier { inherit pkgs; };\nin impurifier.makePackage { pkg = pkgs.hello; }\n```"
+    ]
+  }
+}

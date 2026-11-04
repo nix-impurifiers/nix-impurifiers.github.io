@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "repository": "nix-impurifiers/nuget-impurifier",
+  "reviewedRevision": "3624b3c8eca8af08bbca5d0f25ea7d5d2d4ab303",
+  "readmeSha256": "615a360460b7f1a09105b767487905134813ee6a9eb1867b30411538b445349a",
+  "reviewBasis": "project-readme",
+  "facts": {
+    "target_nix": {
+      "state": "known",
+      "value": "not-added",
+      "evidence": [
+        "`backend` is `import (inputs.nuget-impurifier + \"/nix\") { inherit pkgs; coreSrc = inputs.impurifier; }`.\nThe payload uses NuGet's native layout: for example `lib/net10.0/Example.dll`\nand `runtimes/linux-x64/native/libexample.so`. `authors`, `description`, native\nframework dependency groups and optional `licenseExpression` supply metadata.\nThe default omits a payload license claim. Package versions are immutable\nthree-component releases with an optional prerelease suffix."
+      ]
+    },
+    "bundled_client": {
+      "state": "not-applicable",
+      "reason": "This backend adds no Nix client integration; its native consumer and payload ABI are the relevant runtime contract."
+    },
+    "validation": {
+      "state": "known",
+      "value": "`nix flake check -L` compares two independent native package builds for\nreproducibility, and uses native .NET in QEMU to restore two package versions,\ncompile a consumer, resolve and execute an actual RID-specific native shared\nlibrary, and verify an ordinary rebuild runs the updated library. Removing the\nPackageReference makes the consumer fail to compile. This tests Linux x64 and\n.NET 10; other runtime identifiers, Windows and signing require separate tests.\nNuGet's package cache follows its normal retention policy after reference removal.",
+      "evidence": [
+        "`nix flake check -L` compares two independent native package builds for\nreproducibility, and uses native .NET in QEMU to restore two package versions,\ncompile a consumer, resolve and execute an actual RID-specific native shared\nlibrary, and verify an ordinary rebuild runs the updated library. Removing the\nPackageReference makes the consumer fail to compile. This tests Linux x64 and\n.NET 10; other runtime identifiers, Windows and signing require separate tests.\nNuGet's package cache follows its normal retention policy after reference removal."
+      ]
+    }
+  },
+  "example": {
+    "state": "known",
+    "language": "nix",
+    "value": "backend.makePackage {\n  name = \"Example.Library\";\n  version = \"1.0.0\";\n  payload = preparedTree;\n  licenseExpression = \"MIT\";\n  dependencies.\"net10.0\" = { \"Other.Library\" = \"[1.0.0,2.0.0)\"; };\n}\n",
+    "evidence": [
+      "```nix\nbackend.makePackage {\n  name = \"Example.Library\";\n  version = \"1.0.0\";\n  payload = preparedTree;\n  licenseExpression = \"MIT\";\n  dependencies.\"net10.0\" = { \"Other.Library\" = \"[1.0.0,2.0.0)\"; };\n}\n```"
+    ]
+  }
+}

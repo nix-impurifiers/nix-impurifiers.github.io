@@ -66,9 +66,21 @@ with sync_playwright() as p:
     assert page.locator('h1').inner_text().startswith('rpm-impurifier')
     page.screenshot(path=str(OUT/'docs-dark.png'),full_page=False)
     page.goto(BASE+'/'); page.screenshot(path=str(OUT/'desktop-dark.png'),full_page=False)
-    for slug in ['getting-started','testing','opkg-impurifier','portage-impurifier','bootc-impurifier','bitbake-impurifier','android-impurifier','termux-impurifier','dracut-impurifier','mkinitcpio-impurifier','impurifier']:
+    for slug in ['getting-started','testing','opkg-impurifier','portage-impurifier','bootc-impurifier','bitbake-impurifier','android-impurifier','termux-impurifier','dracut-impurifier','mkinitcpio-impurifier','impurifier','compare','rpm-impurifier/guide','rpm-impurifier/features']:
         response=page.goto(BASE+'/'+slug+'/'); assert response.status==200,slug
         assert page.locator('h1').count()==1,slug
+    page.goto(BASE+'/rpm-impurifier/')
+    assert page.get_by_role('navigation',name='Project documentation').get_by_role('link',name='Overview',exact=True).get_attribute('aria-current')=='page'
+    page.get_by_role('link',name='Full guide',exact=True).click()
+    assert page.url.endswith('/rpm-impurifier/guide/')
+    page.get_by_role('link',name='Feature matrix',exact=True).click()
+    assert page.locator('h1').inner_text()=='rpm-impurifier feature matrix'
+    page.get_by_role('link',name='Compare all impurifiers →').click()
+    assert page.locator('tbody tr').count()==PROJECT_COUNT
+    page.goto(BASE+'/dpkg-impurifier/')
+    legacy=page.locator('[data-guide-target]').first.get_attribute('id')
+    page.goto(BASE+'/dpkg-impurifier/#'+legacy)
+    page.wait_for_url('**/dpkg-impurifier/guide/#*')
     scaled=browser.new_context(viewport={'width':1920,'height':1080},device_scale_factor=2,color_scheme='light')
     sp=scaled.new_page(); sp.goto(BASE+'/'); sp.wait_for_selector('html.js')
     scaled_box=sp.locator('#project-search').bounding_box()
@@ -78,11 +90,16 @@ with sync_playwright() as p:
         for dimension in ['x','width','height']:
             assert abs(current[dimension]-scaled_box[dimension]) < 0.001, (label,dimension,scaled_box,current)
     sp.screenshot(path=str(OUT/'desktop-1080p-2x.png'),full_page=False)
-    mobile=browser.new_context(viewport={'width':390,'height':844},device_scale_factor=1,color_scheme='light',is_mobile=True,has_touch=True)
+    mobile=browser.new_context(viewport={'width':390,'height':844},device_scale_factor=1,color_scheme='light',is_mobile=True,has_touch=True,permissions=['clipboard-read','clipboard-write'])
     mp=mobile.new_page(); mp.on('pageerror',lambda error:errors.append(str(error)))
-    for slug in ['','getting-started/','rpm-impurifier/','bitbake-impurifier/']:
+    for slug in ['','getting-started/','rpm-impurifier/','bitbake-impurifier/','compare/','rpm-impurifier/guide/','rpm-impurifier/features/']:
         mp.goto(BASE+'/'+slug)
         assert mp.evaluate('document.documentElement.scrollWidth <= document.documentElement.clientWidth'),slug
+    mp.goto(BASE+'/dpkg-impurifier/')
+    source=mp.locator('.doc-body pre code').first.inner_text()
+    mp.get_by_role('button',name='Copy code example 1',exact=True).click()
+    assert mp.evaluate('navigator.clipboard.readText()')==source
+    assert mp.locator('.doc-body pre').first.evaluate('(node)=>getComputedStyle(node).whiteSpace')=='pre-wrap'
     mp.goto(BASE+'/'); mp.screenshot(path=str(OUT/'mobile-light.png'),full_page=True)
     mobile_box = mp.locator('#project-search').bounding_box()
     for label in ['Profiles & environments', 'Native packages', 'All']:
@@ -100,6 +117,9 @@ with sync_playwright() as p:
     assert not np.locator('#project-search').is_visible()
     assert np.get_by_role('link',name='dpkg-impurifier',exact=True).is_visible()
     np.get_by_role('link',name='dpkg-impurifier',exact=True).click()
+    assert np.locator('h1').inner_text().startswith('dpkg-impurifier')
+    np.get_by_role('link',name='Full guide',exact=True).click()
+    assert np.url.endswith('/dpkg-impurifier/guide/')
     assert np.locator('h1').inner_text().startswith('dpkg-impurifier')
     assert not errors,errors
     browser.close()

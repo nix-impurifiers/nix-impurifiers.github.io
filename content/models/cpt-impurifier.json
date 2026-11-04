@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "repository": "nix-impurifiers/cpt-impurifier",
+  "reviewedRevision": "83dce871b166a5ae865b16ce85c0a37b630dfb36",
+  "readmeSha256": "ca468d5530acbf2170d5ad70b2fd6d95baf41d0d9f215b7be74169e997984832",
+  "reviewBasis": "project-readme",
+  "facts": {
+    "target_nix": {
+      "state": "known",
+      "value": "mode-dependent",
+      "evidence": [
+        "Native Carbs Packaging Tools archives and recipes backed by atomic Nix profiles.\nOriginal project code is MIT licensed; upstream CPT retains its MIT notices.\nThis targets CPT's own database and hook contracts, independently of KISS.",
+        "`makeNativePackage { name; version; payload; release?; dependencies?; }` emits\na native CPT archive from a producer-prepared tree. It adds no engine callbacks\nor runtime requirement. Install it with ordinary `cpt-install`, without the impurifier\nengine hook. Native dependency inventory and configuration\nchecksums remain available. The producer must prepare a runnable target layout;\nthis does not relocate binaries. The native VM executes a static payload in a\ntarget root without `/nix`, then upgrades and removes it. CPT retains files under `/etc` on removal,\nincluding unedited configurations; the native VM checks that policy."
+      ]
+    },
+    "bundled_client": {
+      "state": "known",
+      "value": true,
+      "evidence": [
+        "`makeRuntimePackage` accepts `bundledNixStore` and `bundledNixNotices`. Supply a\nstatic ELF client and upstream notices. This omits the default Nix dependency;\nPython remains required. Compatible external clients take precedence. Explicit\n`IMPURIFIER_NIX_STORE` disables fallback; failed mutations are never retried\nthrough another client. A separate bundled-client VM repeats the lifecycle\nsuite with an incompatible external candidate. Nix provisioning remains deferred."
+      ]
+    },
+    "validation": {
+      "state": "known",
+      "value": "CPT uses rsync's size/mtime quick check when installing files. This emitter uses\ncontent-derived file timestamps so equal-length changed descriptors/services\nare installed. The VM explicitly covers that regression.",
+      "evidence": [
+        "CPT uses rsync's size/mtime quick check when installing files. This emitter uses\ncontent-derived file timestamps so equal-length changed descriptors/services\nare installed. The VM explicitly covers that regression."
+      ]
+    }
+  },
+  "example": {
+    "state": "known",
+    "language": "nix",
+    "value": "let impurifier = inputs.cpt-impurifier.lib.cpt-impurifier { inherit pkgs; };\nin impurifier.makeOfflinePackage { pkg = pkgs.hello; }\n",
+    "evidence": [
+      "```nix\nlet impurifier = inputs.cpt-impurifier.lib.cpt-impurifier { inherit pkgs; };\nin impurifier.makeOfflinePackage { pkg = pkgs.hello; }\n```"
+    ]
+  }
+}

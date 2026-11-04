@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "repository": "nix-impurifiers/snap-impurifier",
+  "reviewedRevision": "e03e298802967ef89c751f9130ea46aae569cf0d",
+  "readmeSha256": "b8cd69d0e7e96e40ad06b4b8e1242e835cec560b427b99ed0f60802d7cb80052",
+  "reviewBasis": "project-readme",
+  "facts": {
+    "target_nix": {
+      "state": "known",
+      "value": "mode-dependent",
+      "evidence": [
+        "Build native classic-confinement snaps for Nix applications. Snapd owns the\nSquashFS files, mounts, revisions and user data; Nix owns application closures.\nOriginal code is MIT licensed. Upstream snapd, Nix, Go and other dependencies\nretain their original licenses and notices.",
+        "`makeNativeSnap { name; version; payload; program; architecture ? \"amd64\"; }`\npacks a complete prepared application tree with `bin/<program>`. It adds no\nengine, Nix SDK or activation. The producer supplies target-compatible files;\nthis does not relocate binaries. Native snaps retain classic confinement and\n`bare` base requirements. The actual snapd VM executes a static native payload,\nupgrades it and removes it, and separately executes its installed binary in an\nisolated root without `/nix`. This is not a complete Nix-free host boot test."
+      ]
+    },
+    "bundled_client": {
+      "state": "known",
+      "value": true,
+      "evidence": [
+        "Nix-backed constructors accept `bundledNixStore` and `bundledNixNotices` (a list\nof upstream notice files). Supply a static ELF client. The app carries that\nclient privately and omits the SDK CLI. Launch prefers a compatible external\nclient, then the supplied client; explicit `IMPURIFIER_NIX_STORE` disables\nfallback. Selection happens before registration or hardware capture. The\ntrusted host preparation helper still uses host tools and never executes the\napplication-owned client as root. This requires an existing Nix store, daemon\nand initial SDK preparation; it is not a Nix installer. A separate bundled VM\nrepeats the revision, retention, hardware and GC lifecycle with an incompatible\nexternal candidate."
+      ]
+    },
+    "validation": {
+      "state": "known",
+      "value": "The VM suite uses upstream snapd 2.78, real systemd user scopes, SquashFS mounts,\nand snap-confine's exact upstream cgroup-v2 file-capability list. It installs\nthe official signed `bare` revision 5 and `snapd` revision 28254 through native\nassertion verification. The test adapts NixOS's generated configuration\ndirectories into writable directories so snapd can manage its own systemd,\nD-Bus and udev files. Native state and revision databases are never synthesized.",
+      "evidence": [
+        "The VM suite uses upstream snapd 2.78, real systemd user scopes, SquashFS mounts,\nand snap-confine's exact upstream cgroup-v2 file-capability list. It installs\nthe official signed `bare` revision 5 and `snapd` revision 28254 through native\nassertion verification. The test adapts NixOS's generated configuration\ndirectories into writable directories so snapd can manage its own systemd,\nD-Bus and udev files. Native state and revision databases are never synthesized."
+      ]
+    }
+  },
+  "example": {
+    "state": "known",
+    "language": "nix",
+    "value": "let\n  impurifier = inputs.snap-impurifier.lib.snap-impurifier { inherit pkgs; };\nin impurifier.makeOfflineSnap { pkg = pkgs.hello; }\n",
+    "evidence": [
+      "```nix\nlet\n  impurifier = inputs.snap-impurifier.lib.snap-impurifier { inherit pkgs; };\nin impurifier.makeOfflineSnap { pkg = pkgs.hello; }\n```"
+    ]
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "repository": "nix-impurifiers/perl-impurifier",
+  "reviewedRevision": "3cb887b55e431cd7118774f43442b8851776a505",
+  "readmeSha256": "1d99f8aeb9af78897c6d1cb48605793fc24a983c2d824e5e691c7ea4b949081c",
+  "reviewBasis": "project-readme",
+  "facts": {
+    "target_nix": {
+      "state": "known",
+      "value": "not-added",
+      "evidence": [
+        "Consumers use cpanm or compatible MakeMaker distribution tooling. The artifact\nis a prepared distribution, not a promise that CPAN can rebuild its original\nsource. Compiled XS must match the consumer Perl ABI and architecture. Declare\nexternal dependencies and supply compatible files; this backend does not relocate\nlibraries, infer ABI compatibility or add a target Nix runtime. Registry upload,\nsource provenance and release-signing policy remain producer concerns."
+      ]
+    },
+    "bundled_client": {
+      "state": "not-applicable",
+      "reason": "This backend adds no Nix client integration; its native consumer and payload ABI are the relevant runtime contract."
+    },
+    "validation": {
+      "state": "known",
+      "value": "`nix flake check -L` builds an actual XS extension with Nix, then uses native\ncpanm/MakeMaker in QEMU to install from a local archive without a consumer compiler\nor remote mirror. It executes the extension, upgrades, executes its replacement\nand uninstalls through cpanm's native packlist handling. Loading then fails and\nthe shared object is gone. Coverage is the pinned Perl ABI on Linux.",
+      "evidence": [
+        "`nix flake check -L` builds an actual XS extension with Nix, then uses native\ncpanm/MakeMaker in QEMU to install from a local archive without a consumer compiler\nor remote mirror. It executes the extension, upgrades, executes its replacement\nand uninstalls through cpanm's native packlist handling. Loading then fails and\nthe shared object is gone. Coverage is the pinned Perl ABI on Linux."
+      ]
+    }
+  },
+  "example": {
+    "state": "known",
+    "language": "nix",
+    "value": "backend.makeDistribution {\n  name = \"Example::Library\";\n  version = \"1.00\";\n  payload = preparedTree;\n  modules = {\n    \"Library.pm\" = \"Example/Library.pm\";\n    \"Library.so\" = \"auto/Example/Library/Library.so\";\n  };\n  dependencies = { XSLoader = \"0\"; };\n}\n",
+    "evidence": [
+      "```nix\nbackend.makeDistribution {\n  name = \"Example::Library\";\n  version = \"1.00\";\n  payload = preparedTree;\n  modules = {\n    \"Library.pm\" = \"Example/Library.pm\";\n    \"Library.so\" = \"auto/Example/Library/Library.so\";\n  };\n  dependencies = { XSLoader = \"0\"; };\n}\n```"
+    ]
+  }
+}

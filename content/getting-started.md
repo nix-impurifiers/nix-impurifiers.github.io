@@ -1,6 +1,8 @@
 # Getting started
 
-Choose the impurifier for your **package manager**. A distribution matters when choosing native dependencies and host integration, but it does not need its own impurifier.
+Choose the impurifier for your **native consumer**: a package manager, language ecosystem, image runtime or boot tool. A distribution matters when choosing dependencies and host integration, but it does not need its own impurifier.
+
+Each project has an overview, a full guide and a documentation matrix. Use the [comparison](/compare/) to distinguish mode-dependent Nix integration from artifacts that add no target Nix runtime. Prepared payloads still need the right native libraries and ABI.
 
 The quick example below produces a native DEB containing a Nix-built `hello`. Other backends have their own constructors and installation semantics; start with the [directory](/#impurifiers) to find yours.
 

@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "repository": "nix-impurifiers/pkgutils-impurifier",
+  "reviewedRevision": "230759a23281fd2d390a99a7c227f280435c36e5",
+  "readmeSha256": "b83de2cf89c87e66b4be6c2143531d2c4f2039d34bd38bc72c0f70bb265eedfe",
+  "reviewBasis": "project-readme",
+  "facts": {
+    "target_nix": {
+      "state": "known",
+      "value": "mode-dependent",
+      "evidence": [
+        "Native CRUX pkgutils archives, ports and prt-get integration for Nix applications.\nOriginal project code is MIT licensed. The upstream GPL-2.0-or-later pkgutils\ncompiler and fixture keep their own notices and COPYING file.",
+        "`makeNativePackage { name; version; payload; release?; dependencies?; }` emits\na native archive from a producer-prepared filesystem tree, without engine\nrequirements metadata, activation or a Nix dependency. Native pkgutils can own\nthis archive directly; dependency expressions remain port/frontend policy.\nThe producer prepares a runnable target layout; no relocation is performed.\nThe native VM installs and executes a static payload in a root without `/nix`,\nthen upgrades and removes it through native pkgutils."
+      ]
+    },
+    "bundled_client": {
+      "state": "known",
+      "value": true,
+      "evidence": [
+        "`makeRuntimePackage` optionally accepts `bundledNixStore` and\n`bundledNixNotices`. A static client omits the default native Nix requirement;\nPython remains required. Compatible external clients take precedence. Explicit\n`IMPURIFIER_NIX_STORE` prevents fallback, and mutations are never retried with\nanother client. A separate bundled-client VM repeats the existing lifecycle\nsuite with an incompatible external candidate. Nix provisioning remains deferred."
+      ]
+    },
+    "validation": {
+      "state": "known",
+      "value": "The adapter supports `install`, `upgrade`, `remove` and `check`, each taking one\narchive or package name as appropriate. Install automatically uses native\n`pkgadd -u` for an existing package. Native pkgutils has no package scripts or\ndependency solver: **use this adapter, configured prt-get commands, or reconcile\nmanually after plain pkgadd/pkgrm**. Raw native commands alone do not activate\nprofiles. Native protected-file rules stay in `/etc/pkgadd.conf`. **pkgrm removes\nowned configuration, including edits**; back up anything you intend to retain.\nThe VM checks this actual policy instead of claiming conffile preservation.",
+      "evidence": [
+        "The adapter supports `install`, `upgrade`, `remove` and `check`, each taking one\narchive or package name as appropriate. Install automatically uses native\n`pkgadd -u` for an existing package. Native pkgutils has no package scripts or\ndependency solver: **use this adapter, configured prt-get commands, or reconcile\nmanually after plain pkgadd/pkgrm**. Raw native commands alone do not activate\nprofiles. Native protected-file rules stay in `/etc/pkgadd.conf`. **pkgrm removes\nowned configuration, including edits**; back up anything you intend to retain.\nThe VM checks this actual policy instead of claiming conffile preservation."
+      ]
+    }
+  },
+  "example": {
+    "state": "known",
+    "language": "nix",
+    "value": "let impurifier = inputs.pkgutils-impurifier.lib.pkgutils-impurifier { inherit pkgs; };\nin impurifier.makeOfflinePackage { pkg = pkgs.hello; }\n",
+    "evidence": [
+      "```nix\nlet impurifier = inputs.pkgutils-impurifier.lib.pkgutils-impurifier { inherit pkgs; };\nin impurifier.makeOfflinePackage { pkg = pkgs.hello; }\n```"
+    ]
+  }
+}

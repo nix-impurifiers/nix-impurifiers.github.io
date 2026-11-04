@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "repository": "nix-impurifiers/pkg-impurifier",
+  "reviewedRevision": "6679c52c3ef5a9551b580d032ab2f6190cb9c421",
+  "readmeSha256": "5bd03b59c2b4f8faf1cf84c89f9b6e8695e84c842d0c7460d061cd637c82eba5",
+  "reviewBasis": "project-readme",
+  "facts": {
+    "target_nix": {
+      "state": "known",
+      "value": "not-added",
+      "evidence": [
+        "`makePackage { name; version; payload; abi; }` takes a prepared prefix tree and\nan explicit consumer ABI such as `FreeBSD:15:amd64`. `prefix` defaults to\n`/usr/local`; `origin`, `description` and native `dependencies` are configurable.\nDependencies map names to pkg's `{ origin; version; }` records. Upstream pkg\ncreates the manifest, archive and checksums from the staged files. No Nix\nruntime, database, daemon, activation or relocation is added."
+      ]
+    },
+    "bundled_client": {
+      "state": "not-applicable",
+      "reason": "This backend adds no Nix client integration; its native consumer and payload ABI are the relevant runtime contract."
+    },
+    "validation": {
+      "state": "known",
+      "value": "The current VM runs unmodified portable pkg on Linux and tests target-root\ninstallation, compiled static execution without `/nix`, checksum verification,\nversion replacement and removal. It does not claim a FreeBSD kernel boot or\nvalidation of FreeBSD-native executable payloads. Producers must supply the\nright native ABI and dependency metadata; those platform cases remain explicit\nadditional coverage.",
+      "evidence": [
+        "The current VM runs unmodified portable pkg on Linux and tests target-root\ninstallation, compiled static execution without `/nix`, checksum verification,\nversion replacement and removal. It does not claim a FreeBSD kernel boot or\nvalidation of FreeBSD-native executable payloads. Producers must supply the\nright native ABI and dependency metadata; those platform cases remain explicit\nadditional coverage."
+      ]
+    }
+  },
+  "example": {
+    "state": "unknown",
+    "reason": "This README describes its API without a fenced example. Consult the full guide."
+  }
+}

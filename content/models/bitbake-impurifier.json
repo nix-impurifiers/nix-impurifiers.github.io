@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "repository": "nix-impurifiers/bitbake-impurifier",
+  "reviewedRevision": "3b67006694b718bd672ab835ba00debbf3f15a2e",
+  "readmeSha256": "7a734ccfafcc9bb2e62238a749bc28808b36c97faffd25ed114dbaec3c461467",
+  "reviewBasis": "project-readme",
+  "facts": {
+    "target_nix": {
+      "state": "known",
+      "value": "mode-dependent",
+      "evidence": [
+        "Generate an OpenEmbedded layer for Nix application closures. BitBake is the\nexecution engine; OpenEmbedded supplies the recipes, packaging classes and\nimage construction. Yocto distributions consume this layer.",
+        "`makeNativeRecipe { name; version; payload; license?; licenseFile?; ... }` emits\na recipe for a producer-prepared tree using a class with no engine activation\nhooks. It adds no Nix requirement. Compose it with\n`makeNativeLayer { applications = [ recipe ]; }`, or pass `runtime = null` to\n`makeLayer`, to omit the Nix runtime recipe. The producer supplies target-compatible\nfiles; this does not relocate binaries. `compatibleHost` can override the target\ntriplet expression while ordinary recipe dependency and license policy remains\nexplicit."
+      ]
+    },
+    "bundled_client": {
+      "state": "known",
+      "value": true,
+      "evidence": [
+        "`makeRuntime` optionally accepts `bundledNixStore` and `bundledNixNotices` for\na static ELF client and upstream notices. This omits the default native Nix\nrequirement; Python remains required. Compatible external clients take precedence,\nexplicit `IMPURIFIER_NIX_STORE` disables fallback, and failed mutations are never\nretried through another client. Bundled producer/consumer variants repeat the\nfull existing lifecycle and first-boot suite with an incompatible external client.\nNix provisioning remains deferred."
+      ]
+    },
+    "validation": {
+      "state": "known",
+      "value": "Native SDK and VM test coverage is developed against BitBake 2.18.0 and\nOpenEmbedded Core Yocto 6.0.4. Full machine image/boot coverage and other\narchitectures must be distinguished from recipe and native package tests.",
+      "evidence": [
+        "Native SDK and VM test coverage is developed against BitBake 2.18.0 and\nOpenEmbedded Core Yocto 6.0.4. Full machine image/boot coverage and other\narchitectures must be distinguished from recipe and native package tests."
+      ]
+    }
+  },
+  "example": {
+    "state": "known",
+    "language": "nix",
+    "value": "let\n  adapter = inputs.bitbake-impurifier.lib.bitbake-impurifier { inherit pkgs; };\nin adapter.makeLayer {\n  applications = [ (adapter.makeOfflineRecipe { pkg = pkgs.hello; }) ];\n  runtime = adapter.makeRuntime {\n    nixDependency = \"my-nix-provider\";\n    pythonDependency = \"python3-core\";\n  };\n}\n",
+    "evidence": [
+      "```nix\nlet\n  adapter = inputs.bitbake-impurifier.lib.bitbake-impurifier { inherit pkgs; };\nin adapter.makeLayer {\n  applications = [ (adapter.makeOfflineRecipe { pkg = pkgs.hello; }) ];\n  runtime = adapter.makeRuntime {\n    nixDependency = \"my-nix-provider\";\n    pythonDependency = \"python3-core\";\n  };\n}\n```"
+    ]
+  }
+}

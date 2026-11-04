@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "repository": "nix-impurifiers/ukify-impurifier",
+  "reviewedRevision": "2d06c9030909f9cf673b321856300d8dcf5b67a4",
+  "readmeSha256": "8a5733c7946bee1948a8ad72d6c3f8f2c5107b9bec74cd35ddbf529a15cc2c95",
+  "reviewBasis": "project-readme",
+  "facts": {
+    "target_nix": {
+      "state": "known",
+      "value": "not-added",
+      "evidence": [
+        "`makeUKI { kernel; initrds = [ initramfs ]; }` produces an **unsigned** EFI file.\nIt also accepts `cmdline`, `osRelease`, `uname` and `stub`. The default stub is\nx86_64; producers targeting another architecture must supply the matching stub\nand kernel. Native dracut, mkinitcpio or other builder outputs can be initrds.\nNo target Nix runtime or relocation is added."
+      ]
+    },
+    "bundled_client": {
+      "state": "not-applicable",
+      "reason": "This backend adds no Nix client integration; its native consumer and payload ABI are the relevant runtime contract."
+    },
+    "validation": {
+      "state": "known",
+      "value": "The QEMU check enrolls an ephemeral test certificate in Secure-Boot-capable OVMF,\nboots initial and updated signed UKIs, checks the guest's actual SecureBoot EFI\nvariable, and requires firmware rejection after altering the embedded kernel.\nThe early userspace has no root disk, host store or target Nix database.",
+      "evidence": [
+        "The QEMU check enrolls an ephemeral test certificate in Secure-Boot-capable OVMF,\nboots initial and updated signed UKIs, checks the guest's actual SecureBoot EFI\nvariable, and requires firmware rejection after altering the embedded kernel.\nThe early userspace has no root disk, host store or target Nix database."
+      ]
+    }
+  },
+  "example": {
+    "state": "known",
+    "language": "",
+    "value": "ukify-impurifier sign result --key private.key --certificate certificate.pem --output signed.efi\n",
+    "evidence": [
+      "```\nukify-impurifier sign result --key private.key --certificate certificate.pem --output signed.efi\n```"
+    ]
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "repository": "nix-impurifiers/julia-impurifier",
+  "reviewedRevision": "98257184b8e66db43285a66941b02df18ca0ca8b",
+  "readmeSha256": "05abd88959be6d71bc5d0188071bbb10411ec49f9fbc687b1513c04fb4f0b156",
+  "reviewBasis": "project-readme",
+  "facts": {
+    "target_nix": {
+      "state": "known",
+      "value": "not-added",
+      "evidence": [
+        "Publish the archive at downloadUrl and distribute the binding with a Julia\npackage or application. Consumers use Pkg.Artifacts normally. This backend\nproduces artifacts, not a registry, project environment manager or new Julia\npackage-build system. Julia code can locate the artifact and load its libraries\nor data. Prepared files must already match their declared ABI; libc is not\nassumed when platform is omitted. No Nix daemon, database or client is added,\nand no relocation is attempted. External library dependencies remain the\nproducer's responsibility."
+      ]
+    },
+    "bundled_client": {
+      "state": "not-applicable",
+      "reason": "This backend adds no Nix client integration; its native consumer and payload ABI are the relevant runtime contract."
+    },
+    "validation": {
+      "state": "known",
+      "value": "`nix flake check -L` downloads two native artifacts from a VM-local HTTP feed\nusing actual Julia, verifies their identities and executes a compiled shared\nlibrary from the artifact depot. It removes the second artifact, rejects a\ncorrupted download, recovers with the correct archive, removes it again and\nrequires failure when the feed is offline. The pinned Linux Julia/runtime and\nnative platform binding are tested; further platform tags need their own tests. A native binding check also covers\nplatform-independent data without OS/libc tags.",
+      "evidence": [
+        "`nix flake check -L` downloads two native artifacts from a VM-local HTTP feed\nusing actual Julia, verifies their identities and executes a compiled shared\nlibrary from the artifact depot. It removes the second artifact, rejects a\ncorrupted download, recovers with the correct archive, removes it again and\nrequires failure when the feed is offline. The pinned Linux Julia/runtime and\nnative platform binding are tested; further platform tags need their own tests. A native binding check also covers\nplatform-independent data without OS/libc tags."
+      ]
+    }
+  },
+  "example": {
+    "state": "known",
+    "language": "nix",
+    "value": "backend.makeArtifact {\n  name = \"example\";\n  payload = preparedTree;\n  downloadUrl = \"https://example.org/artifact.tar.gz\";\n  platform = { arch = \"x86_64\"; os = \"linux\"; libc = \"glibc\"; };\n}\n",
+    "evidence": [
+      "```nix\nbackend.makeArtifact {\n  name = \"example\";\n  payload = preparedTree;\n  downloadUrl = \"https://example.org/artifact.tar.gz\";\n  platform = { arch = \"x86_64\"; os = \"linux\"; libc = \"glibc\"; };\n}\n```"
+    ]
+  }
+}

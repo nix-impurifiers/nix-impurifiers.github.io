@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "repository": "nix-impurifiers/mkinitcpio-impurifier",
+  "reviewedRevision": "06364028f8de9ddd6df6016a718a12062bfacab0",
+  "readmeSha256": "b03ac44ef01e63b2cec93fc65c4fcbe881e2b9061f8f64657c15ba23fec9d3f2",
+  "reviewBasis": "project-readme",
+  "facts": {
+    "target_nix": {
+      "state": "known",
+      "value": "not-added",
+      "evidence": [
+        "Expose Nix-built software through native mkinitcpio build and runtime hooks.\nThe generated hook embeds complete runtime closures at their original store\npaths. The consumer and early userspace need no Nix executable, daemon, or\nSQLite database. Original adapter code is MIT."
+      ]
+    },
+    "bundled_client": {
+      "state": "not-applicable",
+      "reason": "This backend adds no Nix client integration; its native consumer and payload ABI are the relevant runtime contract."
+    },
+    "validation": {
+      "state": "known",
+      "value": "The QEMU test uses the real mkinitcpio builder and init program. A native early\nhook executes the supplied tool before root is available, checks absence of a\nNix database, emits a proof and powers off. The guest has no root disk or shared\nhost store. This is early-userspace coverage, not a complete Arch installation,\nSecure Boot, or real hardware qualification.",
+      "evidence": [
+        "The QEMU test uses the real mkinitcpio builder and init program. A native early\nhook executes the supplied tool before root is available, checks absence of a\nNix database, emits a proof and powers off. The guest has no root disk or shared\nhost store. This is early-userspace coverage, not a complete Arch installation,\nSecure Boot, or real hardware qualification."
+      ]
+    }
+  },
+  "example": {
+    "state": "known",
+    "language": "nix",
+    "value": "let adapter = inputs.mkinitcpio-impurifier.lib.mkinitcpio-impurifier { inherit pkgs; };\nin adapter.makeHook {\n  pkg = myEarlyBootTool;\n  name = \"my_tool\";\n  runtimeHook = myRuntimeHook;\n}\n",
+    "evidence": [
+      "```nix\nlet adapter = inputs.mkinitcpio-impurifier.lib.mkinitcpio-impurifier { inherit pkgs; };\nin adapter.makeHook {\n  pkg = myEarlyBootTool;\n  name = \"my_tool\";\n  runtimeHook = myRuntimeHook;\n}\n```"
+    ]
+  }
+}

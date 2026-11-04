@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "sections": [
+    {
+      "id": "output",
+      "title": "Artifact and consumer"
+    },
+    {
+      "id": "build",
+      "title": "Example and setup"
+    },
+    {
+      "id": "runtime",
+      "title": "Runtime and dependencies"
+    },
+    {
+      "id": "validation",
+      "title": "Validation and limits"
+    }
+  ],
+  "facts": {
+    "target_nix": {
+      "title": "Target-side Nix integration",
+      "type": "enum",
+      "values": [
+        "mode-dependent",
+        "required",
+        "not-added"
+      ],
+      "labels": {
+        "mode-dependent": "Depends on payload mode",
+        "required": "Nix is the native manager",
+        "not-added": "No Nix runtime added"
+      }
+    },
+    "bundled_client": {
+      "title": "Optional bundled Nix client",
+      "type": "boolean"
+    },
+    "validation": {
+      "title": "Documented validation scope",
+      "type": "text"
+    }
+  }
+}

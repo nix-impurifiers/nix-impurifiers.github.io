@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "repository": "nix-impurifiers/rpm-ostree-impurifier",
+  "reviewedRevision": "7e99ac2eac400988ce0c4a43a2b73300499ef6c9",
+  "readmeSha256": "8b7ed9c790b94f359b4af5c3b3d89871ff25a0557ace9fc9e2942640a483eb9b",
+  "reviewBasis": "project-readme",
+  "facts": {
+    "target_nix": {
+      "state": "known",
+      "value": "mode-dependent",
+      "evidence": [
+        "Native RPM application layers whose executables and dependencies come from Nix.\nOriginal adapter code is MIT. Native RPM compilation reuses rpm-impurifier;\nOSTree deployment and package ownership remain native rpm-ostree operations.\nReplacing an existing application uses native atomic uninstall/install layering.",
+        "`prepare ./application.rpm` performs only the trusted Nix data import and rooting,\nfor administrators who subsequently invoke native rpm-ostree themselves. Package\nscriptlets are absent. The helper verifies native payload digests, reads regular\nCPIO files without following links, and imports Nix output paths using the trusted\nhost executable. Unsigned-cache acceptance applies only to this explicit root\nimport. The daemon's global trust configuration is unchanged."
+      ]
+    },
+    "bundled_client": {
+      "state": "known",
+      "value": true,
+      "evidence": [
+        "Nix-backed application constructors also accept `bundledNixStore` (a supplied\nstatic ELF executable) and `bundledNixNotices` (upstream notice files). The\napplication carries the client privately and uses a Python-only SDK. Launch\nprefers a compatible external client, then the bundle, before registering roots\nor capturing hardware. Explicit `IMPURIFIER_NIX_STORE` disables fallback.\nTrusted preparation still uses host tools and never executes the image-owned\nclient as root. An existing store, daemon and initial SDK preparation remain\nrequired. The separate bundled VM repeats the native lifecycle with an\nincompatible external candidate; this is not a Nix installer."
+      ]
+    },
+    "validation": {
+      "state": "known",
+      "value": "The VM fixture packages its actual NixOS release file into a real base RPM,\nso the native base database has meaningful ownership. It uses real Btrfs, native\nRPM databases, native composition, native\nOSTree deployment and `ostree-prepare-root`. QEMU selects the actual BLS entry\nwritten by OSTree. It supplies the real NixOS kernel/initrd externally and uses\nthe composer's native no-initramfs setting; bootloader installation and dracut\nintegration require separate coverage. FHS bridges expose real SDK executables;\nthe bubblewrap self-test and depmod use real static BusyBox tools. The fixture\ncopies the actual RPM/systemd SDK closure under `/usr`; small FHS entry scripts\nexpose that closure at its original paths inside the isolated native sandbox.\nRPM's ordinary sysusers macro selects the real systemd-sysusers executable.\nNative rofiles-fuse and the kernel FUSE module remain enabled. A native\ninstallation of the upstream reference base policy supplies policy metadata to\nthe package importer and exercises native policy refresh. Kernel SELinux enforcement is not claimed by this fixture.",
+      "evidence": [
+        "The VM fixture packages its actual NixOS release file into a real base RPM,\nso the native base database has meaningful ownership. It uses real Btrfs, native\nRPM databases, native composition, native\nOSTree deployment and `ostree-prepare-root`. QEMU selects the actual BLS entry\nwritten by OSTree. It supplies the real NixOS kernel/initrd externally and uses\nthe composer's native no-initramfs setting; bootloader installation and dracut\nintegration require separate coverage. FHS bridges expose real SDK executables;\nthe bubblewrap self-test and depmod use real static BusyBox tools. The fixture\ncopies the actual RPM/systemd SDK closure under `/usr`; small FHS entry scripts\nexpose that closure at its original paths inside the isolated native sandbox.\nRPM's ordinary sysusers macro selects the real systemd-sysusers executable.\nNative rofiles-fuse and the kernel FUSE module remain enabled. A native\ninstallation of the upstream reference base policy supplies policy metadata to\nthe package importer and exercises native policy refresh. Kernel SELinux enforcement is not claimed by this fixture."
+      ]
+    }
+  },
+  "example": {
+    "state": "known",
+    "language": "nix",
+    "value": "imp = inputs.rpm-ostree-impurifier.lib.rpm-ostree-impurifier { inherit pkgs; };\npackage = imp.makeOfflineRpm {\n  pkg = pkgs.hello;\n  # Optional host-specific native dependency expressions:\n  hostDependencies = [ \"nix >= 2.0\" ];\n};\n# makeNetRpm and makePackage { ...; } (returning { net, offline }) also exist.\n",
+    "evidence": [
+      "```nix\nimp = inputs.rpm-ostree-impurifier.lib.rpm-ostree-impurifier { inherit pkgs; };\npackage = imp.makeOfflineRpm {\n  pkg = pkgs.hello;\n  # Optional host-specific native dependency expressions:\n  hostDependencies = [ \"nix >= 2.0\" ];\n};\n# makeNetRpm and makePackage { ...; } (returning { net, offline }) also exist.\n```"
+    ]
+  }
+}

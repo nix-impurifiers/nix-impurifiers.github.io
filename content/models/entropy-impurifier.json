@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "repository": "nix-impurifiers/entropy-impurifier",
+  "reviewedRevision": "94f3718a0c30a168b2a9a8e75816035a9d534c2f",
+  "readmeSha256": "e6951600d154da68e5fabc9f2ccb637fdae243a1f6424cffaefb80d3b78f9275",
+  "reviewBasis": "project-readme",
+  "facts": {
+    "target_nix": {
+      "state": "known",
+      "value": "mode-dependent",
+      "evidence": [
+        "Build native Entropy `.tbz2` packages projecting Nix applications into a shared\n`/opt/nix/profile`. The compiler emits native tar payloads, Portage XPAK metadata,\nand Entropy SQLite metadata using the upstream format APIs.",
+        "`makeNativePackage { name; version; payload; dependencies?; ... }` emits a\nnative Entropy package from a producer-prepared filesystem tree, with activation\ntriggers disabled and no implicit Nix requirement. The producer supplies a\nworking target layout; this does not relocate binaries. The VM checks native\ninstallation, upgrade and removal with actual Portage VDB integration before\ninstalling the engine, then executes the installed static payload in an isolated\nroot without `/nix`. The native manager fixture uses Gentoo and SDK host tools;\nthis does not claim a full Sabayon boot without Nix."
+      ]
+    },
+    "bundled_client": {
+      "state": "known",
+      "value": true,
+      "evidence": [
+        "`makeRuntimePackage` optionally accepts `bundledNixStore` and\n`bundledNixNotices` for a static ELF client with upstream notices. Bundling omits\nthe default Nix dependency; Python remains required. Compatible external clients\ntake precedence, explicit `IMPURIFIER_NIX_STORE` disables fallback, and failed\nmutations are never retried through another client. A bundled variant repeats\nthe original lifecycle suite with an incompatible external candidate. The Nix\nprovider/installer remains deferred."
+      ]
+    },
+    "validation": {
+      "state": "known",
+      "value": "`makeNativePackage { name; version; payload; dependencies?; ... }` emits a\nnative Entropy package from a producer-prepared filesystem tree, with activation\ntriggers disabled and no implicit Nix requirement. The producer supplies a\nworking target layout; this does not relocate binaries. The VM checks native\ninstallation, upgrade and removal with actual Portage VDB integration before\ninstalling the engine, then executes the installed static payload in an isolated\nroot without `/nix`. The native manager fixture uses Gentoo and SDK host tools;\nthis does not claim a full Sabayon boot without Nix.",
+      "evidence": [
+        "`makeNativePackage { name; version; payload; dependencies?; ... }` emits a\nnative Entropy package from a producer-prepared filesystem tree, with activation\ntriggers disabled and no implicit Nix requirement. The producer supplies a\nworking target layout; this does not relocate binaries. The VM checks native\ninstallation, upgrade and removal with actual Portage VDB integration before\ninstalling the engine, then executes the installed static payload in an isolated\nroot without `/nix`. The native manager fixture uses Gentoo and SDK host tools;\nthis does not claim a full Sabayon boot without Nix."
+      ]
+    }
+  },
+  "example": {
+    "state": "known",
+    "language": "nix",
+    "value": "let\n  impurifier = inputs.entropy-impurifier.lib.entropy-impurifier { inherit pkgs; };\nin impurifier.makePackage { pkg = pkgs.hello; }\n",
+    "evidence": [
+      "```nix\nlet\n  impurifier = inputs.entropy-impurifier.lib.entropy-impurifier { inherit pkgs; };\nin impurifier.makePackage { pkg = pkgs.hello; }\n```"
+    ]
+  }
+}

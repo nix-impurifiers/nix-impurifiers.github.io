@@ -51,5 +51,14 @@ projects=json.loads((ROOT/'content/projects.json').read_text())
 assert projects and len({p['name'] for p in projects})==len(projects)
 for project in projects:
     assert DIST/project['name']/'index.html' in pages, project['name']
-assert len(pages)==len(projects)+5
+assert len(pages)==3*len(projects)+6
+for project in projects:
+    name=project['name']
+    for suffix in ['guide/index.html', 'features/index.html', 'system.json', 'source-review.json']:
+        assert (DIST/name/suffix).exists(), (name,suffix)
+    record=json.loads((DIST/name/'system.json').read_text())
+    assert record['reviewBasis']=='project-readme'
+assert (DIST/'compare/index.html').exists()
+assert (DIST/'model-contract.json').exists()
+assert len(json.loads((DIST/'source-review.json').read_text()))==len(projects)
 print(f'Passed: {len(pages)} pages, {len(projects)} project guides, internal links/anchors, unique headings, local assets.')

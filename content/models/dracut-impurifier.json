@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "repository": "nix-impurifiers/dracut-impurifier",
+  "reviewedRevision": "cca1e1dfc098410ebf8fdd7b6ba4b4130209dd51",
+  "readmeSha256": "cc8898aa0b68516f31653cccec5b37b62dbc088f29e76ec3e321837e5e636415",
+  "reviewBasis": "project-readme",
+  "facts": {
+    "target_nix": {
+      "state": "known",
+      "value": "not-added",
+      "evidence": [
+        "Expose Nix-built software through native dracut modules and early-boot hooks.\nDracut builds the initramfs. The generated module carries complete runtime\nclosures as plain files; neither the build host consuming the module nor early\nuserspace needs a Nix daemon or database. Files retain their original store paths.\nOriginal adapter code is MIT."
+      ]
+    },
+    "bundled_client": {
+      "state": "not-applicable",
+      "reason": "This backend adds no Nix client integration; its native consumer and payload ABI are the relevant runtime contract."
+    },
+    "validation": {
+      "state": "known",
+      "value": "The QEMU test boots the generated image with the Linux kernel and no root disk or\nshared host store. A native cmdline hook executes the supplied tool, checks that\nno real root or Nix database exists, emits its proof and powers off. This proves\nearly userspace integration, not a complete distribution install or real hardware\ncoverage. Secure Boot and ukify are separate consumers.",
+      "evidence": [
+        "The QEMU test boots the generated image with the Linux kernel and no root disk or\nshared host store. A native cmdline hook executes the supplied tool, checks that\nno real root or Nix database exists, emits its proof and powers off. This proves\nearly userspace integration, not a complete distribution install or real hardware\ncoverage. Secure Boot and ukify are separate consumers."
+      ]
+    }
+  },
+  "example": {
+    "state": "known",
+    "language": "nix",
+    "value": "let adapter = inputs.dracut-impurifier.lib.dracut-impurifier { inherit pkgs; };\nin adapter.makeModule {\n  pkg = myEarlyBootTool;\n  name = \"my-tool\";\n  hooks = [{ stage = \"pre-mount\"; priority = 20; script = myBootHook; }];\n}\n",
+    "evidence": [
+      "```nix\nlet adapter = inputs.dracut-impurifier.lib.dracut-impurifier { inherit pkgs; };\nin adapter.makeModule {\n  pkg = myEarlyBootTool;\n  name = \"my-tool\";\n  hooks = [{ stage = \"pre-mount\"; priority = 20; script = myBootHook; }];\n}\n```"
+    ]
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "repository": "nix-impurifiers/appimage-impurifier",
+  "reviewedRevision": "b37e500de6747767781d129f3bbd6f4d13ed3856",
+  "readmeSha256": "a7210f31460cbb3c3cf75df319b11d765af46099300c741c63959a3d0c7c79e6",
+  "reviewBasis": "project-readme",
+  "facts": {
+    "target_nix": {
+      "state": "known",
+      "value": "mode-dependent",
+      "evidence": [
+        "Build native type-2 AppImages that launch Nix applications. Original code is MIT\nlicensed. Images use the unmodified upstream AppImage runtime and a SquashFS\npayload; both FUSE mounting and native extract-and-run are supported.",
+        "`makeNativeImage { name; appDir; }` wraps a producer-prepared AppDir with an\nexecutable `AppRun`. It adds no Nix/Python launcher, database or daemon requirement.\nSupply desktop metadata and icons in the AppDir if desktop integration is wanted.\nThe producer prepares a working target layout; this does not relocate binaries.\nA separate VM executes both real FUSE and extract-and-run inside a root with\nneither `/nix` nor Python, replaces the image and removes it."
+      ]
+    },
+    "bundled_client": {
+      "state": "known",
+      "value": true,
+      "evidence": [
+        "Nix-backed `makeImage` and its flavor constructors accept `bundledNixStore` and\n`bundledNixNotices`. Supply a static ELF client and its upstream notices. A\ncompatible external client takes precedence; explicit `IMPURIFIER_NIX_STORE`\ndisables fallback. Client selection happens before mutation, and failures are\nnever retried through another client or store. The bundled-client VM runs the\nfull lifecycle suite with no external Nix on the application user's PATH."
+      ]
+    },
+    "validation": {
+      "state": "known",
+      "value": "`makeNativeImage { name; appDir; }` wraps a producer-prepared AppDir with an\nexecutable `AppRun`. It adds no Nix/Python launcher, database or daemon requirement.\nSupply desktop metadata and icons in the AppDir if desktop integration is wanted.\nThe producer prepares a working target layout; this does not relocate binaries.\nA separate VM executes both real FUSE and extract-and-run inside a root with\nneither `/nix` nor Python, replaces the image and removes it.",
+      "evidence": [
+        "`makeNativeImage { name; appDir; }` wraps a producer-prepared AppDir with an\nexecutable `AppRun`. It adds no Nix/Python launcher, database or daemon requirement.\nSupply desktop metadata and icons in the AppDir if desktop integration is wanted.\nThe producer prepares a working target layout; this does not relocate binaries.\nA separate VM executes both real FUSE and extract-and-run inside a root with\nneither `/nix` nor Python, replaces the image and removes it."
+      ]
+    }
+  },
+  "example": {
+    "state": "known",
+    "language": "nix",
+    "value": "let backend = inputs.appimage-impurifier.lib.appimage-impurifier { inherit pkgs; };\nin backend.makePackage { pkg = pkgs.ripgrep; }\n",
+    "evidence": [
+      "```nix\nlet backend = inputs.appimage-impurifier.lib.appimage-impurifier { inherit pkgs; };\nin backend.makePackage { pkg = pkgs.ripgrep; }\n```"
+    ]
+  }
+}

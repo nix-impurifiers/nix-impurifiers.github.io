@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "repository": "nix-impurifiers/opkg-impurifier",
+  "reviewedRevision": "eaa03989fb8f94a0c786fbfea18c92fd80695c9b",
+  "readmeSha256": "03a9a5a47c34e3ca2eb225d4693dbbfeb5d247b5655c8ada615445abc1c7891c",
+  "reviewBasis": "project-readme",
+  "facts": {
+    "target_nix": {
+      "state": "known",
+      "value": "mode-dependent",
+      "evidence": [
+        "Emit native IPK packages that project Nix application closures into a shared,\nGC-rooted `/opt/nix/profile`. IPK/opkg is a separate contract from Alpine APK.\nOriginal emitter/runtime code is MIT licensed. IPKs use the original gzip/tar\nenvelope, accepted by both upstream opkg and OpenWrt's fork. OpenWrt's extractor\ndoes not support the Debian `ar` envelope and can otherwise report successful\ninstallation without extracting the payload or maintainer scripts.",
+        "`makeNativePackages { pkg; name ? pkg.pname; version ? pkg.version; ... }` emits a\ncollection of native-owned IPKs at the original store paths, with exact native\nreference dependencies and installed-file checksums. `programs` defaults to the\nmain command (`[]` emits no command links), and `binDir` defaults to `/usr/bin`.\nNo target Nix executable, daemon or database is needed. Native ownership must\nremain separate from a Nix-managed store's garbage collection. This does not\nrelocate binaries. The existing `buildIpk { payload; name; version; ... }` also\naccepts producer-prepared native layouts without implicit impurifier hooks."
+      ]
+    },
+    "bundled_client": {
+      "state": "known",
+      "value": true,
+      "evidence": [
+        "`makeRuntimeIpk` accepts optional `bundledNixStore` and `bundledNixNotices`.\nThe client must be a supplied static ELF executable with upstream notices.\nBundling omits the default external Nix dependency, retains Python, and selects\nthe actual target architecture. Compatible external clients take precedence;\nfailed operations are not retried through another client or store. This is a\nclient bundle, not a Nix installer. Custom `stateDir` behavior is preserved."
+      ]
+    },
+    "validation": {
+      "state": "known",
+      "value": "`nix flake check -L` runs engine contracts, native archive/dependency metadata and\nreference-free closure checks, and a QEMU VM using actual opkg/Nix/systemd. The\nnetwork-disabled VM checks fetch failure, offline reinstall, edited conffiles,\nupgrades, native install batching, lifecycle hooks, account/directory ownership,\nadministrator service intent, removal, cooperating driver upgrades and GC.\nIt uses NixOS with mutable native-style unit directories, not an OpenWrt or\ncomplete OpenEmbedded boot. A separate VM runs the unmodified opkg fork, usign, opkg-key and native database\nfrom the official OpenWrt 24.10.4 x86_64 root filesystem. It checks native signed\nfeed verification, rejection and deletion of manipulated indexes, signed-index\nSHA256 package corruption rejection, real provider dependencies, net\nfailure/offline recovery, conffiles/upgrades, ordinary-user launch and removal/GC.\nThe fixture selects persistent state under `/opt/nix` and shares real Nix state\nand roots with its NixOS host. This covers application commands; procd service\nintegration, complete OpenWrt boot, router hardware and other architectures are\nseparate coverage. Native opkg update can exit zero after rejecting a feed's\nsignature; inspect verification diagnostics and list state, not exit status\nalone.",
+      "evidence": [
+        "`nix flake check -L` runs engine contracts, native archive/dependency metadata and\nreference-free closure checks, and a QEMU VM using actual opkg/Nix/systemd. The\nnetwork-disabled VM checks fetch failure, offline reinstall, edited conffiles,\nupgrades, native install batching, lifecycle hooks, account/directory ownership,\nadministrator service intent, removal, cooperating driver upgrades and GC.\nIt uses NixOS with mutable native-style unit directories, not an OpenWrt or\ncomplete OpenEmbedded boot. A separate VM runs the unmodified opkg fork, usign, opkg-key and native database\nfrom the official OpenWrt 24.10.4 x86_64 root filesystem. It checks native signed\nfeed verification, rejection and deletion of manipulated indexes, signed-index\nSHA256 package corruption rejection, real provider dependencies, net\nfailure/offline recovery, conffiles/upgrades, ordinary-user launch and removal/GC.\nThe fixture selects persistent state under `/opt/nix` and shares real Nix state\nand roots with its NixOS host. This covers application commands; procd service\nintegration, complete OpenWrt boot, router hardware and other architectures are\nseparate coverage. Native opkg update can exit zero after rejecting a feed's\nsignature; inspect verification diagnostics and list state, not exit status\nalone."
+      ]
+    }
+  },
+  "example": {
+    "state": "known",
+    "language": "nix",
+    "value": "let impurifier = inputs.opkg-impurifier.lib.opkg-impurifier { inherit pkgs; };\nin impurifier.makePackage { pkg = pkgs.hello; }\n",
+    "evidence": [
+      "```nix\nlet impurifier = inputs.opkg-impurifier.lib.opkg-impurifier { inherit pkgs; };\nin impurifier.makePackage { pkg = pkgs.hello; }\n```"
+    ]
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "repository": "nix-impurifiers/autopackage-impurifier",
+  "reviewedRevision": "2b3bd16fc1c20adb6b2b95f5f47a19c95f71e447",
+  "readmeSha256": "5f2b0e246a9889f09166606e1440a41da53de160f6b7ad4c8ecd270217b3ede2",
+  "reviewBasis": "project-readme",
+  "facts": {
+    "target_nix": {
+      "state": "known",
+      "value": "mode-dependent",
+      "evidence": [
+        "Native Autopackage 1.4.2 installers whose commands run Nix application closures.\nOriginal adapter code is MIT. Upstream applications, the LGPL installer code\nand bundled native tools retain their own licenses and notices.",
+        "`makeNativePackage { name; version; payload; revision?; }` emits a native installer\nfrom a producer-prepared prefix tree, without Nix launchers, SDK caches or engine\nrequirements. Autopackage's own file-copy and ownership log preserve directories\nand hidden files. The producer supplies files that work in the selected prefix;\nthis does not relocate binaries. The x86_64 Linux VM installs, verifies, upgrades\nand removes the native package as an ordinary user, and executes it in an\nisolated root without `/nix`."
+      ]
+    },
+    "bundled_client": {
+      "state": "known",
+      "value": true,
+      "evidence": [
+        "Nix-backed artifact constructors optionally accept `bundledNixStore` and\n`bundledNixNotices` for a static ELF client and upstream notices. Their prepared\nSDK then contains Python alone. A compatible external Nix client takes precedence;\nexplicit `IMPURIFIER_NIX_STORE` disables fallback and failed mutations are never\nretried through another client. The bundled variant repeats the native lifecycle\nsuite without external Nix on the application user's PATH."
+      ]
+    },
+    "validation": {
+      "state": "known",
+      "value": "The SDK pins the upstream Google Code archive's `autopackage-1.4.2-x86_64.tar.bz2`\nand `autopackage-devel-1.4.2.tar.bz2`; their full original archives accompany the\ntools. It relocates the ELF interpreter/RPATH of the selected native CLI helpers\nand the hard-coded `/bin/ls` call to the real Nix GNU ls. The original call\nsilently produces empty sizes/checksums in a Nix build sandbox; no checksum or\narchitecture checks are disabled. Configuration disables anonymous reporting\nand uses native `autopackage_no_autosu=true` for user installs. Root transactions\nstill run when explicitly invoked as root; automatic password escalation and\nGUI helpers are not covered. The `__no_fd_close=1` native manager flag can keep\nheadless diagnostics visible; VM checks use real PTYs and the native tty frontend.",
+      "evidence": [
+        "The SDK pins the upstream Google Code archive's `autopackage-1.4.2-x86_64.tar.bz2`\nand `autopackage-devel-1.4.2.tar.bz2`; their full original archives accompany the\ntools. It relocates the ELF interpreter/RPATH of the selected native CLI helpers\nand the hard-coded `/bin/ls` call to the real Nix GNU ls. The original call\nsilently produces empty sizes/checksums in a Nix build sandbox; no checksum or\narchitecture checks are disabled. Configuration disables anonymous reporting\nand uses native `autopackage_no_autosu=true` for user installs. Root transactions\nstill run when explicitly invoked as root; automatic password escalation and\nGUI helpers are not covered. The `__no_fd_close=1` native manager flag can keep\nheadless diagnostics visible; VM checks use real PTYs and the native tty frontend."
+      ]
+    }
+  },
+  "example": {
+    "state": "known",
+    "language": "nix",
+    "value": "let adapter = autopackageImpurifier.lib.autopackage-impurifier { inherit pkgs; };\nin adapter.makePackage { pkg = myApplication; }\n",
+    "evidence": [
+      "```nix\nlet adapter = autopackageImpurifier.lib.autopackage-impurifier { inherit pkgs; };\nin adapter.makePackage { pkg = myApplication; }\n```"
+    ]
+  }
+}

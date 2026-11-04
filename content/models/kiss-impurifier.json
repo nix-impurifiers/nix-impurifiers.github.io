@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "repository": "nix-impurifiers/kiss-impurifier",
+  "reviewedRevision": "b2ca80a3b42725920be600a344aa9c1b817c05bd",
+  "readmeSha256": "abab02aa9c26b8f8fee892b0789236e32b6a7ab9cb97338b79ba4fc99b1daf87",
+  "reviewBasis": "project-readme",
+  "facts": {
+    "target_nix": {
+      "state": "known",
+      "value": "mode-dependent",
+      "evidence": [
+        "Native KISS archives backed by atomic, GC-rooted Nix profiles. Original code is\nMIT licensed. The VM fixture preserves upstream KISS's MIT notices.",
+        "`makeNativePackage { name; version; payload; release?; dependencies?; }` emits\na native KISS archive from a producer-prepared tree. It adds no engine callbacks\nor runtime requirement. Install it with ordinary `kiss`, without the impurifier\nwrapper or global engine hook. Native dependency inventory and configuration\nchecksums remain available. The producer must prepare a runnable target layout;\nthis does not relocate binaries. The native VM executes a static payload in a\ntarget root without `/nix`, then upgrades and removes it."
+      ]
+    },
+    "bundled_client": {
+      "state": "known",
+      "value": true,
+      "evidence": [
+        "`makeRuntimePackage` accepts `bundledNixStore` and `bundledNixNotices`. Supply a\nstatic ELF client and upstream notices. This omits the default Nix dependency;\nPython remains required. Compatible external clients take precedence. Explicit\n`IMPURIFIER_NIX_STORE` disables fallback; failed mutations are never retried\nthrough another client. A separate bundled-client VM repeats the lifecycle\nsuite with an incompatible external candidate. Nix provisioning remains deferred."
+      ]
+    },
+    "validation": {
+      "state": "known",
+      "value": "`nix flake check -L` boots QEMU and executes pinned upstream kiss-community KISS\n6.2.0. It tests native dependency rejection, net failure/offline recovery,\nconfiguration preservation, batch activation, service/account lifecycle and\nadmin intent, unrelated native driver updates, foreign-root safety, removal and\nGC. The guest kernel and outer init are NixOS; Nix is preinstalled. This is not\na complete KISS boot test. It also exercises native recipe construction.",
+      "evidence": [
+        "`nix flake check -L` boots QEMU and executes pinned upstream kiss-community KISS\n6.2.0. It tests native dependency rejection, net failure/offline recovery,\nconfiguration preservation, batch activation, service/account lifecycle and\nadmin intent, unrelated native driver updates, foreign-root safety, removal and\nGC. The guest kernel and outer init are NixOS; Nix is preinstalled. This is not\na complete KISS boot test. It also exercises native recipe construction."
+      ]
+    }
+  },
+  "example": {
+    "state": "known",
+    "language": "nix",
+    "value": "let impurifier = inputs.kiss-impurifier.lib.kiss-impurifier { inherit pkgs; };\nin impurifier.makeOfflinePackage { pkg = pkgs.hello; }\n",
+    "evidence": [
+      "```nix\nlet impurifier = inputs.kiss-impurifier.lib.kiss-impurifier { inherit pkgs; };\nin impurifier.makeOfflinePackage { pkg = pkgs.hello; }\n```"
+    ]
+  }
+}

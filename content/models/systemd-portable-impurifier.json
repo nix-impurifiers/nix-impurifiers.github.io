@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "repository": "nix-impurifiers/systemd-portable-impurifier",
+  "reviewedRevision": "fe42458e5f98546d0455b9764ab2b7807619f074",
+  "readmeSha256": "af3ef9dbbd070283e20d25b345a8d9341d931cf203827c03486c3b3660182b97",
+  "reviewBasis": "project-readme",
+  "facts": {
+    "target_nix": {
+      "state": "known",
+      "value": "not-added",
+      "evidence": [
+        "`backend` is `import (inputs.systemd-portable-impurifier + \"/nix\") { inherit pkgs; coreSrc = inputs.impurifier; }`.\n`makeImage { pkg; name; version; units; osRelease ? ...; }` creates a SquashFS\nimage named `name_version.raw`. It embeds the complete pkg closure at its original\nstore paths, native units and os-release. Unit filenames must use the image-name\nprefix. Unit executables and helpers must belong to the supplied closure.\n`makeNativeImage { rootfs; name; version; }` accepts an entirely prepared native\nroot filesystem instead, including its own units, runtime and mount placeholders."
+      ]
+    },
+    "bundled_client": {
+      "state": "not-applicable",
+      "reason": "This backend adds no Nix client integration; its native consumer and payload ABI are the relevant runtime contract."
+    },
+    "validation": {
+      "state": "known",
+      "value": "`nix flake check -L` attaches the actual raw image in a QEMU VM, runs a service\ninside its RootImage, verifies no target Nix database/socket, stops/detaches,\nattaches a second revision and runs it, then detaches and proves the unit is gone.\nThe fixture explicitly chooses systemd's trusted profile for this unsigned local\nimage. Other sandbox profiles, signatures and host policies need separate tests.",
+      "evidence": [
+        "`nix flake check -L` attaches the actual raw image in a QEMU VM, runs a service\ninside its RootImage, verifies no target Nix database/socket, stops/detaches,\nattaches a second revision and runs it, then detaches and proves the unit is gone.\nThe fixture explicitly chooses systemd's trusted profile for this unsigned local\nimage. Other sandbox profiles, signatures and host policies need separate tests."
+      ]
+    }
+  },
+  "example": {
+    "state": "known",
+    "language": "nix",
+    "value": "backend.makeImage {\n  pkg = application;\n  name = \"example\";\n  version = \"1\";\n  units.\"example.service\" = ''\n    [Service]\n    ExecStart=${application}/bin/example\n  '';\n}\n",
+    "evidence": [
+      "```nix\nbackend.makeImage {\n  pkg = application;\n  name = \"example\";\n  version = \"1\";\n  units.\"example.service\" = ''\n    [Service]\n    ExecStart=${application}/bin/example\n  '';\n}\n```"
+    ]
+  }
+}

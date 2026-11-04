@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "repository": "nix-impurifiers/luarocks-impurifier",
+  "reviewedRevision": "ca1121b2ececdb5683dfad1ba9f4c6ebefe24970",
+  "readmeSha256": "28d7d2fad877f23a4b3db2083470710873102325caeeb691b24ab5f6cd8d7f55",
+  "reviewBasis": "project-readme",
+  "facts": {
+    "target_nix": {
+      "state": "known",
+      "value": "not-added",
+      "evidence": [
+        "The SDK uses pkgs.lua and its matching luaPackages.luarocks. Prepared code must\nmatch that Lua ABI and target architecture; express those constraints in native\ndependencies. It does not relocate libraries, infer external native dependencies\nor require a target Nix daemon/database."
+      ]
+    },
+    "bundled_client": {
+      "state": "not-applicable",
+      "reason": "This backend adds no Nix client integration; its native consumer and payload ABI are the relevant runtime contract."
+    },
+    "validation": {
+      "state": "known",
+      "value": "`nix flake check -L` installs, loads, upgrades and removes real binary rocks in a\nQEMU VM. A compiled Lua 5.5 extension executes from the native target tree; the\nconsumer checks dependencies and removal makes require fail. This verifies the\npinned Lua ABI and Linux architecture, not every Lua or LuaJIT configuration.",
+      "evidence": [
+        "`nix flake check -L` installs, loads, upgrades and removes real binary rocks in a\nQEMU VM. A compiled Lua 5.5 extension executes from the native target tree; the\nconsumer checks dependencies and removal makes require fail. This verifies the\npinned Lua ABI and Linux architecture, not every Lua or LuaJIT configuration."
+      ]
+    }
+  },
+  "example": {
+    "state": "known",
+    "language": "nix",
+    "value": "backend.makeRock {\n  name = \"example-library\";\n  version = \"1.0-1\";\n  payload = preparedTree;\n  sourceUrl = \"https://example.org/source\";\n  luaModules.\"example.helpers\" = \"helpers.lua\";\n  nativeModules.\"example.native\" = \"native.so\";\n  dependencies = [ \"lua >= 5.5, < 5.6\" ];\n  license = \"MIT\";\n}\n",
+    "evidence": [
+      "```nix\nbackend.makeRock {\n  name = \"example-library\";\n  version = \"1.0-1\";\n  payload = preparedTree;\n  sourceUrl = \"https://example.org/source\";\n  luaModules.\"example.helpers\" = \"helpers.lua\";\n  nativeModules.\"example.native\" = \"native.so\";\n  dependencies = [ \"lua >= 5.5, < 5.6\" ];\n  license = \"MIT\";\n}\n```"
+    ]
+  }
+}

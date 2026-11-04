@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "repository": "nix-impurifiers/pkgsrc-impurifier",
+  "reviewedRevision": "d406e789f8196fb238edc42ce0d18a7d1403e19b",
+  "readmeSha256": "f1a260ba7c7ead4df49a5e6522e6b5c5ee063d947a8cf602c971fd63595e9003",
+  "reviewBasis": "project-readme",
+  "facts": {
+    "target_nix": {
+      "state": "known",
+      "value": "mode-dependent",
+      "evidence": [
+        "Generate native pkgsrc binary packages containing Nix application intent and,\nfor offline packages, the application closure. Packages install into the host\nroot and publish commands through `/opt/nix/profile`.",
+        "`makeNativePackage { name; version; payload; dependencies?; ... }` packages a\nproducer-prepared filesystem tree with native pkg_create. It adds no engine\nhooks or Nix dependency. The producer supplies a runnable target layout; no\nrelocation is performed. Linux x86_64 platform metadata remains the current SDK\ncontract. The target-root VM executes a static payload without `/nix`, upgrades\nand removes it through native tools."
+      ]
+    },
+    "bundled_client": {
+      "state": "known",
+      "value": true,
+      "evidence": [
+        "`makeRuntimePackage` optionally accepts `bundledNixStore` and\n`bundledNixNotices`. A static ELF client and upstream notices omit the default\nNix dependency; Python remains required. Compatible external clients take\nprecedence. Explicit `IMPURIFIER_NIX_STORE` disables fallback, and mutations are\nnever retried through another client. A separate bundled-client VM repeats\nthe original lifecycle suite with an incompatible external candidate."
+      ]
+    },
+    "validation": {
+      "state": "known",
+      "value": "`makeNativePackage { name; version; payload; dependencies?; ... }` packages a\nproducer-prepared filesystem tree with native pkg_create. It adds no engine\nhooks or Nix dependency. The producer supplies a runnable target layout; no\nrelocation is performed. Linux x86_64 platform metadata remains the current SDK\ncontract. The target-root VM executes a static payload without `/nix`, upgrades\nand removes it through native tools.",
+      "evidence": [
+        "`makeNativePackage { name; version; payload; dependencies?; ... }` packages a\nproducer-prepared filesystem tree with native pkg_create. It adds no engine\nhooks or Nix dependency. The producer supplies a runnable target layout; no\nrelocation is performed. Linux x86_64 platform metadata remains the current SDK\ncontract. The target-root VM executes a static payload without `/nix`, upgrades\nand removes it through native tools."
+      ]
+    }
+  },
+  "example": {
+    "state": "known",
+    "language": "nix",
+    "value": "let\n  impurifier = inputs.pkgsrc-impurifier.lib.pkgsrc-impurifier { inherit pkgs; };\nin impurifier.makePackage { pkg = pkgs.hello; }\n",
+    "evidence": [
+      "```nix\nlet\n  impurifier = inputs.pkgsrc-impurifier.lib.pkgsrc-impurifier { inherit pkgs; };\nin impurifier.makePackage { pkg = pkgs.hello; }\n```"
+    ]
+  }
+}

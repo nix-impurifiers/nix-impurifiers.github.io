@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "repository": "nix-impurifiers/pisi-impurifier",
+  "reviewedRevision": "2263bfa7ac2f9eff0519e9fdde5ba519aa3c7bd6",
+  "readmeSha256": "d02177b924a41df32cc8a93b4d0fbeae60e3290e4bb1b3629233fa182073e0cf",
+  "reviewBasis": "project-readme",
+  "facts": {
+    "target_nix": {
+      "state": "known",
+      "value": "mode-dependent",
+      "evidence": [
+        "Native PiSi format 1.2 archives backed by atomic Nix profiles. Original code is\nMIT licensed; [upstream fixture licenses](THIRD_PARTY.md) remain their own.\nPiSi is tested independently of its eopkg fork.",
+        "`makeNativePackage { name; version; payload; dependencies?; configPaths?; ... }`\naccepts a producer-prepared filesystem tree. It adds no engine intent or Nix\ndependency; ordinary `pisi` owns and installs its files. Distribution metadata\nand native dependency expressions remain consumer policy. The producer supplies\na working target layout; this does not relocate binaries. A native VM executes\na static payload in a target root without `/nix`, upgrades and removes it."
+      ]
+    },
+    "bundled_client": {
+      "state": "known",
+      "value": true,
+      "evidence": [
+        "`makeRuntimePackage` accepts `bundledNixStore` and `bundledNixNotices` for a static\nELF client and its upstream notices. Bundling omits the default Nix dependency;\nPython and the manager's Python API remain required. Compatible external clients\ntake precedence, explicit `IMPURIFIER_NIX_STORE` disables fallback, and failed\nmutations are never retried through another client. A bundled-client VM repeats\nthe original lifecycle suite with an incompatible external candidate. The Nix\nprovider/installer remains deferred."
+      ]
+    },
+    "validation": {
+      "state": "known",
+      "value": "`nix flake check -L` boots QEMU and executes the actual PisiLinuxNew v2.7.2\nrelease source (which reports 2.7.1), built with pinned Python 2 dependencies.\nThe modern emitter, runtime and applications use the main pinned nixpkgs.\nTests keep native version/distribution/architecture checks enabled and cover\nruntime rejection before unpack, dependency solving, offline recovery, flavor\nswitches, edited and unedited config, batch activation, accounts/services/admin\nintent, drivers, foreign roots, removal and rooted GC. The fixture uses native\n`--ignore-comar`; COMAR daemon and full PisiLinux/Mudur boot remain separate\ncoverage. Preinstalled provider inventory markers are not installers.",
+      "evidence": [
+        "`nix flake check -L` boots QEMU and executes the actual PisiLinuxNew v2.7.2\nrelease source (which reports 2.7.1), built with pinned Python 2 dependencies.\nThe modern emitter, runtime and applications use the main pinned nixpkgs.\nTests keep native version/distribution/architecture checks enabled and cover\nruntime rejection before unpack, dependency solving, offline recovery, flavor\nswitches, edited and unedited config, batch activation, accounts/services/admin\nintent, drivers, foreign roots, removal and rooted GC. The fixture uses native\n`--ignore-comar`; COMAR daemon and full PisiLinux/Mudur boot remain separate\ncoverage. Preinstalled provider inventory markers are not installers."
+      ]
+    }
+  },
+  "example": {
+    "state": "known",
+    "language": "nix",
+    "value": "let impurifier = inputs.pisi-impurifier.lib.pisi-impurifier {\n  inherit pkgs;\n  distribution = \"your-distribution\";\n  distributionRelease = \"your-native-release\";\n};\nin impurifier.makeOfflinePackage { pkg = pkgs.hello; }\n",
+    "evidence": [
+      "```nix\nlet impurifier = inputs.pisi-impurifier.lib.pisi-impurifier {\n  inherit pkgs;\n  distribution = \"your-distribution\";\n  distributionRelease = \"your-native-release\";\n};\nin impurifier.makeOfflinePackage { pkg = pkgs.hello; }\n```"
+    ]
+  }
+}

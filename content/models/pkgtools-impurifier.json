@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "repository": "nix-impurifiers/pkgtools-impurifier",
+  "reviewedRevision": "27f2582875dbfa6ef41b3695a0c1df8b03c46274",
+  "readmeSha256": "9b747cf38341381803d3732eaa459ef6a09a4a40a9a3381686bb63d79b363866",
+  "reviewBasis": "project-readme",
+  "facts": {
+    "target_nix": {
+      "state": "known",
+      "value": "mode-dependent",
+      "evidence": [
+        "Emit native Slackware pkgtools `.txz` archives from Nix applications. Original\ncode is MIT licensed. Upstream pkgtools retains its own copyright notices.",
+        "`makeNativePackage { name; version; payload; architecture?; configPaths?; ... }`\naccepts a producer-prepared filesystem tree. It adds no engine dependency or\nactivation callbacks. Native `.new` configuration handling remains available,\nincluding installation into a foreign root. The producer supplies a working\ntarget layout; binaries are not relocated. Dependency metadata is advisory, as\nwith ordinary pkgtools archives. The native VM executes a static payload in a\nroot without `/nix`, upgrades it and removes it with upstream pkgtools."
+      ]
+    },
+    "bundled_client": {
+      "state": "known",
+      "value": true,
+      "evidence": [
+        "`makeRuntimePackage` accepts `bundledNixStore` and `bundledNixNotices` for a static\nELF client and upstream notices. Bundling drops the default native Nix requirement\nand uses a machine architecture; Python remains required. Compatible external\nclients take precedence, explicit `IMPURIFIER_NIX_STORE` disables fallback, and\na failed mutation is never retried through another client. A bundled-client VM\nrepeats the lifecycle suite with an incompatible external candidate. Bundling is\nnot a Nix provider/installer."
+      ]
+    },
+    "validation": {
+      "state": "known",
+      "value": "`makeNativePackage { name; version; payload; architecture?; configPaths?; ... }`\naccepts a producer-prepared filesystem tree. It adds no engine dependency or\nactivation callbacks. Native `.new` configuration handling remains available,\nincluding installation into a foreign root. The producer supplies a working\ntarget layout; binaries are not relocated. Dependency metadata is advisory, as\nwith ordinary pkgtools archives. The native VM executes a static payload in a\nroot without `/nix`, upgrades it and removes it with upstream pkgtools.",
+      "evidence": [
+        "`makeNativePackage { name; version; payload; architecture?; configPaths?; ... }`\naccepts a producer-prepared filesystem tree. It adds no engine dependency or\nactivation callbacks. Native `.new` configuration handling remains available,\nincluding installation into a foreign root. The producer supplies a working\ntarget layout; binaries are not relocated. Dependency metadata is advisory, as\nwith ordinary pkgtools archives. The native VM executes a static payload in a\nroot without `/nix`, upgrades it and removes it with upstream pkgtools."
+      ]
+    }
+  },
+  "example": {
+    "state": "known",
+    "language": "nix",
+    "value": "let impurifier = inputs.pkgtools-impurifier.lib.pkgtools-impurifier { inherit pkgs; };\nin impurifier.makeOfflinePackage { pkg = pkgs.hello; }\n",
+    "evidence": [
+      "```nix\nlet impurifier = inputs.pkgtools-impurifier.lib.pkgtools-impurifier { inherit pkgs; };\nin impurifier.makeOfflinePackage { pkg = pkgs.hello; }\n```"
+    ]
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "repository": "nix-impurifiers/booster-impurifier",
+  "reviewedRevision": "70bc49d6a3c659861436e0f37bcdc00a91543056",
+  "readmeSha256": "fac56912d6aae8cbb55dcde04a08695fe77d4c854e25a9da84cea32f07be8aa8",
+  "reviewBasis": "project-readme",
+  "facts": {
+    "target_nix": {
+      "state": "known",
+      "value": "not-added",
+      "evidence": [
+        "The upstream generator receives every store object in the package's closure\nthrough its `extra_files` configuration. Absolute paths remain unchanged and\nneed no Nix database, daemon or client at boot. `extraFiles` adds prepared\nabsolute paths; their own non-Nix dependencies remain the producer's concern.\n`kernel` must provide `modules` and `modDirVersion`. Native Booster configuration\npasses through `config`, except closure files and stripping are controlled by\nthe backend. Builds use universal mode, with explicit kernel/module selection;\nhost-only discovery is unavailable in a pure build."
+      ]
+    },
+    "bundled_client": {
+      "state": "not-applicable",
+      "reason": "This backend adds no Nix client integration; its native consumer and payload ABI are the relevant runtime contract."
+    },
+    "validation": {
+      "state": "known",
+      "value": "`nix flake check -L` builds two revisions with the native generator and boots\nupstream Booster `/init` in QEMU. Its native emergency shell executes each\nembedded tool without a root disk, shared store or Nix database. The fixture\nadds static BusyBox at Booster's documented rescue path; it does not replace\ninit. This verifies early tool availability, not every storage/root layout.",
+      "evidence": [
+        "`nix flake check -L` builds two revisions with the native generator and boots\nupstream Booster `/init` in QEMU. Its native emergency shell executes each\nembedded tool without a root disk, shared store or Nix database. The fixture\nadds static BusyBox at Booster's documented rescue path; it does not replace\ninit. This verifies early tool availability, not every storage/root layout."
+      ]
+    }
+  },
+  "example": {
+    "state": "known",
+    "language": "nix",
+    "value": "let\n  backend = import (inputs.booster-impurifier + \"/nix\") {\n    inherit pkgs;\n    coreSrc = inputs.impurifier;\n  };\nin backend.makeImage {\n  pkg = earlyTool;\n  kernel = pkgs.linuxPackages.kernel;\n  extraFiles = [];\n  config = { compression = \"gzip\"; };\n}\n",
+    "evidence": [
+      "```nix\nlet\n  backend = import (inputs.booster-impurifier + \"/nix\") {\n    inherit pkgs;\n    coreSrc = inputs.impurifier;\n  };\nin backend.makeImage {\n  pkg = earlyTool;\n  kernel = pkgs.linuxPackages.kernel;\n  extraFiles = [];\n  config = { compression = \"gzip\"; };\n}\n```"
+    ]
+  }
+}

@@ -81,3 +81,13 @@ for (const button of document.querySelectorAll('[data-example]')) {
     link.textContent = `Read the ${button.dataset.example} guide →`;
   });
 }
+
+// Preserve existing project/#section links after splitting overview and guide.
+function followGuideAnchor() {
+  let id;
+  try { id = decodeURIComponent(location.hash.slice(1)); } catch { return; }
+  const target = document.getElementById(id)?.dataset.guideTarget;
+  if (target) location.replace(target);
+}
+followGuideAnchor();
+window.addEventListener('hashchange', followGuideAnchor);

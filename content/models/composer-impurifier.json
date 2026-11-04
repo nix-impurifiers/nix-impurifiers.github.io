@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "repository": "nix-impurifiers/composer-impurifier",
+  "reviewedRevision": "85974684025992cd7cea944fc0d233b6e2dfc46b",
+  "readmeSha256": "b826f3470eded05793c081e1a614d0855a98669686422e765d861121b53bbe8c",
+  "reviewBasis": "project-readme",
+  "facts": {
+    "target_nix": {
+      "state": "known",
+      "value": "not-added",
+      "evidence": [
+        "This distributes prepared files, rather than making arbitrary nixpkgs programs\nPHP-compatible. PHP versions, required extensions and native ABIs remain producer\nresponsibilities. No Nix client, daemon, database or relocation is added."
+      ]
+    },
+    "bundled_client": {
+      "state": "not-applicable",
+      "reason": "This backend adds no Nix client integration; its native consumer and payload ABI are the relevant runtime contract."
+    },
+    "validation": {
+      "state": "known",
+      "value": "`nix flake check -L` runs Composer inside QEMU with network access disabled and\nPackagist disabled: install from local artifacts, load a class through the actual\nComposer autoloader, upgrade, check platform requirements and remove. It verifies\nthat the package and class are unavailable after removal. Native PHP extensions\nand additional platforms need their own compatibility tests.",
+      "evidence": [
+        "`nix flake check -L` runs Composer inside QEMU with network access disabled and\nPackagist disabled: install from local artifacts, load a class through the actual\nComposer autoloader, upgrade, check platform requirements and remove. It verifies\nthat the package and class are unavailable after removal. Native PHP extensions\nand additional platforms need their own compatibility tests."
+      ]
+    }
+  },
+  "example": {
+    "state": "known",
+    "language": "nix",
+    "value": "backend.makePackage {\n  name = \"example/library\";\n  version = \"1.0.0\";\n  payload = preparedTree;\n  autoload.\"psr-4\".\"Example\\\\\" = \"src/\";\n  require.php = \">=8.0\";\n  license = \"MIT\";\n}\n",
+    "evidence": [
+      "```nix\nbackend.makePackage {\n  name = \"example/library\";\n  version = \"1.0.0\";\n  payload = preparedTree;\n  autoload.\"psr-4\".\"Example\\\\\" = \"src/\";\n  require.php = \">=8.0\";\n  license = \"MIT\";\n}\n```"
+    ]
+  }
+}

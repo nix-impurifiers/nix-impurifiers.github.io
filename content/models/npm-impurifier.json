@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "repository": "nix-impurifiers/npm-impurifier",
+  "reviewedRevision": "26442438cf71f38bd98da640480a22b93e3c658a",
+  "readmeSha256": "694e3e11d215d70624f9d81d74e8e078243af72e460310076aaf99fcaadc4f22",
+  "reviewBasis": "project-readme",
+  "facts": {
+    "target_nix": {
+      "state": "known",
+      "value": "not-added",
+      "evidence": [
+        "`main`, `bin`, `dependencies`, `os`, `cpu` and `license` supply native package\nmetadata. The generated package.json replaces any payload package.json.\nLifecycle scripts are not added or executed while packing. Consumers can install\nthe resulting tarball with npm or compatible package managers. Supply an already\ncompatible Node addon or native executable: no automatic relocation, native\ncompilation at install, Nix runtime or registry publication is implied."
+      ]
+    },
+    "bundled_client": {
+      "state": "not-applicable",
+      "reason": "This backend adds no Nix client integration; its native consumer and payload ABI are the relevant runtime contract."
+    },
+    "validation": {
+      "state": "known",
+      "value": "The QEMU test installs an actual compiled N-API addon with real offline npm,\nloads it with Node, upgrades, checks the dependency tree and uninstalls. Node/npm\nare NixOS fixture tools; the package itself contains no Nix launcher or runtime.\nFurther Node versions, native ABIs and operating systems need explicit validation.",
+      "evidence": [
+        "The QEMU test installs an actual compiled N-API addon with real offline npm,\nloads it with Node, upgrades, checks the dependency tree and uninstalls. Node/npm\nare NixOS fixture tools; the package itself contains no Nix launcher or runtime.\nFurther Node versions, native ABIs and operating systems need explicit validation."
+      ]
+    }
+  },
+  "example": {
+    "state": "known",
+    "language": "nix",
+    "value": "backend.makePackage { name = \"my-package\"; version = \"1.0.0\"; payload = tree; }\n",
+    "evidence": [
+      "```nix\nbackend.makePackage { name = \"my-package\"; version = \"1.0.0\"; payload = tree; }\n```"
+    ]
+  }
+}
